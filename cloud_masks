@@ -43,22 +43,22 @@ var landsatSR = function() {
           var adjacent_mask = computeQAbits(mask, 3, 3, 'adjacent');
           var snow_mask = computeQAbits(mask, 4, 4, 'snow');
   
-          good_pix = cloud_mask.eq(0)
-                     .and(shadow_mask.eq(0))
-                     .and(snow_mask.eq(0))
-                     .and(adjacent_mask.eq(0))
+          var good_pix = cloud_mask.eq(0)
+                        .and(shadow_mask.eq(0))
+                        .and(snow_mask.eq(0))
+                        .and(adjacent_mask.eq(0))
           return good_pix
       }
   
       var pix = function() {
-          mask = image.select('pixel_qa')
-          cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
-          shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
-          snow_mask = computeQAbits(mask, 4, 4, 'snow')
+          var mask = image.select('pixel_qa')
+          var cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
+          var shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
+          var snow_mask = computeQAbits(mask, 4, 4, 'snow')
   
-          good_pix = cloud_mask.eq(0)
-                     .and(shadow_mask.eq(0))
-                     .and(snow_mask.eq(0))
+          var good_pix = cloud_mask.eq(0)
+                        .and(shadow_mask.eq(0))
+                        .and(snow_mask.eq(0))
           return good_pix
       }
   
