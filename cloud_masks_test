@@ -1,0 +1,29 @@
+/***
+ * Tests for cloud mask functions
+ * 
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * License: MIT
+ */
+ 
+ var s2mask = require('users/fitoprincipe/geetools:cloud_masks').sentinel2
+ 
+ var sentinel2 = function() {
+   var cent = Map.getCenter();
+   var col = ee.ImageCollection('COPERNICUS/S2')
+             .filterBounds(cent)
+             .filterMetadata('CLOUDY_PIXEL_PERCENTAGE', 'greater_than', 40)
+             //.filterDate('2017-01-01', '2017-03-01')
+             .sort('CLOUDY_PIXEL_PERCENTAGE');
+   
+   var img = ee.Image(col.first());
+   var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
+   var masked = s2mask(img);
+   Map.addLayer(masked, vis, 'Sentinel 2 masked');
+   Map.addLayer(img, vis, 'Sentinel 2 NOT masked');
+   Map.centerObject(img)
+ };
+ 
+ exports.sentinel2 = sentinel2
+ 
+ sentinel2()
