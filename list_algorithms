@@ -5,9 +5,7 @@
  * email: fitoprincipe82@gmail.com
  * License: MIT
  */
- 
-print('Module "list_algorithms" made by Rodrigo E. Principe');
- 
+
 var help = {};
 
 var remove_duplicates = function(list) {
