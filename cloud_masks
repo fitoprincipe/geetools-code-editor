@@ -30,7 +30,7 @@ var sentinel2 = function(image) {
 
 var landsatSR = function(options) {
   var bits = ee.Dictionary({'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4});
-  var opt = options || ['cloud', 'shadow', 'adjacent', 'snow'];
+  var opt = options || ['cloud', 'shadow', 'snow'];
   
   options = ee.List(opt);
 
@@ -67,13 +67,13 @@ var landsatSR = function(options) {
           */
           var first = ee.Image.constant(0)
           var good_pix = ee.Image(options.iterate(function(o, ini){
-            ini = ee.Image(ini);
+            var i = ee.Image(ini);
             var m = computeQAbits(mask, bits.get(o), bits.get(o), o).eq(0);
-            return ini.or(m);
+            return i.or(m);
           }, first));
           
-          // return good_pix.not()
-          return image.select([0]).gt(1000); 
+          return good_pix.not()
+          //return image.select([0]).gt(1000); 
       }
   
       var good_pix = ee.Algorithms.If(contains_sr, sr(), pix());
