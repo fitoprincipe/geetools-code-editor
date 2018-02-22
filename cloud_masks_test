@@ -85,22 +85,18 @@
              .filterMetadata('CLOUD_COVER', 'greater_than', 40)
              .sort('CLOUD_COVER');
    
-   var cond = col.size().gt(0);
-   print(col.size())
+   if (col.size().getInfo() !== 0) {
    
-   var img = ee.Image(col.first());
-   var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
-   var masked = landsatSR(options)(img);
-   var notempty = function() {
-     print(masked)
+     var img = ee.Image(col.first());
+     var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
+     var masked = landsatSR(options)(img);
      Map.addLayer(masked, vis, n+' masked');
      Map.addLayer(img, vis, n+' NOT masked', false);
      Map.centerObject(img)
-   }
-   var empty = function() {
+     }
+   else {
      print('Collection is empty')
    }
-   return ee.Algorithms.If(cond, notempty(), empty());
  };
  
  exports.sentinel2 = sentinel2
