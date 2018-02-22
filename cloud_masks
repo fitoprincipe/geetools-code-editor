@@ -72,7 +72,8 @@ var landsatSR = function(options) {
             return ini.or(m);
           }, first));
           
-          return good_pix.not()
+          // return good_pix.not()
+          return image.select([0]).gt(1000); 
       }
   
       var good_pix = ee.Algorithms.If(contains_sr, sr(), pix());
