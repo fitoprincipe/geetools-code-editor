@@ -36,7 +36,7 @@ var landsatSR = function(options) {
       var bands = image.bandNames();
       var contains_sr = bands.contains('sr_cloud_qa');
   
-      var sr = function(options) {
+      var sr = function() {
           var mask = image.select('sr_cloud_qa');
           var cloud_mask = computeQAbits(mask, 1, 1, 'cloud');
           var shadow_mask = computeQAbits(mask, 2, 2, 'shadow');
@@ -50,7 +50,7 @@ var landsatSR = function(options) {
           return good_pix
       }
   
-      var pix = function(options) {
+      var pix = function() {
           mask = image.select('pixel_qa')
           cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
           shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
@@ -66,6 +66,7 @@ var landsatSR = function(options) {
   
       return image.updateMask(good_pix);
   }
+  return wrap;
 }
 
 help['sentinel2'] = 'function to mask out clouds of Sentinel 2 images. Use on map function directly';
