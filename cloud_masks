@@ -21,11 +21,11 @@ var computeQAbits = function(image, start, end, newName) {
 var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
-  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque")
-  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus")
-  var mask = opaque.Or(cirrus)
+  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
+  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus");
+  var mask = opaque.or(cirrus);
   
-  return image.updateMask(mask.Not());
+  return image.updateMask(mask.not());
 }
 
 help['sentinel2'] = 'function to mask out cloud from Sentinel 2 images. Use on map function directly';
