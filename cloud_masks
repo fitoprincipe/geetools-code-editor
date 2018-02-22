@@ -59,12 +59,15 @@ var landsatSR = function(options) {
           var shadow_mask = computeQAbits(mask, 2, 2, 'shadow');
           var adjacent_mask = computeQAbits(mask, 3, 3, 'adjacent');
           var snow_mask = computeQAbits(mask, 4, 4, 'snow');
-  
-          var good_pix = cloud_mask.eq(0)
-                        .and(shadow_mask.eq(0))
-                        .and(snow_mask.eq(0))
-                        .and(adjacent_mask.eq(0))
-          return good_pix
+          
+          var rel = ee.Dictionary({
+            'cloud': cloud_mask, 
+            'shadow': shadow_mask,
+            'snow': snow_mask,
+            'adjacent': adjacent_mask
+          })
+          
+          return compute(rel);
       }
   
       var pix = function() {
