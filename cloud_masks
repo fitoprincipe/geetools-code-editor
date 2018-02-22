@@ -28,7 +28,7 @@ var sentinel2 = function(image) {
   return image.updateMask(mask.not());
 }
 
-var landsatSR = function(options) {
+var landsatSR = function() {
   var bits = {'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4};
   //var opt = ee.List(options) || ee.List(['cloud', 'shadow', 'adjacent', 'snow']);
 
