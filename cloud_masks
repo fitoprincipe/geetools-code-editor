@@ -22,7 +22,7 @@ var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
   var opaque = computeQAbits(cloud_mask, 10, 10, "opaque")
-  var cirrus = tools.compute_bits(nubes, 11, 11, "cirrus")
+  var cirrus = computeQAbits(nubes, 11, 11, "cirrus")
   var mask = opaque.Or(cirrus)
   
   return image.updateMask(mask.Not());
