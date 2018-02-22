@@ -60,6 +60,42 @@
    Map.centerObject(img)
  };
  
+ var landsat7SR = function(options, name) {
+   var n = name || 'Landsat 7 SR'
+   var cent = Map.getCenter();
+   var col = ee.ImageCollection('LANDSAT/LE07/C01/T1_SR')
+             .filterBounds(cent)
+             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
+             .sort('CLOUD_COVER');
+   
+   var img = ee.Image(col.first());
+   var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
+   var masked = landsatSR(options)(img);
+   print(masked)
+   Map.addLayer(masked, vis, n+' masked');
+   Map.addLayer(img, vis, n+' NOT masked', false);
+   Map.centerObject(img)
+ };
+ 
+ var landsat4SR = function(options, name) {
+   var n = name || 'Landsat 4 SR'
+   var cent = Map.getCenter();
+   var col = ee.ImageCollection('LANDSAT/LT04/C01/T1_SR')
+             .filterBounds(cent)
+             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
+             .sort('CLOUD_COVER');
+   
+   var img = ee.Image(col.first());
+   var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
+   var masked = landsatSR(options)(img);
+   print(masked)
+   Map.addLayer(masked, vis, n+' masked');
+   Map.addLayer(img, vis, n+' NOT masked', false);
+   Map.centerObject(img)
+ };
+ 
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
+ exports.landsat4SR = landsat4SR
+ exports.landsat7SR = landsat7SR
