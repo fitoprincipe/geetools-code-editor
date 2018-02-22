@@ -13,8 +13,7 @@ Once you are in the Code Editor, at top write
 See **Cloud_masks** for an example.
 
 ## Cloud masks
-Applying masks for clouds, shadows and snow is a basic process is almost made 
-every time. This module provides some funtions to do it directly.
+Applying masks for clouds, shadows and snow is a very common process. This module provides some funtions to do it directly.
 
 #### Import module
 
