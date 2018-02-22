@@ -29,7 +29,7 @@ var sentinel2 = function(image) {
 }
 
 var landsatSR = function(options) {
-  var bits = {'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4};
+  var bits = ee.Dictionary({'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4});
   var opt = options || ['cloud', 'shadow', 'adjacent', 'snow'];
   
   options = ee.List(opt);
@@ -54,6 +54,8 @@ var landsatSR = function(options) {
   
       var pix = function() {
           var mask = image.select('pixel_qa')
+          
+          /*
           var cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
           var shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
           var snow_mask = computeQAbits(mask, 4, 4, 'snow')
@@ -62,6 +64,15 @@ var landsatSR = function(options) {
                         .and(shadow_mask.eq(0))
                         .and(snow_mask.eq(0))
           return good_pix
+          */
+          var first = ee.Image.constant(0)
+          var good_pix = ee.Image(options.iterate(function(o, ini){
+            ini = ee.Image(ini);
+            var m = computeQAbits(mask, bits.get(o), bits.get(o), o).eq(0);
+            return ini.or(m);
+          }, first));
+          
+          return good_pix.not()
       }
   
       var good_pix = ee.Algorithms.If(contains_sr, sr(), pix());
