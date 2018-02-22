@@ -37,6 +37,21 @@ var landsatSR = function(options) {
   var wrap = function(image) {
       var bands = image.bandNames();
       var contains_sr = bands.contains('sr_cloud_qa');
+      
+      var compute = function(rel) {
+        var first = ee.Image.constant(0)
+        var good_pix = ee.Image(
+          options.iterate(function(o, ini){
+            var cond = rel.contains(o);
+            
+            var i = ee.Image(ini);
+            var m = ee.Image(rel.get(o));
+            return ee.Image(ee.Algorithms.If(cond, i.or(m), i));
+          }, first)
+        );
+      
+        return good_pix.not();
+      }
   
       var sr = function() {
           var mask = image.select('sr_cloud_qa');
@@ -63,25 +78,8 @@ var landsatSR = function(options) {
             'shadow': shadow_mask,
             'snow': snow_mask
           })
-          /*
-          var good_pix = cloud_mask.eq(0)
-                        .and(shadow_mask.eq(0))
-                        .and(snow_mask.eq(0))
-          return good_pix
-          */
-          var first = ee.Image.constant(0)
-          var good_pix = ee.Image(
-            options.iterate(function(o, ini){
-              var cond = rel.contains(o);
-              
-              var i = ee.Image(ini);
-              var m = ee.Image(rel.get(o));
-              return ee.Image(ee.Algorithms.If(cond, i.or(m), i));
-            }, first)
-          );
           
-          return good_pix.not()
-          //return image.select([0]).gt(1000); 
+          return compute(rel);
       }
   
       var good_pix = ee.Algorithms.If(contains_sr, sr(), pix());
