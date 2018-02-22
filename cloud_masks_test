@@ -86,6 +86,7 @@
              .sort('CLOUD_COVER');
    
    var cond = col.size().gt(0);
+   print(col.size())
    
    var img = ee.Image(col.first());
    var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
