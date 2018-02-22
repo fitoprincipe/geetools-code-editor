@@ -25,5 +25,3 @@
  };
  
  exports.sentinel2 = sentinel2
- 
- sentinel2()
