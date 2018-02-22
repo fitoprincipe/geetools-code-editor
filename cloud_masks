@@ -34,8 +34,6 @@ var landsatSR = function(options) {
   
   options = ee.List(opt);
   
-  print(options)
-
   var wrap = function(image) {
       var bands = image.bandNames();
       var contains_sr = bands.contains('sr_cloud_qa');
