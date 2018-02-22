@@ -72,9 +72,11 @@ var landsatSR = function(options) {
           var first = ee.Image.constant(0)
           var good_pix = ee.Image(
             options.iterate(function(o, ini){
+              var cond = rel.contains(o);
+              
               var i = ee.Image(ini);
               var m = ee.Image(rel.get(o));
-              return i.or(m);
+              return ee.Image(ee.Algorithms.If(cond, i.or(m), i));
             }, first)
           );
           
