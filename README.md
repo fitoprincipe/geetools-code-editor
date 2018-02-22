@@ -17,13 +17,13 @@ Applying masks for clouds, shadows and snow is a very common process. This modul
 
 #### Import module
 
-    var cloud_mask = require('users/fitoprincipe/geetools:cloud_masks');
+    var cloud_masks = require('users/fitoprincipe/geetools:cloud_masks');
 
 In the `cloud_masks` module exist the following functions:
 
 ### Sentinel 2
 
-    var s2function = cloud_mask.sentinel2
+    var sentinel2function = cloud_masks.sentinel2
 
 This function is made to use in collection `COPERNICUS/S2`. 
 Does not use any argument, so can be used directly on a `map`
@@ -31,7 +31,7 @@ function.
 
 ### Landsat SR
 
-    var landsatSRfunction = cloud_mask.landsatSR
+    var landsatSRfunction = cloud_masks.landsatSR
 
 This function is made to use in:
   
@@ -50,11 +50,13 @@ are:
 
 ### Test Cloud masks
 
-There is a module to test `cloud_masks`.
+There is a module to test `cloud_masks`. All functions in that module use the
+center of the map to filter by bounds, so if you move around you'll see
+different images.
 
-    var cloud_mask = require('users/fitoprincipe/geetools:cloud_masks_test');
-    cloud_mask.sentinel2()  // Test Sentinel 2
-    cloud_mask.landsat4SR()  // Test Landsat 4 SR
-    cloud_mask.landsat5SR()  // Test Landsat 5 SR
-    cloud_mask.landsat7SR(['cloud'])  // Test only cloud of Landsat 7 SR
-    cloud_mask.landsat8SR(['cloud'], 'L8 SR only cloud')  // Test only cloud of Landsat 8 SR and assign a name to the layer
+    var cloud_masks = require('users/fitoprincipe/geetools:cloud_masks_test');
+    cloud_masks.sentinel2()  // Test Sentinel 2
+    cloud_masks.landsat4SR()  // Test Landsat 4 SR
+    cloud_masks.landsat5SR()  // Test Landsat 5 SR
+    cloud_masks.landsat7SR(['cloud'])  // Test only cloud of Landsat 7 SR
+    cloud_masks.landsat8SR(['cloud'], 'L8 SR only cloud')  // Test only cloud of Landsat 8 SR and assign a name to the layer
