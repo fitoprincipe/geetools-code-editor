@@ -33,6 +33,8 @@ var landsatSR = function(options) {
   var opt = options || ['cloud', 'shadow', 'adjacent', 'snow'];
   
   options = ee.List(opt);
+  
+  print(options)
 
   var wrap = function(image) {
       var bands = image.bandNames();
