@@ -37,6 +37,7 @@
    var img = ee.Image(col.first());
    var vis = {bands:['B5', 'B7', 'B4'], min:0, max:5000}
    var masked = landsatSR()(img);
+   print(masked)
    Map.addLayer(masked, vis, 'Landsat 8 SR masked');
    Map.addLayer(img, vis, 'Landsat 8 SR NOT masked', false);
    Map.centerObject(img)
