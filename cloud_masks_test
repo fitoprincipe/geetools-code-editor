@@ -43,7 +43,7 @@
    Map.centerObject(img)
  };
  
- var landsat5SR = function(optionsname) {
+ var landsat5SR = function(options, name) {
    var n = name || 'Landsat 5 SR'
    var cent = Map.getCenter();
    var col = ee.ImageCollection('LANDSAT/LT05/C01/T1_SR')
