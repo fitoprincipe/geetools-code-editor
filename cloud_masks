@@ -28,7 +28,7 @@ var sentinel2 = function(image) {
   return image.updateMask(mask.Not());
 }
 
-help['sentiel2'] = 'function to mask out cloud from Sentinel 2 images. Use on map function directly';
+help['sentinel2'] = 'function to mask out cloud from Sentinel 2 images. Use on map function directly';
 
 exports.help = help
-exports.sentinel2 = sentienl2
+exports.sentinel2 = sentinel2
