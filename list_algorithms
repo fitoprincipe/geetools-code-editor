@@ -1,0 +1,24 @@
+/***
+ * List algorithms for enhacing List objects
+ * 
+ * Author: Rodrigo E. Principe
+ * License: MIT
+ */
+ 
+var help = {};
+
+var remove_duplicates = function(list) {
+  var newlist = ee.List([]);
+  var wrap = function(element, init) {
+    init = ee.List(init);
+    var contained = init.contains(element);
+    
+    return ee.Algorithms.If(contained, init, init.add(element));
+  };
+  return ee.List(list.iterate(wrap, newlist));
+};
+
+help['remove_duplicates'] = 'Remove duplicated values from a list object'
+
+exports.help = help
+exports.remove_duplicates = remove_duplicates
