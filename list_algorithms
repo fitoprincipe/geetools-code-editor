@@ -30,7 +30,7 @@ var get_from_dict = function(list, dict) {
 }
 
 help['remove_duplicates'] = 'Remove duplicated values from a list object'
-help['get_from_dict'] = "Get a list of Dict's values from a list object."+
+help['get_from_dict'] = "Get a list of Dict's values from a list object. Keys must be unique"+
                         "\nArgs:\n  list: list of keys\n  dict: dict to get the values for list's keys"
 
 exports.help = help
