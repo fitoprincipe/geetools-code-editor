@@ -30,7 +30,9 @@ var sentinel2 = function(image) {
 
 var landsatSR = function(options) {
   var bits = {'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4};
-  var opt = ee.List(options) || ee.List(['cloud', 'shadow', 'adjacent', 'snow']);
+  var opt = options || ['cloud', 'shadow', 'adjacent', 'snow'];
+  
+  options = ee.List(opt);
 
   var wrap = function(image) {
       var bands = image.bandNames();
