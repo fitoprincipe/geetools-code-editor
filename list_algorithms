@@ -2,8 +2,11 @@
  * List algorithms for enhacing List objects
  * 
  * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
  * License: MIT
  */
+ 
+print('Module "list_algorithms" made by Rodrigo E. Principe');
  
 var help = {};
 
