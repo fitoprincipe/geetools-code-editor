@@ -30,7 +30,7 @@ var sentinel2 = function(image) {
 
 var landsatSR = function(options) {
   var bits = ee.Dictionary({'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4});
-  var opt = options || ['cloud', 'shadow', 'snow'];
+  var opt = options || ['cloud', 'shadow', 'adjacent', 'snow'];
   
   options = ee.List(opt);
 
@@ -54,23 +54,29 @@ var landsatSR = function(options) {
   
       var pix = function() {
           var mask = image.select('pixel_qa')
-          
-          /*
           var cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
           var shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
           var snow_mask = computeQAbits(mask, 4, 4, 'snow')
-  
+          
+          var rel = ee.Dictionary({
+            'cloud': cloud_mask, 
+            'shadow': shadow_mask,
+            'snow': snow_mask
+          })
+          /*
           var good_pix = cloud_mask.eq(0)
                         .and(shadow_mask.eq(0))
                         .and(snow_mask.eq(0))
           return good_pix
           */
           var first = ee.Image.constant(0)
-          var good_pix = ee.Image(options.iterate(function(o, ini){
-            var i = ee.Image(ini);
-            var m = computeQAbits(mask, bits.get(o), bits.get(o), o).eq(0);
-            return i.or(m);
-          }, first));
+          var good_pix = ee.Image(
+            options.iterate(function(o, ini){
+              var i = ee.Image(ini);
+              var m = ee.Image(rel.get(o));
+              return i.or(m);
+            }, first)
+          );
           
           return good_pix.not()
           //return image.select([0]).gt(1000); 
