@@ -1,0 +1,75 @@
+/*
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Some tools
+*/
+
+var help = {};
+
+var addLayerCol = function(col, viz, active, label) {
+  var label = label;
+  var n = col.size().getInfo();
+  var list = col.toList(n);
+  var active = active;
+  for (var i = 0; i < n; i++) {
+    var img = ee.Image(list.get(i));
+    if (label == "ID") {
+      var id = img.id().getInfo();
+      var laylabel = label+" "+id;
+    } else if (label == "system_date") {
+      var date = img.date().format().getInfo()
+      var laylabel = label+" "+date;
+    } else if (img.propertyNames().contains(label).getInfo() == true) {
+      var p = img.get(label).getInfo();
+      var laylabel = label+" "+p
+    } else {
+      print(label+" not found")
+      var laylabel = "No. "+i.toString();
+    }
+    Map.addLayer(img, viz, laylabel, active)
+  }
+}
+
+var ExportCol = function(col, folder, scale, type,
+                         nimg, maxPixels, region) {
+    type = type || "float";
+    nimg = nimg || 500;
+    scale = scale || 1000;
+    maxPixels = maxPixels || 1e13;
+
+    var colList = col.toList(nimg);
+    var n = colList.size().getInfo();
+
+    for (var i = 0; i < n; i++) {
+      var img = ee.Image(colList.get(i));
+      var id = img.id().getInfo();
+      region = region || img.geometry().bounds().getInfo()["coordinates"];
+
+      var imgtype = {"float":img.toFloat(),
+                     "byte":img.toByte(),
+                     "int":img.toInt(),
+                     "double":img.toDouble()
+                    }
+
+      Export.image.toDrive({
+        image:imgtype[type],
+        description: id,
+        folder: folder,
+        fileNamePrefix: id,
+        region: region,
+        scale: scale,
+        maxPixels: maxPixels})
+    }
+  }
+
+help['complete'] = 'https://github.com/fitoprincipe/geetools-code-editor'
+
+help['addLayerCol'] = 'This function adds all images from one Collection to the Map. You can label'+
+                       the images using any available property or choosing between "date" or "ID"'
+
+help['ExportCol'] = 'Exports all images from one Collection'
+
+exports.addLayerCol = addLayerCol
+exports.ExportCol = ExportCol
