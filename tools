@@ -8,7 +8,19 @@ Some tools
 
 var help = {};
 
-var addLayerCol = function(col, viz, active, label) {
+var addLayerCol = function(col, options) { //viz, active, label) {
+  
+  var fbands = ee.Image(col.first).bandNames()
+  var def_viz = {bands: fbands.get(0), min:0, max:1};
+  
+  var def = {viz: def_viz, active: false, label:'ID'}
+  
+  var opt = options || def
+  
+  if (options['viz'] !== undefined) {var viz = options['viz']} else {var viz = def['viz']}
+  if (options['active'] !== undefined) {var active = options['active']} else {var active = def['active']}
+  if (options['label'] !== undefined) {var label = options['label']} else {var label = def['label']}
+  
   // var label = label;
   var n = col.size().getInfo();
   var list = col.toList(n);
