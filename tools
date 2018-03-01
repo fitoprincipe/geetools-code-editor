@@ -10,10 +10,10 @@ var help = {};
 
 var addLayerCol = function(col, options) {
   
-  var fbands = ee.Image(col.first()).bandNames()
+  var fbands = ee.Image(col.first()).bandNames();
   var def_viz = {bands: fbands.get(0), min:0, max:1};
   
-  var def = {viz: def_viz, active: false, label:'ID'}
+  var def = {viz: def_viz, active: false, label:'ID'};
   
   var opt = options || def
   
