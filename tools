@@ -14,9 +14,9 @@ var addLayerCol = function(col, options) {
   var def_viz = {bands: fbands.get(0), min:0, max:1};
   
   var def = {viz: def_viz, active: false, label:'ID'};
-  print(def)
-  print(options)
+  
   if (options !== undefined) {var opt = options} else {var opt = def}
+  print(def)
   
   if (options['viz'] !== undefined) {var viz = options['viz']} else {var viz = def['viz']}
   if (options['active'] !== undefined) {var active = options['active']} else {var active = def['active']}
