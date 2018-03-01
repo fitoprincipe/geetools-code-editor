@@ -43,7 +43,6 @@ var addLayerCol = function(col, options) {
       print(label+" not found")
       var laylabel = "No. "+i.toString();
     }
-    print(laylabel)
     Map.addLayer(img, viz, laylabel, active)
   }
 }
