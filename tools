@@ -11,7 +11,9 @@ var help = {};
 var addLayerCol = function(col, options) {
   
   var fbands = ee.Image(col.first()).bandNames();
-  var def_viz = {bands: [fbands.get(0), fbands.get(1), fbands.get(2)], min:0, max:1};
+  var def_viz = {bands: [fbands.get(0).getInfo(), 
+                         fbands.get(1).getInfo(), 
+                         fbands.get(2).getInfo()], min:0, max:1};
   
   var def = {viz: def_viz, active: false, label:'ID'};
   
