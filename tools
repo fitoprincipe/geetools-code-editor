@@ -79,16 +79,16 @@ var ExportCol = function(col, folder, scale, type,
 help['complete'] = 'https://github.com/fitoprincipe/geetools-code-editor'
 
 help['addLayerCol'] = 'This function adds all images\n'+ 
-                      'from one Collection to the Map.\n '+
-                      'You can label the images using any \n '+
-                      'available property or choosing between \n '+
-                      '"date" or "ID"\n '+
-                      'Use: addLayerCol(collection, options)\n '+
-                      'options: (dictionary)\n '+
-                      '  viz: visualization parameters (dict)\n '+
-                      '  active: if each image will be active (bool)\n '+
-                      '  label: the label to put as image name, can be any property of the image, or\n '+
-                      '         "ID": the name will be the ID\n '+
+                      'from one Collection to the Map.\n'+
+                      'You can label the images using any \n'+
+                      'available property or choosing between \n'+
+                      '"date" or "ID"\n\n'+
+                      'Use: addLayerCol(collection, options)\n'+
+                      'options: (dictionary)\n'+
+                      '  viz: visualization parameters (dict)\n'+
+                      '  active: if each image will be active (bool)\n'+
+                      '  label: the label to put as image name, can be any property of the image, or\n'+
+                      '         "ID": the name will be the ID\n'+
                       '         "system_date": the name will be the image date'
 
 help['ExportCol'] = 'Exports all images from one Collection'
