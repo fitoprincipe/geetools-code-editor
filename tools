@@ -85,4 +85,4 @@ help['ExportCol'] = 'Exports all images from one Collection'
 
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
-exoirts.help = help
+exports.help = help
