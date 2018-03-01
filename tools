@@ -18,7 +18,6 @@ var addLayerCol = function(col, options) {
   var def = {viz: def_viz, active: false, label:'ID'};
   
   if (options !== undefined) {var opt = options} else {var opt = def}
-  print(opt)
   
   if (opt['viz'] !== undefined) {var viz = opt['viz']} else {var viz = def['viz']}
   if (opt['active'] !== undefined) {var active = opt['active']} else {var active = def['active']}
