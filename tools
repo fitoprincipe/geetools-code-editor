@@ -18,9 +18,9 @@ var addLayerCol = function(col, options) {
   if (options !== undefined) {var opt = options} else {var opt = def}
   print(opt)
   
-  if (options['viz'] !== undefined) {var viz = options['viz']} else {var viz = def['viz']}
-  if (options['active'] !== undefined) {var active = options['active']} else {var active = def['active']}
-  if (options['label'] !== undefined) {var label = options['label']} else {var label = def['label']}
+  if (opt['viz'] !== undefined) {var viz = opt['viz']} else {var viz = def['viz']}
+  if (opt['active'] !== undefined) {var active = opt['active']} else {var active = def['active']}
+  if (opt['label'] !== undefined) {var label = opt['label']} else {var label = def['label']}
   
   // var label = label;
   var n = col.size().getInfo();
