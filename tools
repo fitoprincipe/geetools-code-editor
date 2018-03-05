@@ -128,11 +128,23 @@ help['addLayerCol'] = 'This function adds all images\n'+
                       '         "system_date": the name will be the image date'
 
 help['ExportCol'] = 'Exports all images from one Collection'
+
 help['dict2image'] = "Create an Image from dict's key/values pairs\n\n"+
                      "For example:\n"+
                      "var i = dict2image({one:1, two:2});\n"+
                      "will return an image with 2 constant bands:\n"+
                      "  one: all pixels have value = 1\n"+
+                     "  two: all pixels have value = 2"
+                     
+help['list2image'] = "Create an Image from a list and an optional value\n\n"+
+                     "For example:\n"+
+                     "var i = list2image(['one', 'two']);\n"+
+                     "will return an image with 2 constant bands:\n"+
+                     "  one: all pixels have value = 0\n"+
+                     "  two: all pixels have value = 0\n\n"+
+                     "var i2 = list2image(['one', 'two'], 2);\n"+
+                     "will return an image with 2 constant bands:\n"+
+                     "  one: all pixels have value = 2\n"+
                      "  two: all pixels have value = 2"
 
 exports.addLayerCol = addLayerCol
