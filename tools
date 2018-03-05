@@ -8,34 +8,19 @@ Some tools
 
 var help = {};
 
-var constant_image = function(options) {
-  var def = {value:0, bandnames:null, bands:null}
+var constant_image = function(bands) {
   
-  if (options !== undefined) {var opt = options} else {opt = def}
+  if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
   
-  var value = opt['value']
-  var bandnames = opt['bandnames']
-  var bands = opt['bands']
-  print(value, bandnames, bands)
-  
-  if (bands !== undefined) {
-    print('got bands')
-    var dict = ee.Dictionary(bands)
-    bandnames = dict.keys()  // ee.List
-    var bandlist = dict.map(function(key, val){
+  var dict = ee.Dictionary(bands)
+  bandnames = dict.keys()  // ee.List
+  var bandlist = dict.map(function(key, val){
       var v = ee.Number(val);
       var k = ee.String(key)
       var f = ee.Image(v).select([0], [k])
       return f
       }).values()
-  } else {
-    print('got no bands')
-    if (bandnames === undefined) {bandnames = ['constant']}
-    var bandlist = bandnames.map(function(name){
-      return ee.Image.constant(value).select([0], [name])
-    })
-  }
-  var bandlist = ee.List(bandlist)
+  bandlist = ee.List(bandlist)
   var final = ee.Image(bandlist.iterate(function(img, ini){
       ini = ee.Image(ini)
       return ini.addBands(img)
