@@ -12,7 +12,7 @@ var constant_image = function(bands) {
   
   if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
   
-  var dict = ee.Dictionary(bands)
+  var dict = ee.Dictionary(opt)
   var bandnames = dict.keys()  // ee.List
   var bandlist = dict.map(function(key, val){
       var v = ee.Number(val);
