@@ -112,9 +112,10 @@ var ExportCol = function(col, folder, scale, type,
     }
   }
 
-help['complete'] = 'https://github.com/fitoprincipe/geetools-code-editor'
+help['gitHub'] = 'https://github.com/fitoprincipe/geetools-code-editor'
 
-help['addLayerCol'] = 'This function adds all images\n'+ 
+help['addLayerCol'] = 'addLayerCol()\n\n'+
+                      'This function adds all images\n'+ 
                       'from one Collection to the Map.\n'+
                       'You can label the images using any \n'+
                       'available property or choosing between \n'+
@@ -127,16 +128,19 @@ help['addLayerCol'] = 'This function adds all images\n'+
                       '         "ID": the name will be the ID\n'+
                       '         "system_date": the name will be the image date'
 
-help['ExportCol'] = 'Exports all images from one Collection'
+help['ExportCol'] = 'ExportCol()\n\n'+
+                    'Exports all images from one Collection'
 
-help['dict2image'] = "Create an Image from dict's key/values pairs\n\n"+
+help['dict2image'] = "dict2image()\n\n"+
+                     "Create an Image from dict's key/values pairs\n\n"+
                      "For example:\n"+
                      "var i = dict2image({one:1, two:2});\n"+
                      "will return an image with 2 constant bands:\n"+
                      "  one: all pixels have value = 1\n"+
                      "  two: all pixels have value = 2"
                      
-help['list2image'] = "Create an Image from a list and an optional value\n\n"+
+help['list2image'] = "list2image()\n\n"+
+                     "Create an Image from a list and an optional value\n\n"+
                      "For example:\n"+
                      "var i = list2image(['one', 'two']);\n"+
                      "will return an image with 2 constant bands:\n"+
