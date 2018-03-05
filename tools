@@ -8,7 +8,7 @@ Some tools
 
 var help = {};
 
-var constant_image = function(bands) {
+var dict2image = function(bands) {
   
   if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
   
@@ -118,4 +118,4 @@ help['ExportCol'] = 'Exports all images from one Collection'
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
-exports.constant_image = constant_image
+exports.dict2image = dict2image
