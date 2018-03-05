@@ -26,12 +26,12 @@ If you need to access the help in the code editor, you can do
 
 ```javascript
 var module = require('users/fitoprincipe/geetools:MODULE_NAME');
-module.help;  // will print all help for MODULE_NAME
-moduel.help[FUNCTION_NAME];  // will print help for FUNCTION_NAME
+print(module.help);  // will print all help for MODULE_NAME
+print(module.help[FUNCTION_NAME]);  // will print help for FUNCTION_NAME
 
 // EXAMPLE
 var tools = require('users/fitoprincipe/geetools:tools');
-tools.help['dict2image']; // Help for dict2image function
+print(tools.help['dict2image']); // Help for dict2image function
 ```
 
 ## Cloud masks
