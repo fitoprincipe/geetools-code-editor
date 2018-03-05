@@ -18,7 +18,7 @@ var constant_image = function(options) {
   var bands = opt['bands']
   print(value, bandnames, bands)
   
-  if (bands !== null) {
+  if (bands !== undefined) {
     print('got bands')
     var dict = ee.Dictionary(bands)
     bandnames = dict.keys()  // ee.List
@@ -30,7 +30,7 @@ var constant_image = function(options) {
       }).values()
   } else {
     print('got no bands')
-    if (bandnames === null) {bandnames = ['constant']}
+    if (bandnames === undefined) {bandnames = ['constant']}
     var bandlist = bandnames.map(function(name){
       return ee.Image.constant(value).select([0], [name])
     })
