@@ -16,6 +16,7 @@ var constant_image = function(options) {
   var value = opt['value']
   var bandnames = opt['bandnames']
   var bands = opt['bands']
+  print(value, bandnames, bands)
   
   if (bands !== null) {
     print('got bands')
