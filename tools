@@ -114,7 +114,7 @@ help['addLayerCol'] = 'This function adds all images\n'+
                       '         "system_date": the name will be the image date'
 
 help['ExportCol'] = 'Exports all images from one Collection'
-help['dict2image'] = "Create an Image from dict's key/values pairs\n"+
+help['dict2image'] = "Create an Image from dict's key/values pairs\n\n"+
                      "For example:\n"+
                      "var i = dict2image({one:1, two:2});\n"+
                      "will return an image with 2 constant bands:\n"+
