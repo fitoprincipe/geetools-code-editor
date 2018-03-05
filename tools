@@ -8,6 +8,38 @@ Some tools
 
 var help = {};
 
+var constant_image = function(options) {
+  var def = {value:0, bandnames:null, bands:null}
+  
+  if (options !== undefined) {var opt = options} else {opt = def}
+  
+  var value = opt['value']
+  var bandnames = opt['bandnames']
+  var bands = opt['bands']
+  
+  if (bands !== null) {
+    var dict = ee.Dictionary(bands)
+    bandnames = dict.keys()  // ee.List
+    var bandlist = dict.map(function(key, val){
+      var v = ee.Number(val);
+      var k = ee.String(key)
+      var f = ee.Image(v).select([0], [k])
+      return f
+      }).values()
+  } else {
+    if (bandnames === null) {bandnames = ['constant']}
+    bandlist = bandnames.map(function(name){
+      return ee.Image.constant(value).select([0], [name])
+    })
+  }
+  
+  var final = ee.Image(bandlist.iterate(function(img, ini){
+      ini = ee.Image(ini)
+      return ini.addBands(img)
+    }, ee.Image(0)))
+  return final.select(bandnames)
+}
+
 var addLayerCol = function(col, options) {
   
   var fbands = ee.Image(col.first()).bandNames();
@@ -98,3 +130,4 @@ help['ExportCol'] = 'Exports all images from one Collection'
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
+exports.constant_image = constant_image
