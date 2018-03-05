@@ -28,7 +28,7 @@ var constant_image = function(options) {
       }).values()
   } else {
     if (bandnames === null) {bandnames = ['constant']}
-    bandlist = bandnames.map(function(name){
+    var bandlist = bandnames.map(function(name){
       return ee.Image.constant(value).select([0], [name])
     })
   }
