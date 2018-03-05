@@ -21,6 +21,19 @@ module.
 var cld_mask_module = require('users/fitoprincipe/geetools:cloud_masks');
 ```
 
+## HELP! (directly in the Code Editor)
+If you need to access the help in the code editor, you can do
+
+```javascript
+var module = require('users/fitoprincipe/geetools:MODULE_NAME');
+module.help;  // will print all help for MODULE_NAME
+moduel.help[FUNCTION_NAME];  // will print help for FUNCTION_NAME
+
+// EXAMPLE
+var tools = require('users/fitoprincipe/geetools:tools');
+tools.help['dict2image']; // Help for dict2image function
+```
+
 ## Cloud masks
 Applying masks for clouds, shadows and snow is a very common process. This module provides some funtions to do it directly.
 
