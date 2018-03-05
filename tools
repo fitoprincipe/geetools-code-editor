@@ -28,6 +28,20 @@ var dict2image = function(bands) {
   return final.select(bandnames)
 }
 
+var list2image = function(list, value) {
+  if (value === undefined) {var val = 0} else {var val = value}
+  var listt = ee.List(list)
+  
+  var imglist = listt.map(function(name){
+    return ee.Image(val).select([0], [name])
+  })
+  var final = ee.Image(imglist.iterate(function(img, ini){
+    ini = ee.Image(ini)
+    return ini.addBands(img)
+  }, ee.Image(0)))
+  return final.select(listt)
+}
+
 var addLayerCol = function(col, options) {
   
   var fbands = ee.Image(col.first()).bandNames();
@@ -125,3 +139,4 @@ exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
 exports.dict2image = dict2image
+exports.list2image = list2image
