@@ -32,7 +32,7 @@ var constant_image = function(options) {
       return ee.Image.constant(value).select([0], [name])
     })
   }
-  
+  print(bandlist)
   var final = ee.Image(bandlist.iterate(function(img, ini){
       ini = ee.Image(ini)
       return ini.addBands(img)
