@@ -25,8 +25,8 @@ var sum_bands = function(name, bands) {
         var newimg = ee.Image(bn.iterate(sumBandas, nim))
 
         return image.addBands(newimg)
-    return wrap
   }
+  return wrap
 }
 
 var dict2image = function(bands) {
