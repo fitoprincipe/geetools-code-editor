@@ -12,7 +12,7 @@ var sum_bands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
   name = name || 'sum_bands';
-  var append = append_to_image || true;
+  var append = append_to_image || ee.Number(0);
   
   var wrap = function(image) {
         var bn = ee.Algorithms.If(bands, ee.List(bands), image.bandNames());
