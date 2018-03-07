@@ -157,7 +157,7 @@ help['addLayerCol'] = 'addLayerCol()\n\n'+
 help['ExportCol'] = 'ExportCol()\n\n'+
                     'Exports all images from one Collection'
 
-help['dict2image'] = "dict2image()\n\n"+
+help['dict2image'] = "dict2image(bands)\n\n"+
                      "Create an Image from dict's key/values pairs\n\n"+
                      "For example:\n"+
                      "var i = dict2image({one:1, two:2});\n"+
@@ -165,7 +165,7 @@ help['dict2image'] = "dict2image()\n\n"+
                      "  one: all pixels have value = 1\n"+
                      "  two: all pixels have value = 2"
                      
-help['list2image'] = "list2image()\n\n"+
+help['list2image'] = "list2image(list, value)\n\n"+
                      "Create an Image from a list and an optional value\n\n"+
                      "For example:\n"+
                      "var i = list2image(['one', 'two']);\n"+
@@ -176,6 +176,13 @@ help['list2image'] = "list2image()\n\n"+
                      "will return an image with 2 constant bands:\n"+
                      "  one: all pixels have value = 2\n"+
                      "  two: all pixels have value = 2"
+
+help['sum_bands'] = 'sum_bands(name, bands, append_to_image)\n\n'+
+                    'Add all *bands* values and puts the result on *name*\n'+
+                    'name: name for the band that will hold the result\n'+
+                    'bands: list of bands to sum\n'+
+                    'append_to_image: if true (default) the resulting image\n'+
+                    'will have all bands plus the resulting band'
 
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
