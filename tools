@@ -8,6 +8,27 @@ Some tools
 
 var help = {};
 
+var sum_bands = function(name, bands) {
+  
+  bands = bands || null;
+  name = name || 'sum_bands'
+  
+  var wrap = function(image) {
+        var bn = ee.Algorithms.If(bands, ee.List(bands), image.bandNames());
+        var nim = ee.Image(0).select([0], [name]);
+
+        // TODO: check if passed band names are in band names
+        var sumBandas = function(n, ini) {
+            return ee.Image(ini).add(image.select([n]))
+        }
+
+        var newimg = ee.Image(bn.iterate(sumBandas, nim))
+
+        return image.addBands(newimg)
+    return wrap
+  }
+}
+
 var dict2image = function(bands) {
   
   if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
@@ -156,3 +177,4 @@ exports.ExportCol = ExportCol
 exports.help = help
 exports.dict2image = dict2image
 exports.list2image = list2image
+exports.sum_bands = sum_bands
