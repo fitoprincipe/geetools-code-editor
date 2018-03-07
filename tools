@@ -10,7 +10,7 @@ var help = {};
 
 var sum_bands = function(name, bands) {
   
-  bands = bands || null;
+  bands = bands || ee.List([]);
   name = name || 'sum_bands'
   
   var wrap = function(image) {
