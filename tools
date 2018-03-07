@@ -22,7 +22,7 @@ var sum_bands = function(name, bands) {
             return ee.Image(ini).add(image.select([n]))
         }
 
-        var newimg = ee.Image(bn.iterate(sumBandas, nim))
+        var newimg = ee.Image(ee.List(bn).iterate(sumBandas, nim))
 
         return image.addBands(newimg)
   }
