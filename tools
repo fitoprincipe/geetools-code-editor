@@ -11,8 +11,7 @@ var help = {};
 var replace_band = function(image, replace_band, add_band) {
     var band = add_band.select([0]);
     var bands = image.bandNames();
-    band = band.select([0], [replace_band]);
-    print(band)
+    // band = band.select([0], [replace_band]);
     var resto = bands.remove(replace_band);
     var img_resto = image.select(resto);
     var img_final = img_resto.addBands(band);
