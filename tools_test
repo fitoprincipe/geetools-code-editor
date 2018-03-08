@@ -11,7 +11,7 @@ var test_sum_bands = function(add_layers) {
   
   var sum = tools.sum_bands()(ii)
   var sum2 = tools.sum_bands('a_name')(ii)
-  var sum3 = tools.sum_bands(null, ['a', 'd'])(ii)
+  var sum3 = tools.sum_bands('a_plus_d', ['a', 'd'])(ii)
   var sum4 = tools.sum_bands(null, null, false)(ii)
   
   print('Original image', ii)
