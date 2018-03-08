@@ -8,6 +8,16 @@ Some tools
 
 var help = {};
 
+var replace_band = function(image, replace_band, add_band) {
+    var band = add_band.select([0]);
+    var bands = image.bandNames();
+    band = band.select([0], [replace_band]);
+    var resto = bands.remove(replace_band);
+    var img_resto = image.select(resto);
+    var img_final = img_resto.addBands(band);
+    return img_final
+}
+
 var sum_bands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
@@ -184,9 +194,18 @@ help['sum_bands'] = 'sum_bands(name, bands, append_to_image)\n\n'+
                     'append_to_image: if true (default) the resulting image\n'+
                     'will have all bands plus the resulting band'
 
+help['replace_band'] = 'replace_band(image, replace_band, add_band)\n\n'+
+                       'Replace one band of the image with a provided band\n'+
+                       'image: Image containing the band to replace\n'+
+                       "replace_band: name of the band to replace. If the image hasn't got\n"+
+                       'that band, it will be added to the image.\n'+
+                       'add_band: Image (one band) containing the band to add. If an Image\n'+
+                       'with more than one band is provided, it uses the first band.'
+
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
 exports.dict2image = dict2image
 exports.list2image = list2image
 exports.sum_bands = sum_bands
+exports.replace_band = replace_band
