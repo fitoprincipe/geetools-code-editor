@@ -2,7 +2,7 @@ var tools = require('users/fitoprincipe/geetools:tools')
 
 var help = {};
 
-var test_sum_bands = function(add_layers) {
+var sum_bands = function(add_layers) {
   var add = add_layers || false;
   
   print(tools.help['sum_bands'])
@@ -28,7 +28,32 @@ var test_sum_bands = function(add_layers) {
   }
 }
 
-help['test_sum_bands'] = 'test_sum_bands'
+var replace_band = function(add_layers) {
+  print(tools.help['replace_band']);
+  
+  var i = tools.dict2image({'a':1, 'b':2, 'c':3})
+  var i2 = tools.dict2image({'d':4})
+  
+  print('replace_band', i);
+  print('add_band', i2);
+  
+  var result = tools.replace_band(i, 'c', i2);
+  print('replace band "c"', result)
+  
+  if (add_layers) {
+    Map.addLayer(i,{},'replace_band')
+    Map.addLayer(i2,{},'add_band')
+    Map.addLayer(result,{},'replace band c')
+  }
+}
 
-exports.test_sum_bands = test_sum_bands
+help['sum_bands'] = 'sum_bands(add_layer)\n\n'+
+                    'add_layer: whether to add or not the layers to the Map'
+
+help['replace_band'] = 'replace_band(add_layer)\n\n'+
+                       'add_layer: whether to add or not the layers to the Map'
+                         
+
+exports.sum_bands = sum_bands
+exports.replace_band = replace_band
 exports.help = help
