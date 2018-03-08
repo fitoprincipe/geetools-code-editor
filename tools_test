@@ -1,5 +1,7 @@
 var tools = require('users/fitoprincipe/geetools:tools')
 
+var help = {};
+
 var test_sum_bands = function(add_layers) {
   var add = add_layers || false;
   
@@ -26,4 +28,7 @@ var test_sum_bands = function(add_layers) {
   }
 }
 
+help['test_sum_bands'] = 'test_sum_bands'
+
 exports.test_sum_bands = test_sum_bands
+exports.help = help
