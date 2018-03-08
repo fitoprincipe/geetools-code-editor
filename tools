@@ -22,12 +22,7 @@ var sum_bands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
   name = name || 'sum_bands';
-  /*
-  if (append_to_image === undefined) {
-    var append = ee.Number(1);
-  } else if {
-  var append = append_to_image || ee.Number(0);
-  */
+  
   var append;
   switch (append_to_image) {
     case undefined:
@@ -37,9 +32,7 @@ var sum_bands = function(name, bands, append_to_image) {
         append = ee.Number(1);
         break;
     case false:
-        append = ee.Number(0);
-    }
-  
+        append = ee.Number(0);}
   
   // print(bands, name, append)
   
