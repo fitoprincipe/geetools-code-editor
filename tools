@@ -10,8 +10,8 @@ var help = {};
 
 var get_value = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
-  var p = point.geometry();
-  var result = image.reduceRegion(ee.Reducer.first(), p, sc);
+  //var p = point.geometry();
+  var result = image.reduceRegion(ee.Reducer.first(), point, sc);
   return result
 }
 
