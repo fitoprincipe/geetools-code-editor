@@ -92,6 +92,10 @@ var landsatSR = function(options) {
   return wrap;
 }
 
+var landsatTOA = function(image) {
+  return;
+}
+ 
 var modis = function(options) {
   var bits = ee.Dictionary({'cloud': 1, 'shadow': 2, 'snow': 3});
   var opt = options || ['cloud', 'shadow', 'snow'];
