@@ -8,6 +8,12 @@ Some tools
 
 var help = {};
 
+var get_value = function(image, point, scale) {
+  var sc = ee.Number(scale).toInt() || 10;
+  var result = image.reduceRegion(ee.Reducer.first(), point, sc);
+  return result
+}
+
 var replace_band = function(image, replace_band, add_band) {
     var band = add_band.select([0]);
     var bands = image.bandNames();
@@ -220,3 +226,4 @@ exports.dict2image = dict2image
 exports.list2image = list2image
 exports.sum_bands = sum_bands
 exports.replace_band = replace_band
+exports.get_value = get_value
