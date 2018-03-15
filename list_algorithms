@@ -29,12 +29,13 @@ var get_from_dict = function(list, dict) {
   return values
 }
 
-var regex = function(list, regex) {
+var regex = function(list, regex, flags) {
+  var fl = flags || null
   var i = ee.List([])
   var f = list.iterate(function(el, first){
     var f = ee.List(first)
     var e = ee.String(el);
-    var matched = ee.List(e.match(regex))
+    var matched = ee.List(e.match(regex, fl))
     return ee.Algorithms.If(matched.size().gt(0), f.add(el), f)
   }, i)
   return ee.List(f)
