@@ -43,22 +43,22 @@ var regex = function(list, regex, flags) {
 
 var filters = {regex: regex}
 
-help['remove_duplicates'] = 'remove_duplicates(list)\n\n'+
+help['remove_duplicates'] = 'remove_duplicates(list)\n'+
                             'Remove duplicated values from a list object'
-help['get_from_dict'] = "get_from_dict(list, dict)\n\n"+
-                        "Get a list of Dict's values from a list object. Keys must be unique\n"+
+                            
+help['get_from_dict'] = "get_from_dict(list, dict)\n"+
+                        "Get a list of Dict's values from a list object. Keys must be unique"+
                         "list: list of keys\n"+
                         "dict: dict to get the values for list's keys"
-help['regex'] = 'regex(list, regex, flags)\n\n'+
-                'Filter a list with a RegEx expression (use via filters)\n'+
-                'list: the list to filter\n'+
-                'regex: RegEx expression\n'+
-                'flags: Flags to use in the expression'
 
-help['filters'] = 'Collection of filter to use in ee.List'
+help['filters'] = {'regex': 'filters.regex(list, regex, flags)\n'+
+                            'Filter a list using a Regular Expression\n'+
+                            'list: the list to filter\n'+
+                            'regex: regular expression\n'+
+                            'flags: flags for the RegEx'
+                  }
 
 exports.help = help
 exports.remove_duplicates = remove_duplicates
 exports.get_from_dict = get_from_dict
 exports.filters = filters
-exports.regex = regex
