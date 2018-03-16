@@ -33,114 +33,62 @@
    }
  }
  
- 
  var sentinel2 = function(options) {
    var opt = options || null
-   show('COPERNICUS/S2', 'CLOUDY_PIXEL_PERCENTAGE', 
+   show('COPERNICUS/S2', 
+        'CLOUDY_PIXEL_PERCENTAGE', 
         {bands:['B8', 'B12', 'B4'], min:0, max:5000}, 
-        'SENTINEL 2', cloud.make.sentinel2, opt)
+        'SENTINEL 2', 
+        cloud.make.sentinel2, 
+        opt)
  }
- 
  
  var landsat8SR = function(options) {
    var opt = options || null
-   show('LANDSAT/LC08/C01/T1_SR', 'CLOUD_COVER', 
+   show('LANDSAT/LC08/C01/T1_SR', 
+        'CLOUD_COVER', 
         {bands:['B5', 'B7', 'B4'], min:0, max:5000}, 
-        'Landsat 8 SR', cloud.make.landsatSR, opt)
+        'Landsat 8 SR', 
+        cloud.make.landsatSR, 
+        opt)
  }
  
- var landsat8SR_ = function(options, name) {
-   var n = name || 'Landsat 8 SR'
-   var cent = Map.getCenter();
-   var col = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')
-             .filterBounds(cent)
-             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
-             .sort('CLOUD_COVER');
-   
-   if (col.size().getInfo() !== 0) {
-     var img = ee.Image(col.first());
-     var vis = {bands:['B5', 'B7', 'B4'], min:0, max:5000}
-     var masked = landsatSR(options)(img);
-     Map.addLayer(masked, vis, n+' masked');
-     Map.addLayer(img, vis, n+' NOT masked', false);
-     Map.centerObject(img)
-   }
-   else {
-     print('Collection is empty')
-   }
- };
+ var landsat5SR = function(options) {
+   var opt = options || null
+   show('LANDSAT/LT05/C01/T1_SR', 
+        'CLOUD_COVER', 
+        {bands:['B4', 'B5', 'B3'], min:0, max:5000}, 
+        'Landsat 5 SR', 
+        cloud.make.landsatSR, 
+        opt)
+ }
  
- var landsat5SR = function(options, name) {
-   var n = name || 'Landsat 5 SR'
-   var cent = Map.getCenter();
-   var col = ee.ImageCollection('LANDSAT/LT05/C01/T1_SR')
-             .filterBounds(cent)
-             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
-             .sort('CLOUD_COVER');
-   if (col.size().getInfo() !== 0) {
-     var img = ee.Image(col.first());
-     var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
-     var masked = landsatSR(options)(img);
-     Map.addLayer(masked, vis, n+' masked');
-     Map.addLayer(img, vis, n+' NOT masked', false);
-     Map.centerObject(img)
-   }
-   else {
-     print('Collection is empty')
-   }
- };
+ var landsat7SR = function(options) {
+   var opt = options || null
+   show('LANDSAT/LE07/C01/T1_SR', 
+        'CLOUD_COVER', 
+        {bands:['B4', 'B5', 'B3'], min:0, max:5000}, 
+        'Landsat 7 SR', 
+        cloud.make.landsatSR, 
+        opt)
+ }
  
- var landsat7SR = function(options, name) {
-   var n = name || 'Landsat 7 SR'
-   var cent = Map.getCenter();
-   var col = ee.ImageCollection('LANDSAT/LE07/C01/T1_SR')
-             .filterBounds(cent)
-             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
-             .sort('CLOUD_COVER');
-   
-   if (col.size().getInfo() !== 0) {
-     var img = ee.Image(col.first());
-     var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
-     var masked = landsatSR(options)(img);
-     Map.addLayer(masked, vis, n+' masked');
-     Map.addLayer(img, vis, n+' NOT masked', false);
-     Map.centerObject(img)
-   }
-   else {
-     print('Collection is empty')
-   }
- };
+ var landsat4SR = function(options) {
+   var opt = options || null
+   show('LANDSAT/LT04/C01/T1_SR', 
+        'CLOUD_COVER', 
+        {bands:['B4', 'B5', 'B3'], min:0, max:5000}, 
+        'Landsat 4 SR', 
+        cloud.make.landsatSR, 
+        opt)
+ }
  
- var landsat4SR = function(options, name) {
-   var n = name || 'Landsat 4 SR'
-   var cent = Map.getCenter();
-   var col = ee.ImageCollection('LANDSAT/LT04/C01/T1_SR')
-             .filterBounds(cent)
-             .filterMetadata('CLOUD_COVER', 'greater_than', 40)
-             .sort('CLOUD_COVER');
-   
-   if (col.size().getInfo() !== 0) {
-   
-     var img = ee.Image(col.first());
-     var vis = {bands:['B4', 'B5', 'B3'], min:0, max:5000}
-     var masked = landsatSR(options)(img);
-     Map.addLayer(masked, vis, n+' masked');
-     Map.addLayer(img, vis, n+' NOT masked', false);
-     Map.centerObject(img)
-     }
-   else {
-     print('Collection is empty')
-   }
- };
- 
- 
- var landsat4TOA = function(options, name) {
-   var n = name || 'Landsat 4 TOA'
+ var landsat4TOA = function(options) {
    var opt = options || null
    show('LANDSAT/LT04/C01/T1_TOA', 
         'CLOUD_COVER',
         {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
-        n,
+        'Landsat 4 TOA',
         cloud.make.landsatTOA,
         opt)
  }
