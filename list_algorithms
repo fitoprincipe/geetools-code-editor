@@ -10,6 +10,7 @@ var help = {};
 
 var remove_duplicates = function(list) {
   var newlist = ee.List([]);
+  list = ee.List(list)
   var wrap = function(element, init) {
     init = ee.List(init);
     var contained = init.contains(element);
