@@ -61,7 +61,7 @@ var compute = function(image, mask_band, bits, options) {
     var cond = bits_dict.contains(option);
     
     // get the mask for the option
-    var mask = computeQAbitsEE(image, bits_dict.get(option), bits_dict.get(option), option)
+    var mask = computeQAbits(image, bits_dict.get(option), bits_dict.get(option), option)
     return ee.Image(ee.Algorithms.If(cond, 
                                      i.or(mask), 
                                      i))
