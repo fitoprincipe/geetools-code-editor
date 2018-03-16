@@ -18,6 +18,7 @@ var computeQAbits = function(image, start, end, newName) {
     for (var i=start; i<=end; i++) {
         pattern += Math.pow(2, i);
     }
+    print(pattern)
     
     return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
 };
@@ -73,8 +74,8 @@ var compute = function(image, mask_band, bits, options) {
 var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
-  var opaque = computeQAbitsEE(cloud_mask, 10, 10, "opaque");
-  var cirrus = computeQAbitsEE(cloud_mask, 11, 11, "cirrus");
+  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
+  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus");
   var mask = opaque.or(cirrus);
   
   return image.updateMask(mask.not());
