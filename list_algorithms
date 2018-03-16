@@ -20,7 +20,9 @@ var remove_duplicates = function(list) {
 };
 
 var get_from_dict = function(list, dict) {
-  var empty = ee.List([]);
+  var empty = ee.List([])
+  list = ee.List(list)
+  dict = ee.Dictionary(dict)
   var values = ee.List(list.iterate(function(el, first) {
     var f = ee.List(first)
     var cond = dict.contains(el);
