@@ -22,6 +22,31 @@ var computeQAbits = function(image, start, end, newName) {
     return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
 };
 
+var compute = function(image, mask_band, bits, options) {
+  // cast params in case they are not EE objects
+  var bits_dict = ee.Dictionary(bits)
+  var opt = ee.List(options)
+  image = ee.Image(image).select(mask_band)
+  
+  var first = ee.Image.constant(0) // init image
+  
+  // function for iterate over the options
+  var for_iterate = function(option, ini) {
+    var i = ee.Image(ini) // cast ini
+    
+    // bits relation dict contains the option?
+    var cond = bits_dict.contains(option);
+    
+    // get the mask for the option
+    var mask = computeQAbits(image, bits_dict.get(option), bits_dict.get(option), option)
+    return ee.Image(ee.Algorithms.If(cond, i.or(mask), i))
+  }
+  
+  var good_pix = ee.Image(opt.iterate(for_iterate, first))
+
+  return good_pix.not();
+}
+
 var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
@@ -30,6 +55,18 @@ var sentinel2 = function(image) {
   var mask = opaque.or(cirrus);
   
   return image.updateMask(mask.not());
+}
+
+var s2 = function(options) {
+  var opt = options || ['opaque', 'cirrus']
+  var rel = {opaque: 10, cirrus:11}
+  var band = 'QA60'
+  
+  var wrap = function(img){
+    var good_pix = compute(img, band, rel, opt)
+    return img.updateMask(good_pix)
+  }
+  return wrap
 }
 
 var landsatSR = function(options) {
