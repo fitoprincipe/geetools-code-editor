@@ -26,7 +26,7 @@ var computeQAbitsEE = function(image, start, end, newName) {
   var pattern = ee.Number(0)
   
   start = ee.Number(start)
-  end = ee.Number(end).subtract(1)
+  end = ee.Number(end)//.subtract(1)
   newName = ee.String(newName)
   
   var seq = ee.List.sequence(start, end)
