@@ -6,7 +6,9 @@
  * License: MIT
  */
 
-print('geetools imported')
+var test_import = function() {
+  print('geetools imported')
+}
 
 var help = {};
 
@@ -153,3 +155,4 @@ exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
 exports.make = make
+exports.test_import = test_import
