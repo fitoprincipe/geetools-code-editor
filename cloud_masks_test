@@ -12,6 +12,7 @@
  
  
  var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
+   print(colid, cloud_prop, viz, name)
    var percent = cloud_percent || 40;
    var cent = Map.getCenter();
    var col = ee.ImageCollection(colid)
