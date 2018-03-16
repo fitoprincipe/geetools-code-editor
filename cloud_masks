@@ -7,7 +7,7 @@
  */
 
 var test_import = function() {
-  print('geetools imported')
+  print('cloud_masks module imported')
 }
 
 var help = {};
