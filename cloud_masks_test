@@ -46,7 +46,7 @@
    if (col.size().getInfo() !== 0) {
      var img = ee.Image(col.first());
      var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
-     var masked = cloud.test_s2()(img)
+     var masked = cloud.make.sentinel2()(img)
      Map.addLayer(masked, vis, 'Sentinel 2 masked');
      Map.addLayer(img, vis, 'Sentinel 2 NOT masked', false);
      Map.centerObject(img)
