@@ -220,6 +220,9 @@ help['replace_band'] = 'replace_band(image, replace_band, add_band)\n\n'+
                        'add_band: Image (one band) containing the band to add. If an Image\n'+
                        'with more than one band is provided, it uses the first band.'
 
+help['get_value'] = 'get_value(image, point, scale)\n\n'+
+                    'Extract values for each band of the image in the specified point'
+
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
