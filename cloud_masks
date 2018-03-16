@@ -150,9 +150,10 @@ help['sentinel2'] = 'function to mask out clouds of Sentinel 2 images. Use on ma
 help['landsatSR'] = 'function to mask out clouds of Landsat SR images. There is one argument to specify what to mask'+
                     'if ommited all options will be masked out (cloud, shodow, adjacent and snow)'
 
-exports.help = help
+exports.test_import = test_import
+
+/*exports.help = help
 exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
-exports.make = make
-exports.test_import = test_import
+exports.make = make*/
