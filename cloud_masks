@@ -193,3 +193,4 @@ exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
 exports.make = make
+exports.test_s2 = s2
