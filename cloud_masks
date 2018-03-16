@@ -195,9 +195,12 @@ var modis = function(options) {
   return wrap
 }
 
-var make = {sentinel2: sentinel2,
-            landsatSR: landsatSR,
-            landsatTOA: landsatTOA}
+var make = {
+  sentinel2: sentinel2,
+  landsatSR: landsatSR,
+  landsatTOA: landsatTOA,
+  modis: modis
+}
 
 help['sentinel2'] = 'function to mask out clouds of Sentinel 2 images. Use on map function directly';
 help['landsatSR'] = 'function to mask out clouds of Landsat SR images. There is one argument to specify what to mask'+
