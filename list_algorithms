@@ -62,3 +62,4 @@ exports.help = help
 exports.remove_duplicates = remove_duplicates
 exports.get_from_dict = get_from_dict
 exports.filters = filters
+exports.options = ee.Dictionary(help).keys()
