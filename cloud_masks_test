@@ -144,19 +144,19 @@
    }
  };
  
- /*
+ 
  var landsat4TOA = function(options, name) {
    show('LANDSAT/LT04/C01/T1_TOA', 
         'CLOUD_COVER',
-        {},
+        {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
         'landsat 4 TOA',
         cloud.make('landsatTOA'),
-        ())
- }*/
+        null)
+ }
  
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
  exports.landsat4SR = landsat4SR
  exports.landsat7SR = landsat7SR
- //exports.landsat4TOA = landsat4TOA
+ exports.landsat4TOA = landsat4TOA
