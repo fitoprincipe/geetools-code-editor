@@ -110,7 +110,6 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
      var masked = cloud.make.modis(opt)(i)
      Map.addLayer(masked, vis, name+' masked');
      Map.addLayer(i, vis, name+' NOT masked', false);
-     Map.centerObject(i)
    }
    else {
      print('Collection is empty')
