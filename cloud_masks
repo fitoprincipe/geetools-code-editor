@@ -20,8 +20,6 @@ var computeQAbits = function(image, start, end, newName) {
     }
     
     var good_pix = image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
-    Map.addLayer(good_pix, {min:0, max:1}, newName+' '+pattern.toString())
-    print(newName, good_pix)
     return good_pix.toInt()
 };
 
@@ -29,7 +27,7 @@ var computeQAbitsEE = function(image, start, end, newName) {
   var pattern = ee.Number(0)
   
   start = ee.Number(start).toInt()
-  end = ee.Number(end)//.subtract(1)
+  end = ee.Number(end).toInt()
   newName = ee.String(newName)
   
   var seq = ee.List.sequence(start, end)
@@ -43,8 +41,6 @@ var computeQAbitsEE = function(image, start, end, newName) {
     
   patt = ee.Number(patt).toInt()
   var good_pix = image.select([0], [newName]).bitwiseAnd(patt).rightShift(start);
-  Map.addLayer(good_pix, {min:0, max:1}, newName.getInfo()+' EE '+patt.getInfo())
-  print(newName, 'EE', good_pix)
   return good_pix.toInt()
 }
 
@@ -78,10 +74,8 @@ var compute = function(image, mask_band, bits, options) {
 var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
-  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
-  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus");
-  computeQAbitsEE(cloud_mask, 10, 10, "opaque");
-  computeQAbitsEE(cloud_mask, 11, 11, "cirrus");
+  var opaque = computeQAbitsEE(cloud_mask, 10, 10, "opaque");
+  var cirrus = computeQAbitsEE(cloud_mask, 11, 11, "cirrus");
   
   var mask = opaque.or(cirrus);
   
