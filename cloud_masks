@@ -12,7 +12,8 @@ var test_import = function() {
 
 var help = {};
 
-var computeQAbits = function(image, start, end, newName) {
+// original compute bits with client-side functions DEPRECATED
+var computeQAbits_old = function(image, start, end, newName) {
     var pattern = 0;
 
     for (var i=start; i<=end; i++) {
@@ -23,7 +24,7 @@ var computeQAbits = function(image, start, end, newName) {
     return good_pix.toInt()
 };
 
-var computeQAbitsEE = function(image, start, end, newName) {
+var computeQAbits = function(image, start, end, newName) {
   var pattern = ee.Number(0)
   
   start = ee.Number(start).toInt()
@@ -74,8 +75,8 @@ var compute = function(image, mask_band, bits, options) {
 var sentinel2 = function(image) {
   
   var cloud_mask = image.select("QA60");
-  var opaque = computeQAbitsEE(cloud_mask, 10, 10, "opaque");
-  var cirrus = computeQAbitsEE(cloud_mask, 11, 11, "cirrus");
+  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
+  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus");
   
   var mask = opaque.or(cirrus);
   
