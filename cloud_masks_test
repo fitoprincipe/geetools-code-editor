@@ -150,7 +150,7 @@
         {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
         n,
         cloud.make['landsatTOA'],
-        options)
+        opt)
  }
  
  exports.sentinel2 = sentinel2
