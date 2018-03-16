@@ -96,6 +96,36 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
         opt)
  }
  
+ var landsat5TOA = function(options) {
+   var opt = options || null
+   show('LANDSAT/LT05/C01/T1_TOA', 
+        'CLOUD_COVER',
+        {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
+        'Landsat 5 TOA',
+        cloud.make.landsatTOA,
+        opt)
+ }
+ 
+ var landsat7TOA = function(options) {
+   var opt = options || null
+   show('LANDSAT/LE07/C01/T1_TOA', 
+        'CLOUD_COVER',
+        {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
+        'Landsat 7 TOA',
+        cloud.make.landsatTOA,
+        opt)
+ }
+ 
+ var landsat8TOA = function(options) {
+   var opt = options || null
+   show('LANDSAT/LC08/C01/T1_TOA', 
+        'CLOUD_COVER',
+        {bands:['B5', 'B7', 'B4'], min:0, max:0.5},
+        'Landsat 8 TOA',
+        cloud.make.landsatTOA,
+        opt)
+ }
+ 
  var modis = function(date, options, name) {
    var opt = options || null
    var col = ee.ImageCollection('MODIS/006/MOD09GA')
