@@ -24,11 +24,7 @@
    if (col.size().getInfo() !== 0) {
      var img = ee.Image(col.first());
      //var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
-     if (params) {
-      var masked = func(params)(img);
-     } else {
-      var masked = func(img);
-     }
+     var masked = func(params)(img)
      Map.addLayer(masked, viz, name+' masked');
      Map.addLayer(img, viz, name+' NOT masked', false);
      Map.centerObject(img)
