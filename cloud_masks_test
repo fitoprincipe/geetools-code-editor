@@ -26,7 +26,7 @@
      if (params) {
       var masked = func(params)(img);
      } else {
-      var masked = funct(img);
+      var masked = func(img);
      }
      Map.addLayer(masked, viz, name+' masked');
      Map.addLayer(img, viz, name+' NOT masked', false);
