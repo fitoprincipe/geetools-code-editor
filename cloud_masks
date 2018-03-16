@@ -12,19 +12,7 @@ var test_import = function() {
 
 var help = {};
 
-// original compute bits with client-side functions DEPRECATED
-var computeQAbits_old = function(image, start, end, newName) {
-    var pattern = 0;
-
-    for (var i=start; i<=end; i++) {
-        pattern += Math.pow(2, i);
-    }
-    
-    var good_pix = image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
-    return good_pix.toInt()
-};
-
-var computeQAbits = function(image, start, end, newName) {
+var computeQAbits = function(start, end, newName) {
   var pattern = ee.Number(0)
   
   start = ee.Number(start).toInt()
@@ -41,8 +29,12 @@ var computeQAbits = function(image, start, end, newName) {
     }, pattern)
     
   patt = ee.Number(patt).toInt()
-  var good_pix = image.select([0], [newName]).bitwiseAnd(patt).rightShift(start);
-  return good_pix.toInt()
+  
+  var wrap = function(image) {
+    var good_pix = image.select([0], [newName]).bitwiseAnd(patt).rightShift(start);
+    return good_pix.toInt()
+  }
+  return wrap
 }
 
 var compute = function(image, mask_band, bits, options) {
@@ -61,7 +53,7 @@ var compute = function(image, mask_band, bits, options) {
     var cond = bits_dict.contains(option);
     
     // get the mask for the option
-    var mask = computeQAbits(image, bits_dict.get(option), bits_dict.get(option), option)
+    var mask = computeQAbits(bits_dict.get(option), bits_dict.get(option), option)(image)
     return ee.Image(ee.Algorithms.If(cond, 
                                      i.or(mask), 
                                      i))
@@ -70,18 +62,6 @@ var compute = function(image, mask_band, bits, options) {
   var good_pix = ee.Image(opt.iterate(for_iterate, first))
   
   return good_pix.not();
-}
-
-// original S2 function DEPRECATED
-var sentinel2_old = function(image) {
-  
-  var cloud_mask = image.select("QA60");
-  var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
-  var cirrus = computeQAbits(cloud_mask, 11, 11, "cirrus");
-  
-  var mask = opaque.or(cirrus);
-  
-  return image.updateMask(mask.not());
 }
 
 var sentinel2 = function(options) {
@@ -123,10 +103,10 @@ var landsatSR = function(options) {
   
       var sr = function() {
           var mask = image.select('sr_cloud_qa');
-          var cloud_mask = computeQAbits(mask, 1, 1, 'cloud');
-          var shadow_mask = computeQAbits(mask, 2, 2, 'shadow');
-          var adjacent_mask = computeQAbits(mask, 3, 3, 'adjacent');
-          var snow_mask = computeQAbits(mask, 4, 4, 'snow');
+          var cloud_mask = computeQAbits(1, 1, 'cloud')(mask);
+          var shadow_mask = computeQAbits(2, 2, 'shadow')(mask);
+          var adjacent_mask = computeQAbits(3, 3, 'adjacent')(mask);
+          var snow_mask = computeQAbits(4, 4, 'snow')(mask);
           
           var rel = ee.Dictionary({
             'cloud': cloud_mask, 
@@ -140,9 +120,9 @@ var landsatSR = function(options) {
   
       var pix = function() {
           var mask = image.select('pixel_qa')
-          var cloud_mask = computeQAbits(mask, 5, 5, 'cloud')
-          var shadow_mask = computeQAbits(mask, 3, 3, 'shadow')
-          var snow_mask = computeQAbits(mask, 4, 4, 'snow')
+          var cloud_mask = computeQAbits(5, 5, 'cloud')(mask)
+          var shadow_mask = computeQAbits(3, 3, 'shadow')(mask)
+          var snow_mask = computeQAbits(4, 4, 'snow')(mask)
           
           var rel = ee.Dictionary({
             'cloud': cloud_mask, 
