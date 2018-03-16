@@ -10,7 +10,7 @@
  var landsatSR = require('users/fitoprincipe/geetools:cloud_masks').landsatSR
  var cloud = require('users/fitoprincipe/geetools:cloud_masks')
  
- /*
+ 
  var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
    var percent = cloud_percent || 40;
    var cent = Map.getCenter();
@@ -36,7 +36,7 @@
      print('Collection is empty')
    }
  }
- */
+ 
  
  var sentinel2 = function() {
    var cent = Map.getCenter();
