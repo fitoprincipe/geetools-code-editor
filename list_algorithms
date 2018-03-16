@@ -33,6 +33,7 @@ var get_from_dict = function(list, dict) {
 }
 
 var regex = function(list, regex, flags) {
+  list = ee.List(list)
   var fl = flags || null
   var i = ee.List([])
   var f = list.iterate(function(el, first){
