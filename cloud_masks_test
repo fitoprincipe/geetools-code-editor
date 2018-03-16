@@ -8,6 +8,8 @@
  
  var s2mask = require('users/fitoprincipe/geetools:cloud_masks').sentinel2
  var landsatSR = require('users/fitoprincipe/geetools:cloud_masks').landsatSR
+ 
+ /*
  var cloud = require('users/fitoprincipe/geetools:cloud_masks')
  
  var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
@@ -57,7 +59,7 @@
      print('Collection is empty')
    }
  };
- 
+ */
  
  var landsat8SR = function(options, name) {
    var n = name || 'Landsat 8 SR'
@@ -144,6 +146,7 @@
    }
  };
  
+ /*
  var landsat4TOA = function(options, name) {
    show('LANDSAT/LT04/C01/T1_TOA', 
         'CLOUD_COVER',
@@ -151,13 +154,11 @@
         'landsat 4 TOA',
         cloud.make('landsatTOA'),
         ())
- }
- 
- print('imported')
+ }*/
  
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
  exports.landsat4SR = landsat4SR
  exports.landsat7SR = landsat7SR
- exports.landsat4TOA = landsat4TOA
+ //exports.landsat4TOA = landsat4TOA
