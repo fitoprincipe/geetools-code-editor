@@ -8,6 +8,34 @@
  
  var s2mask = require('users/fitoprincipe/geetools:cloud_masks').sentinel2
  var landsatSR = require('users/fitoprincipe/geetools:cloud_masks').landsatSR
+ var cloud = require('users/fitoprincipe/geetools:cloud_masks')
+ 
+ var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
+   var percent = cloud_percent || 40;
+   var cent = Map.getCenter();
+   var col = ee.ImageCollection(colid)
+             .filterBounds(cent)
+             .filterMetadata(cloud_prop, 'greater_than', percent)
+             //.filterDate('2017-01-01', '2017-03-01')
+             .sort(cloud_prop);
+   
+   if (col.size().getInfo() !== 0) {
+     var img = ee.Image(col.first());
+     //var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
+     if (params) {
+      var masked = func(params)(img);
+     } else {
+      var masked = funct(img);
+     }
+     Map.addLayer(masked, viz, name+' masked');
+     Map.addLayer(img, viz, name+' NOT masked', false);
+     Map.centerObject(img)
+   }
+   else {
+     print('Collection is empty')
+   }
+ }
+ 
  
  var sentinel2 = function() {
    var cent = Map.getCenter();
@@ -115,8 +143,18 @@
    }
  };
  
+ var landsat4TOA = function(options, name) {
+   show('LANDSAT/LT04/C01/T1_TOA', 
+        'CLOUD_COVER',
+        {},
+        'landsat 4 TOA',
+        cloud.make('landsatTOA'),
+        ())
+ }
+ 
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
  exports.landsat4SR = landsat4SR
  exports.landsat7SR = landsat7SR
+ exports.landsat4TOA = landsat4TOA
