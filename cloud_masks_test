@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /***
  * Tests for cloud mask functions
  * 
@@ -93,9 +96,31 @@
         opt)
  }
  
+ var modis = function(options, date, name) {
+   var opt = options || null
+   var col = ee.ImageCollection('MODIS/006/MOD09GA')
+   var vis = {bands:['sur_refl_b01', 'sur_refl_b06', 'sur_refl_b02'], min:0, max:5000}
+   var d = date || '2017-03-01'
+   var eedate = ee.Date(d)
+   var n = name || 'MODIS TERRA 500m'
+   
+   var filtered = col.filterDate(eedate, eedate.advance(1, 'day'))
+   if (filtered.size().getInfo() !== 0) {
+     var i = ee.Image(filtered.first())
+     var masked = cloud.make.modis(opt)(i)
+     Map.addLayer(masked, vis, name+' masked');
+     Map.addLayer(i, vis, name+' NOT masked', false);
+     Map.centerObject(i)
+   }
+   else {
+     print('Collection is empty')
+   }
+ }
+ 
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
  exports.landsat4SR = landsat4SR
  exports.landsat7SR = landsat7SR
  exports.landsat4TOA = landsat4TOA
+ exports.modis = modis
