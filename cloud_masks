@@ -169,34 +169,10 @@ var landsatTOA = function(options) {
   options = ee.List(opt);
   
   var wrap = function(image) {
-    var bands = image.bandNames();
-    
-    var compute = function(rel) {
-        var first = ee.Image.constant(0)
-        var good_pix = ee.Image(
-          options.iterate(function(o, ini){
-            var cond = rel.contains(o);
-            
-            var i = ee.Image(ini);
-            var m = ee.Image(rel.get(o));
-            return ee.Image(ee.Algorithms.If(cond, i.or(m), i));
-          }, first)
-        );
-      
-        return good_pix.not();
-      }
-    
-    var mask = image.select(mask_band)
-          
-    var rel = ee.Dictionary({
-                'cloud': computeQAbits(mask, bits.get('cloud'), bits.get('cloud'), 'cloud'), 
-                'shadow': computeQAbits(mask, bits.get('shadow'), bits.get('shadow'), 'shadow'),
-                'snow': computeQAbits(mask, bits.get('snow'), bits.get('snow'), 'snow')
-              })
-          
-    var good_pix = compute(rel);
+    var good_pix = compute(image, mask_band, bits, opt)
     return image.updateMask(good_pix);
   }
+  return wrap
 }
  
 var modis = function(options) {
