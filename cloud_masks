@@ -43,6 +43,7 @@ var compute = function(image, mask_band, bits, options) {
   }
   
   var good_pix = ee.Image(opt.iterate(for_iterate, first))
+  print(good_pix)
 
   return good_pix.not();
 }
