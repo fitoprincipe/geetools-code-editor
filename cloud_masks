@@ -6,6 +6,8 @@
  * License: MIT
  */
 
+print('geetools imported')
+
 var help = {};
 
 var computeQAbits = function(image, start, end, newName) {
