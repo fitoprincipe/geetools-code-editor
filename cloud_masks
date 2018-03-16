@@ -18,9 +18,10 @@ var computeQAbits = function(image, start, end, newName) {
     for (var i=start; i<=end; i++) {
         pattern += Math.pow(2, i);
     }
-    print(pattern)
     
-    return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
+    var good_pix = image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
+    Map.addLayer(good_pix)
+    return good_pix
 };
 
 var computeQAbitsEE = function(image, start, end, newName) {
@@ -40,8 +41,9 @@ var computeQAbitsEE = function(image, start, end, newName) {
     }, pattern)
     
   patt = ee.Number(patt)
-  print(patt)
-  return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
+  var good_pix = image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
+  Map.addLayer(good_pix)
+  return good_pix
 }
 
 var compute = function(image, mask_band, bits, options) {
