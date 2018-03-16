@@ -153,6 +153,8 @@
         ())
  }
  
+ print('imported')
+ 
  exports.sentinel2 = sentinel2
  exports.landsat8SR = landsat8SR
  exports.landsat5SR = landsat5SR
