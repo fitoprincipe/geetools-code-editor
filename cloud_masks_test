@@ -8,10 +8,9 @@
  
  var s2mask = require('users/fitoprincipe/geetools:cloud_masks').sentinel2
  var landsatSR = require('users/fitoprincipe/geetools:cloud_masks').landsatSR
- 
- /*
  var cloud = require('users/fitoprincipe/geetools:cloud_masks')
  
+ /*
  var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
    var percent = cloud_percent || 40;
    var cent = Map.getCenter();
