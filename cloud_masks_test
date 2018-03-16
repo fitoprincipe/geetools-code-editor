@@ -37,7 +37,7 @@
      print('Collection is empty')
    }
  }
- 
+ */
  
  var sentinel2 = function() {
    var cent = Map.getCenter();
@@ -59,7 +59,7 @@
      print('Collection is empty')
    }
  };
- */
+ 
  
  var landsat8SR = function(options, name) {
    var n = name || 'Landsat 8 SR'
