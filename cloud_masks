@@ -30,7 +30,6 @@ var computeQAbitsEE = function(image, start, end, newName) {
   newName = ee.String(newName)
   
   var seq = ee.List.sequence(start, end)
-  print(seq)
   
   var patt = seq.iterate(
     function(element, ini) {
@@ -40,6 +39,7 @@ var computeQAbitsEE = function(image, start, end, newName) {
     }, pattern)
     
   patt = ee.Number(patt)
+  print(patt)
   return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
 }
 
