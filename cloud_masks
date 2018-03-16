@@ -27,6 +27,7 @@ var compute = function(image, mask_band, bits, options) {
   var bits_dict = ee.Dictionary(bits)
   var opt = ee.List(options)
   image = ee.Image(image).select(mask_band)
+  print(image)
   
   var first = ee.Image.constant(0) // init image
   
