@@ -12,7 +12,7 @@
  
  
  var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
-   print(colid, cloud_prop, viz, name)
+   //print(colid, cloud_prop, viz, name)
    var percent = cloud_percent || 40;
    var cent = Map.getCenter();
    var col = ee.ImageCollection(colid)
@@ -24,6 +24,7 @@
    if (col.size().getInfo() !== 0) {
      var img = ee.Image(col.first());
      //var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
+     print(img)
      if (params) {
       var masked = func(params)(img);
      } else {
