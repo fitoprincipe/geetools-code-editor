@@ -165,7 +165,7 @@ var landsatTOA = function(options) {
   var mask_band = 'BQA'
   
   // Parameters
-  var opt = options || ['cloud', 'shadow', 'snow'];
+  var opt = options || bits.keys();
   options = ee.List(opt);
   
   var wrap = function(image) {
@@ -176,10 +176,23 @@ var landsatTOA = function(options) {
 }
  
 var modis = function(options) {
-  var bits = ee.Dictionary({'cloud': 1, 'shadow': 2, 'snow': 3});
-  var opt = options || ['cloud', 'shadow', 'snow'];
+  var bits = ee.Dictionary({
+    'cloud': 0, 
+    'mix': 1, 
+    'shadow': 2, 
+    'cloud2':10, 
+    'snow':12
+  });
+  
+  var opt = options || bits.keys()
+  var mask_band = 'state_1km'
   
   options = ee.List(opt);
+  var wrap = function(image) {
+    var good_pix = compute(image, mask_band, bits, opt)
+    return image.updateMask(good_pix);
+  }
+  return wrap
 }
 
 var make = {sentinel2: sentinel2,
