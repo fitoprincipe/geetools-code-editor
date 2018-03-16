@@ -30,6 +30,7 @@ var computeQAbitsEE = function(image, start, end, newName) {
   newName = ee.String(newName)
   
   var seq = ee.List.sequence(start, end)
+  print(seq)
   
   var patt = seq.iterate(
     function(element, ini) {
