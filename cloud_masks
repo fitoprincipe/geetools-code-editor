@@ -28,7 +28,7 @@ var computeQAbits = function(image, start, end, newName) {
 var computeQAbitsEE = function(image, start, end, newName) {
   var pattern = ee.Number(0)
   
-  start = ee.Number(start)
+  start = ee.Number(start).toInt()
   end = ee.Number(end)//.subtract(1)
   newName = ee.String(newName)
   
@@ -41,7 +41,7 @@ var computeQAbitsEE = function(image, start, end, newName) {
       return ini.add(bit)
     }, pattern)
     
-  patt = ee.Number(patt)
+  patt = ee.Number(patt).toInt()
   var good_pix = image.select([0], [newName]).bitwiseAnd(patt).rightShift(start);
   Map.addLayer(good_pix, {min:0, max:1}, newName.getInfo()+' EE '+patt.getInfo())
   print(newName, 'EE', good_pix)
