@@ -35,7 +35,7 @@
  }
  
  
- var sentinel2 = function() {
+ var sentinel2_ = function() {
    var cent = Map.getCenter();
    var col = ee.ImageCollection('COPERNICUS/S2')
              .filterBounds(cent)
@@ -55,6 +55,12 @@
      print('Collection is empty')
    }
  };
+ 
+ var sentinel2 = function() {
+   show('COPERNICUS/S2', 'CLOUDY_PIXEL_PERCENTAGE', 
+        {bands:['B8', 'B12', 'B4'], min:0, max:5000}, 
+        'SENTINEL 2', cloud.make.sentinel2, null)
+ }
  
  
  var landsat8SR = function(options, name) {
