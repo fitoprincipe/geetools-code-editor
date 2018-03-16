@@ -96,7 +96,7 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
         opt)
  }
  
- var modis = function(options, date, name) {
+ var modis = function(date, options, name) {
    var opt = options || null
    var col = ee.ImageCollection('MODIS/006/MOD09GA')
    var vis = {bands:['sur_refl_b01', 'sur_refl_b06', 'sur_refl_b02'], min:0, max:5000}
