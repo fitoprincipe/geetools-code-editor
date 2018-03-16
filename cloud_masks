@@ -22,6 +22,26 @@ var computeQAbits = function(image, start, end, newName) {
     return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
 };
 
+var computeQAbitsEE = function(image, start, end, newName) {
+  var pattern = ee.Number(0)
+  
+  start = ee.Number(start)
+  end = ee.Number(end).subtract(1)
+  newName = ee.String(newName)
+  
+  var seq = ee.List.sequence(start, end)
+  
+  var patt = seq.iterate(
+    function(element, ini) {
+      ini = ee.Number(ini)
+      var bit = ee.Number(2).pow(ee.Number(element));
+      return ini.add(bit)
+    }, pattern)
+    
+  patt = ee.Number(patt)
+  return image.select([0], [newName]).bitwiseAnd(pattern).rightShift(start);
+}
+
 var compute = function(image, mask_band, bits, options) {
   // cast params in case they are not EE objects
   var bits_dict = ee.Dictionary(bits)
@@ -38,15 +58,14 @@ var compute = function(image, mask_band, bits, options) {
     var cond = bits_dict.contains(option);
     
     // get the mask for the option
-    var mask = computeQAbits(image, bits_dict.get(option), bits_dict.get(option), option)
+    var mask = computeQAbitsEE(image, bits_dict.get(option), bits_dict.get(option), option)
     return ee.Image(ee.Algorithms.If(cond, 
-                                     i,//.or(mask), 
+                                     i.or(mask), 
                                      i))
   }
   
   var good_pix = ee.Image(opt.iterate(for_iterate, first))
-  print(good_pix)
-
+  
   return good_pix.not();
 }
 
