@@ -150,7 +150,7 @@
         'CLOUD_COVER',
         {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
         'landsat 4 TOA',
-        cloud.make['landsatTOA'],
+        cloud.make.landsatTOA,
         null)
  }
  
