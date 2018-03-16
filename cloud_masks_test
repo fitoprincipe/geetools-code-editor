@@ -147,12 +147,13 @@
  
  var landsat4TOA = function(options, name) {
    var n = name || 'Landsat 4 TOA'
+   var opt = options || null
    show('LANDSAT/LT04/C01/T1_TOA', 
         'CLOUD_COVER',
         {bands:['B4', 'B5', 'B3'], min:0, max:0.5},
         n,
         cloud.make['landsatTOA'],
-        null)
+        options)
  }
  
  exports.sentinel2 = sentinel2
