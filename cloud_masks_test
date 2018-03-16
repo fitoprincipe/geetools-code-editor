@@ -108,8 +108,8 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
    if (filtered.size().getInfo() !== 0) {
      var i = ee.Image(filtered.first())
      var masked = cloud.make.modis(opt)(i)
-     Map.addLayer(masked, vis, name+' masked');
-     Map.addLayer(i, vis, name+' NOT masked', false);
+     Map.addLayer(masked, vis, n+' masked');
+     Map.addLayer(i, vis, n+' NOT masked', false);
    }
    else {
      print('Collection is empty')
