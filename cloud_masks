@@ -72,7 +72,8 @@ var compute = function(image, mask_band, bits, options) {
   return good_pix.not();
 }
 
-var sentinel2 = function(image) {
+// original S2 function DEPRECATED
+var sentinel2_old = function(image) {
   
   var cloud_mask = image.select("QA60");
   var opaque = computeQAbits(cloud_mask, 10, 10, "opaque");
@@ -83,7 +84,7 @@ var sentinel2 = function(image) {
   return image.updateMask(mask.not());
 }
 
-var s2 = function(options) {
+var sentinel2 = function(options) {
   var opt = options || ['opaque', 'cirrus']
   var rel = {opaque: 10, cirrus:11}
   var band = 'QA60'
@@ -219,4 +220,3 @@ exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
 exports.make = make
-exports.test_s2 = s2
