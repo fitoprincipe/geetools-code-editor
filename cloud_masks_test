@@ -168,4 +168,5 @@ exports.options = function() {
              'landsat7TOA',
              'landsat8TOA',
              'modisSR']
+  print(opt)
 }
