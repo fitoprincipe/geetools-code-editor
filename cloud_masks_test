@@ -126,7 +126,7 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
         opt)
  }
  
- var modis = function(date, options, name) {
+ var modisSR = function(date, options, name) {
    var opt = options || null
    var col = ee.ImageCollection('MODIS/006/MOD09GA')
    var vis = {bands:['sur_refl_b02', 'sur_refl_b06', 'sur_refl_b01'], min:0, max:5000}
@@ -146,13 +146,26 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
    }
  }
  
- exports.sentinel2 = sentinel2
- exports.landsat8SR = landsat8SR
- exports.landsat5SR = landsat5SR
- exports.landsat4SR = landsat4SR
- exports.landsat7SR = landsat7SR
- exports.landsat4TOA = landsat4TOA
- exports.landsat5TOA = landsat5TOA
- exports.landsat7TOA = landsat7TOA
- exports.landsat8TOA = landsat8TOA
-  exports.modis = modis
+exports.sentinel2 = sentinel2
+exports.landsat8SR = landsat8SR
+exports.landsat5SR = landsat5SR
+exports.landsat4SR = landsat4SR
+exports.landsat7SR = landsat7SR
+exports.landsat4TOA = landsat4TOA
+exports.landsat5TOA = landsat5TOA
+exports.landsat7TOA = landsat7TOA
+exports.landsat8TOA = landsat8TOA
+exports.modisSR = modisSR
+
+exports.options = function() {
+  var opt = ['sentinel2',
+             'landsat8SR',
+             'landsat5SR',
+             'landsat4SR',
+             'landsat7SR',
+             'landsat4TOA',
+             'landsat5TOA',
+             'landsat7TOA',
+             'landsat8TOA',
+             'modisSR']
+}
