@@ -109,7 +109,7 @@ var landsatTOA = function(options) {
   options = ee.List(opt);
   
   var wrap = function(image) {
-    var good_pix = compute(image, mask_band, bits, opt)
+    var good_pix = compute(image, mask_band, bits, options)
     return image.updateMask(good_pix);
   }
   return wrap
