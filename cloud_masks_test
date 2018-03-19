@@ -30,6 +30,7 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
      Map.addLayer(masked, viz, name+' masked');
      Map.addLayer(img, viz, name+' NOT masked', false);
      Map.centerObject(img)
+     return masked
    }
    else {
      print('Collection is empty')
@@ -118,12 +119,13 @@ var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
  
  var landsat8TOA = function(options) {
    var opt = options || null
-   show('LANDSAT/LC08/C01/T1_TOA', 
-        'CLOUD_COVER',
-        {bands:['B5', 'B7', 'B4'], min:0, max:0.5},
-        'Landsat 8 TOA',
-        cloud.make.landsatTOA,
-        opt)
+   var masked = show('LANDSAT/LC08/C01/T1_TOA', 
+                    'CLOUD_COVER',
+                    {bands:['B5', 'B7', 'B4'], min:0, max:0.5},
+                    'Landsat 8 TOA',
+                    cloud.make.landsatTOA,
+                    opt)
+    return masked
  }
  
  var modisSR = function(date, options, name) {
