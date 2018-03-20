@@ -8,6 +8,15 @@ Some tools
 
 var help = {};
 
+var mask_geometry = function(geometry) {
+  var mask = ee.Image.constant(1).clip(geometry).mask().not()
+  
+  var wrap = function(img) {
+    return img.updateMask(mask)
+  }
+  return wrap
+}
+
 var get_value = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
   //var p = point.geometry();
@@ -223,6 +232,10 @@ help['replace_band'] = 'replace_band(image, replace_band, add_band)\n\n'+
 help['get_value'] = 'get_value(image, point, scale)\n\n'+
                     'Extract values for each band of the image in the specified point'
 
+help['mask_geometry'] = 'mask_geometry(geometry)\n\n'+
+                        'Mask out pixels inside a geometry\n'+
+                        'geometry: can be a Geometry, Feature or FeatureCollection'
+
 exports.addLayerCol = addLayerCol
 exports.ExportCol = ExportCol
 exports.help = help
@@ -231,3 +244,4 @@ exports.list2image = list2image
 exports.sum_bands = sum_bands
 exports.replace_band = replace_band
 exports.get_value = get_value
+exports.mask_geometry = mask_geometry
