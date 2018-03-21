@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageCollection = ee.ImageCollection("MODIS/006/MOD09GA");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /***
  * Tests for cloud mask functions
  * 
