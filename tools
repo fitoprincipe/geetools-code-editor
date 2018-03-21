@@ -174,7 +174,7 @@ var ExportCol = function(col, folder, options) {
     var maxPixels = opt.maxPixels
     var type = opt.type
     
-    var n = colList.size().getInfo();
+    var n = col.size().getInfo();
     var colList = col.toList(n);
 
     for (var i = 0; i < n; i++) {
