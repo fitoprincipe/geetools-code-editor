@@ -34,6 +34,14 @@ var tools = require('users/fitoprincipe/geetools:tools');
 print(tools.help['dict2image']); // Help for dict2image function
 ```
 
+To see all functions inside a module there is a special variable called 
+`options` that will show all options. Example:
+
+```javascript
+var tools = require('users/fitoprincipe/geetools:tools');
+print(tools.options);  // Print the name of all functions inside tools
+```
+
 ## Cloud masks
 Applying masks for clouds, shadows and snow is a very common process. This module provides some funtions to do it directly.
 
@@ -48,17 +56,16 @@ In the `cloud_masks` module exist the following functions:
 ### Sentinel 2
 
 ```javascript
-var sentinel2function = cloud_masks.sentinel2
+var sentinel2function = cloud_masks.sentinel2(options)
 ```
 
-This function is made to use in collection `COPERNICUS/S2`. 
-Does not use any argument, so can be used directly on a `map`
-function.
+This function is made to use in collection `COPERNICUS/S2`. Options are: 
+`cirrus` and/or `opaque`. If no argument is passed, will mask both.
 
 ### Landsat SR
 
 ```javascript
-var landsatSRfunction = cloud_masks.landsatSR
+var landsatSRfunction = cloud_masks.landsatSR(options)
 ```
 
 This function is made to use in:
