@@ -165,7 +165,8 @@ var ExportCol = function(col, folder, options) {
     var def = {
       'type': 'float',
       'scale': 500,
-      'maxPixels': 1e13
+      'maxPixels': 1e13,
+      'region': undefined
     }
     
     var opt = get_options(def, options)
@@ -173,6 +174,7 @@ var ExportCol = function(col, folder, options) {
     var scale = opt.scale
     var maxPixels = opt.maxPixels
     var type = opt.type
+    var region = opt.region
     
     var n = col.size().getInfo();
     var colList = col.toList(n);
@@ -255,7 +257,9 @@ help['ExportCol'] = 'ExportCol(col, folder, options)\n\n'+
                     'options: dict of options:\n'+
                     '  type: can be "float", "byte", "int" or "double"\n'+
                     "  scale: output images pixel's scale\n"+
-                    '  maxPixels: same as ee.Export.image.toDrive'
+                    '  maxPixels: same as ee.Export.image.toDrive\n'+
+                    '  region: region to "clip" the images with. If not specified, will\n'+
+                    '          use every image region'
 
 help['dict2image'] = "dict2image(bands)\n\n"+
                      "Create an Image from dict's key/values pairs\n\n"+
