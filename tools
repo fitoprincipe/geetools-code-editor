@@ -160,7 +160,7 @@ var addLayerCol = function(col, options) {
   }
 }
 
-var ExportCol = function(col, folder, options) {
+var col2drive = function(col, folder, options) {
   
     var def = {
       'type': 'float',
@@ -250,7 +250,7 @@ help['addLayerCol'] = 'addLayerCol()\n\n'+
                       '         "ID": the name will be the ID\n'+
                       '         "system_date": the name will be the image date'
 
-help['ExportCol'] = 'ExportCol(col, folder, options)\n\n'+
+help['col2drive'] = 'col2drive(col, folder, options)\n\n'+
                     'Exports all images from one Collection\n'+
                     'col: ee.ImageCollection to export (all images)\n'+
                     'folder: name of the folder to put the images into (str)\n'+
@@ -304,7 +304,7 @@ help['mask_geometry'] = 'mask_geometry(geometry)\n\n'+
                         'geometry: can be a Geometry, Feature or FeatureCollection'
 
 exports.addLayerCol = addLayerCol
-exports.ExportCol = ExportCol
+exports.col2drive = col2drive
 exports.help = help
 exports.dict2image = dict2image
 exports.list2image = list2image
