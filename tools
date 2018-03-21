@@ -8,6 +8,23 @@ Some tools
 
 var help = {};
 
+// INTERNAL
+
+var get_options = function(def, options) {
+  // fill options dict with default values if not present
+  
+  if (options !== undefined) {
+    var opt = options
+    
+    for (var key in def) {
+      var value = def[key]
+      if (opt[key] === undefined) {opt[key] = value}
+    }
+  } else {var opt = def}
+  return opt
+}
+
+
 var mask_geometry = function(geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
   
@@ -143,7 +160,49 @@ var addLayerCol = function(col, options) {
   }
 }
 
-var ExportCol = function(col, folder, scale, type,
+var col2drive = function(col, folder, options) {
+  
+    var def = {
+      'type': 'float',
+      'scale': 500,
+      'maxPixels': 1e13,
+      'region': undefined
+    }
+    
+    var opt = get_options(def, options)
+    var nimg = opt.nimg
+    var scale = opt.scale
+    var maxPixels = opt.maxPixels
+    var type = opt.type
+    var region = opt.region
+    
+    var n = col.size().getInfo();
+    var colList = col.toList(n);
+
+    for (var i = 0; i < n; i++) {
+      var img = ee.Image(colList.get(i));
+      var id = img.id().getInfo();
+      region = region || img.geometry().bounds().getInfo()["coordinates"];
+
+      var imgtype = {"float":img.toFloat(),
+                     "byte":img.toByte(),
+                     "int":img.toInt(),
+                     "double":img.toDouble()
+                    }
+
+      Export.image.toDrive({
+        image:imgtype[type],
+        description: id,
+        folder: folder,
+        fileNamePrefix: id,
+        region: region,
+        scale: scale,
+        maxPixels: maxPixels})
+    }
+  }
+
+// DEPRECATED
+var ExportCol_ = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
     type = type || "float";
     nimg = nimg || 500;
@@ -191,8 +250,16 @@ help['addLayerCol'] = 'addLayerCol()\n\n'+
                       '         "ID": the name will be the ID\n'+
                       '         "system_date": the name will be the image date'
 
-help['ExportCol'] = 'ExportCol()\n\n'+
-                    'Exports all images from one Collection'
+help['col2drive'] = 'col2drive(col, folder, options)\n\n'+
+                    'Exports all images from one Collection\n'+
+                    'col: ee.ImageCollection to export (all images)\n'+
+                    'folder: name of the folder to put the images into (str)\n'+
+                    'options: dict of options:\n'+
+                    '  type: can be "float", "byte", "int" or "double"\n'+
+                    "  scale: output images pixel's scale\n"+
+                    '  maxPixels: same as ee.Export.image.toDrive\n'+
+                    '  region: region to "clip" the images with. If not specified, will\n'+
+                    '          use every image region'
 
 help['dict2image'] = "dict2image(bands)\n\n"+
                      "Create an Image from dict's key/values pairs\n\n"+
@@ -237,7 +304,7 @@ help['mask_geometry'] = 'mask_geometry(geometry)\n\n'+
                         'geometry: can be a Geometry, Feature or FeatureCollection'
 
 exports.addLayerCol = addLayerCol
-exports.ExportCol = ExportCol
+exports.col2drive = col2drive
 exports.help = help
 exports.dict2image = dict2image
 exports.list2image = list2image
