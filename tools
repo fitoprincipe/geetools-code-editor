@@ -312,3 +312,4 @@ exports.sum_bands = sum_bands
 exports.replace_band = replace_band
 exports.get_value = get_value
 exports.mask_geometry = mask_geometry
+exports.options = ee.Dictionary(help).keys()
