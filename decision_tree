@@ -53,7 +53,14 @@ var binary = function(conditions, classes) {
    
    var unique = lalg.remove_duplicates(repeated)
    
-   var ini = ee.Dictionary.fromLists(unique, ee.List.repeat(ee.Image(0), unique.size()))
+   // CREATE INITIAL DICT
+   var ini = ee.Dictionary(unique.iterate(function(baseclass, ini) {
+     ini = ee.Dictionary(ini)
+     var i = ee.Image.constant(1).select([0], [baseclass])
+     return ini.set(baseclass, i)
+   }, ee.Dictionary({})))
+   
+   // var ini = ee.Dictionary.fromLists(unique, ee.List.repeat(ee.Image(0), unique.size()))
    var unify = function(key, init) {
      init = ee.Dictionary(init)
      var baseclass = ee.String(key).split('-').get(0)
