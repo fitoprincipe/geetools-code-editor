@@ -1,0 +1,40 @@
+var binary = function(conditions, classes) {
+ /*
+ Binary decision tree
+ 
+ conditions: an object holding conditions. Example: {1: img.gt(0), 2: img.lt(500)}
+ classes: a dict holding paths for different classes. 
+          Example: {water:[[1,1], [2,0]], land: [[1,0],[2,1}]}
+                   this means that the 'water' class will be when condition 1 is true
+                   and condition 2 is false, and 'land' class will be when condition
+                   1 is false and cond 2 is true
+ 
+ */
+ 
+ var cond = ee.Dictionary(conditions)
+ var paths = ee.Dictionary(classes)
+ 
+ var C = function(condition, bool) {
+   //var b = ee.Number(bool)
+   return ee.Image(ee.Algorithms.If(bool, ee.Image(condition), ee.Image(condition).not()))
+ }
+ 
+ 
+ var overpath = function(key, path) {
+   var v = ee.List(path)
+   var ini = ee.Image.constant(1).select([0], [key])
+   var result = ee.Image(v.iterate(function(pair, init){
+     init = ee.Image(init)
+     pair = ee.List(pair)
+     var boolean = pair.get(0)
+     var condition_key = pait.get(1)  // could need var casting
+     var condition = cond.get(condition_key)
+     var final_condition = C(boolean, condition)
+     return ee.Image(init.and(final_condition))
+   }, ini))
+ }
+ var new_classes = ee.Dictionary(paths.map(overpath))
+ return new_classes
+}
+
+exports.binary = binary
