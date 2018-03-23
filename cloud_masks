@@ -139,7 +139,10 @@ var modisSR = function(options) {
   return wrap
 }
 
-var dt_hollstein_S2 = function(options) {
+var hollstein_S2 = function(options) {
+  // Taken from André Hollstein et al. 2016 (doi:10.3390/rs8080666)
+  // http://www.mdpi.com/2072-4292/8/8/666/pdf
+  
   var opt = options || ['cloud', 'snow', 'shadow', 'water', 'cirrus']
   
   var difference = function(a, b) {
@@ -242,7 +245,8 @@ var make = {
   sentinel2: sentinel2,
   landsatSR: landsatSR,
   landsatTOA: landsatTOA,
-  modisSR: modisSR
+  modisSR: modisSR,
+  hollstein_S2: hollstein_S2
 }
 
 help['sentinel2'] = 'sentinel2(options)\n\n'+
@@ -266,6 +270,10 @@ help['modisSR'] = 'modis(options)\n\n'+
                   'collections: MODIS/006/MOD09GA, MODIS/006/MYD09GA\n'+
                   'options (list): cloud, mix, shadow, cloud2, snow'
 
+help['hollstein_S2'] = 'hollstein_S2(options)\n\n'+
+                       'Implementation of the decision tree developed by André Hollstein et al. 2016 (doi:10.3390/rs8080666) (http://www.mdpi.com/2072-4292/8/8/666/pdf)\n'+
+                       'options: a list with one or more of "cloud", "water", "cirrus", "snow", "shadow"\n'
+
 help['make'] = 'Create functions using a key. Example:\n'+
                "var make = require('users/fitoprincipe/geetools:cloud_masks').make\n"+
                'var s2 = make.sentinel2()\n'+
@@ -278,5 +286,5 @@ exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
 exports.modisSR = modisSR
 exports.make = make
-exports.dt_hollstein_S2 = dt_hollstein_S2
+exports.hollstein_S2 = hollstein_S2
 exports.options = ee.Dictionary(help).keys()
