@@ -32,6 +32,7 @@ var binary = function(conditions, classes) {
        var final_condition = C(boolean, condition)
        return ee.Image(init.and(final_condition))
      }, ini))
+     return result
    }
    var new_classes = ee.Dictionary(paths.map(overpath))
    var masks = new_classes.values() // list of masks
