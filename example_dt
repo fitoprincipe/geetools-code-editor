@@ -1,0 +1,40 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/* Example of a binary decision tree 
+
+Author: Rodrigo E. Principe
+mail: fitoprincipe82@gmail.com
+LICENSE: MIT
+*/
+
+var dt = require('users/fitoprincipe/geetools:decision_tree')
+var c = Map.getCenter()
+
+var i = ee.Image(l8.filterBounds(c).filterMetadata('CLOUD_COVER','greater_than',50).first())
+var ndvi = i.normalizedDifference(['B5', 'B4']).rename(['ndvi'])
+i = i.addBands(ndvi)
+
+Map.addLayer(i, {bands:['B5','B6','B4'],min:0,max:5000},'original img')
+
+// CONDITIONS
+var c1 = i.select('ndvi').gt(0.2) // ndvi value greater than 0.2
+var c2 = i.select('ndvi').lt(0.8) // ndvi value less than 2000
+var c3 = i.select('B7').gt(3000) // SWIR2 value greater than 2000
+
+// dict of conditions
+var conditions = {1:c1, 2:c2, 3:c3, 4:i.select('ndvi').lte(0)}
+
+// dict of 'paths for classes'
+var classes = {'wood': [[1,1], [2,1], [3,0]], // [cond1, true], [cond2, true], [cond3, false]
+               'cloud': [[3, 1]],
+               'water':[[4, 1]]
+              }
+
+var dtf = dt.binary(conditions, classes)
+
+var result = dtf(i)
+
+Map.addLayer(result.select('wood'), {}, 'Wood mask')
+Map.addLayer(result.select('cloud'), {}, 'Cloud mask')
+Map.addLayer(result.select('water'), {}, 'Water mask')
