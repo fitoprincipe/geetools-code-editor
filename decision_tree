@@ -35,11 +35,11 @@ var binary = function(conditions, classes) {
    }
    var new_classes = ee.Dictionary(paths.map(overpath))
    var masks = new_classes.values() // list of masks
-    //print(masks)
+   print(masks)
    return ee.Image(masks.iterate(function(mask, ini){
-      ini = ee.Image(ini)
-      return ini.addBands(mask)
-   }, img))
+        ini = ee.Image(ini)
+        return ini.addBands(mask)
+      }, img))
  }
  return wrap
 }
