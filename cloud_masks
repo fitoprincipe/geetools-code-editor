@@ -6,6 +6,9 @@
  * License: MIT
  */
 
+var tools = require('users/fitoprincipe/geetools:tools')
+var l_algo = require('users/fitoprincipe/geetools:list_algorithms')
+
 var test_import = function() {
   print('cloud_masks module imported')
 }
@@ -135,6 +138,122 @@ var modisSR = function(options) {
   return wrap
 }
 
+var dt_hollstein_S2 = function(options) {
+  var opt = options || ['cloud', 'snow', 'shadow', 'water', 'cirrus']
+  
+  var difference = function(a, b) {
+    var wrap = function(img) {
+      return img.select(a).subtract(image.select(b))
+    }
+    return wrap
+  }
+  var ratio = function(a, b) {
+    var wrap = function(img) {
+      return img.select(a).divide(image.select(b))
+    }
+    return wrap
+  }
+  var depth = function(a, b, c) {
+    var wrap = function(img) {
+      return img.expression("(a+b)/c",{a:img.select(a),
+                                       b:img.select(b),
+                                       c:img.select(c)})
+    }
+    return wrap
+  }
+  var index = function(a, b) {
+    var wrap = function(img) {
+      return img.expression("(a-b)/(a+b)",{a:img.select(a),
+                                       b:img.select(b)})
+    }
+    return wrap
+  }
+  var index_take = function(a, b, c, d) {
+    var wrap = function(img) {
+      return img.expression("(a-b)/(c-d)",{a:img.select(a),
+                                           b:img.select(b),
+                                           c:img.select(c),
+                                           d:img.select(d)
+      })
+    }
+    return wrap
+  }
+  var index_plus = function(a, b, c, d) {
+    var wrap = function(img) {
+      return img.expression("(a+b)/(c+d)",{a:img.select(a),
+                                           b:img.select(b),
+                                           c:img.select(c),
+                                           d:img.select(d)
+      })
+    }
+    return wrap
+  }
+  
+  var opt_list = ee.List(opt)
+  
+  var compute = function(img) {
+    
+    //1
+    var b3 = img.select('B3').lt(3190)
+    
+    //2
+    var b8a = img.select('B8a').lt(1660)
+    var r511 = ratio('B5', 'B11')(img).lt(4.33)
+    
+    //3
+    var s1110 = difference('B11', 'B10')(img).lt(2550)
+    var b3_3 = img.select('B3').lt(5250)
+    var r210 = ratio('B2','B10')(img).lt(14.689)
+    var s37 = difference('B3', 'B7')(img).lt(270)
+    
+    //4
+    var r15 = ratio('B1', 'B5')(img).lt(1.184)
+    var s67 = difference('B6', 'B7')(img).lt(-160)
+    var b1 = img.select('B1').lt(3000)
+    var r29 =  ratio('B2', 'B9')(img).lt(0.788)
+    var s911 = difference('B9', 'B11')(img).lt(210)
+    var s911_2 = difference('B9', 'B11')(img).lt(-970)
+    
+    // CLOUDS
+    var cloud1 = b3.not().and(r511).and(s1110).and(s67)
+    var cloud2 = b3.not().and(r511).and(s1110.not()).and(b1.not())
+    var cloud = cloud1.or(cloud2)
+    
+    // SNOW
+    var snow = b3.not().and(r511.not()).and(b3_3.not())
+    
+    // SHADOW
+    var shadow1 = b3.and(b8a).and(s37).and(s911.not())
+    var shadow2 = b3.and(b8a).and(s37.not()).and(s911.not())
+    var shadow3 = b3.not().and(r511.not()).and(b3_3).and(r15.not())
+    var shadow = shadow1.or(shadow2).or(shadow3)
+    
+    // WATER
+    var water = b3.and(b8a).and(s37.not()).and(s911)
+    
+    // CIRRUS
+    var cirrus1 = b3.and(b8a.not()).and(r210).and(r29.not())
+    var cirrus2 = b3.not().and(r511).and(s1110).and(s67.not())
+    var cirrus = cirrus1.or(cirrus2)
+    
+    var results = ee.Dictionary({'cloud': cloud.select([0], ['cloud']), 
+                                 'snow':snow.select([0], ['snow']),
+                                 'shadow':shadow.select([0], ['shadow']), 
+                                 'water':water.select([0], ['water']), 
+                                 'cirrus':cirrus.select([0], ['cirrus'])})
+    return results
+  }
+  
+  var wrap = function(img) {
+    var masks = compute(img).select(opt_list).values() // list of masks
+    return ee.Image(masks.iterate(function(mask, ini){
+      ini = ee.Image(img)
+      return ini.addBands(mask)
+    }, img))
+  }
+  return wrap
+}
+
 var make = {
   sentinel2: sentinel2,
   landsatSR: landsatSR,
@@ -175,4 +294,5 @@ exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
 exports.modisSR = modisSR
 exports.make = make
+exports.dt_hollstein_s2 = dt_hollstein_s2
 exports.options = ee.Dictionary(help).keys()
