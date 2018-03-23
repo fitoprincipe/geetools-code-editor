@@ -197,7 +197,7 @@ var dt_hollstein_S2 = function(options) {
     var b3 = img.select('B3').lt(3190)
     
     //2
-    var b8a = img.select('B8a').lt(1660)
+    var b8a = img.select('B8A').lt(1660)
     var r511 = ratio('B5', 'B11')(img).lt(4.33)
     
     //3
