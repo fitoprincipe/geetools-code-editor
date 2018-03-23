@@ -59,7 +59,7 @@ var binary = function(conditions, classes) {
      var baseclass = ee.String(key).split('-').get(0)
      var mask_before = ee.Image(init.get(baseclass))
      var mask = new_classes.get(key)
-     var new_mask = mask_before.and(mask)
+     var new_mask = mask_before.or(mask)
      return init.set(baseclass, new_mask)
    }
    var new_classes_unique = ee.Dictionary(new_classes_list.iterate(unify, ini))
