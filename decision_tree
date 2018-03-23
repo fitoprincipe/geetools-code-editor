@@ -1,3 +1,5 @@
+var lalg = require('users/fitoprincipe/geetools:list_algorithms')
+
 var binary = function(conditions, classes) {
  /*
  Binary decision tree
@@ -41,7 +43,28 @@ var binary = function(conditions, classes) {
      return result
    }
    var new_classes = ee.Dictionary(paths.map(overpath))
-   var masks = new_classes.values() // list of masks
+   
+   // unify classes. example: {'snow-1':x, 'snow-2':y} into {'snow': x.and(y)}
+   var new_classes_list = new_classes.keys()
+   
+   var repeated = new_classes_list.map(function(el){
+     return ee.String(el).split('-').get(0)
+   })
+   
+   var unique = lalg.remove_duplicates(repeated)
+   
+   var ini = ee.Dictionary.fromLists(unique, ee.List.repeat(ee.Image(0), unique.size()))
+   var unify = function(key, init) {
+     init = ee.Dictionary(init)
+     var baseclass = ee.String(key).split('-').get(0)
+     var mask_before = ee.Image(init.get(baseclass))
+     var mask = new_classes.get(key)
+     var new_mask = mask_before.and(mask)
+     return init.set(baseclass, new_mask)
+   }
+   var new_classes_unique = ee.Dictionary(new_classes_list.iterate(unify, ini))
+   
+   var masks = new_classes_unique.values() // list of masks
    
    return ee.Image(masks.iterate(function(mask, ini){
         ini = ee.Image(ini)
