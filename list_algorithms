@@ -53,7 +53,8 @@ help['remove_duplicates'] = 'remove_duplicates(list)\n'+
 help['get_from_dict'] = "get_from_dict(list, dict)\n"+
                         "Get a list of Dict's values from a list object. Keys must be unique"+
                         "list: list of keys\n"+
-                        "dict: dict to get the values for list's keys"
+                        "dict: dict to get the values for list's keys\n"+
+                        'return: ee.List'
 
 help['filters'] = {'regex': 'filters.regex(list, regex, flags)\n'+
                             'Filter a list using a Regular Expression\n'+
