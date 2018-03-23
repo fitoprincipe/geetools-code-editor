@@ -27,7 +27,7 @@ var binary = function(conditions, classes) {
        init = ee.Image(init)
        pair = ee.List(pair)
        var boolean = pair.get(0)
-       var condition_key = pait.get(1)  // could need var casting
+       var condition_key = pair.get(1)  // could need var casting
        var condition = cond.get(condition_key)
        var final_condition = C(boolean, condition)
        return ee.Image(init.and(final_condition))
