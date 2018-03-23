@@ -44,7 +44,7 @@ var binary = function(conditions, classes) {
    }
    var new_classes = ee.Dictionary(paths.map(overpath))
    
-   // unify classes. example: {'snow-1':x, 'snow-2':y} into {'snow': x.and(y)}
+   // UNIFY CLASSES. example: {'snow-1':x, 'snow-2':y} into {'snow': x.and(y)}
    var new_classes_list = new_classes.keys()
    
    var repeated = new_classes_list.map(function(el){
@@ -66,6 +66,7 @@ var binary = function(conditions, classes) {
    
    var masks = new_classes_unique.values() // list of masks
    
+   // ADD CLASSES AS BANDS OF THE IMAGE
    return ee.Image(masks.iterate(function(mask, ini){
         ini = ee.Image(ini)
         return ini.addBands(mask)
