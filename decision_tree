@@ -36,14 +36,13 @@ var binary = function(conditions, classes) {
        var condition_key = pair.get(0)  // could need var casting
        var condition = cond.get(condition_key)
        var final_condition = C(condition, boolean)
-       //var final_condition = ee.Image(ee.Algorithms.If(bool, ee.Image(condition), ee.Image(condition).not()))
        return ee.Image(init.and(ee.Image(final_condition)))
      }, ini))
      return result
    }
    var new_classes = ee.Dictionary(paths.map(overpath))
    var masks = new_classes.values() // list of masks
-   print(masks)
+   
    return ee.Image(masks.iterate(function(mask, ini){
         ini = ee.Image(ini)
         return ini.addBands(mask)
