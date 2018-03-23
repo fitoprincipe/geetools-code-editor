@@ -56,7 +56,7 @@ var binary = function(conditions, classes) {
    // CREATE INITIAL DICT
    var ini = ee.Dictionary(unique.iterate(function(baseclass, ini) {
      ini = ee.Dictionary(ini)
-     var i = ee.Image.constant(1).select([0], [baseclass])
+     var i = ee.Image.constant(0).select([0], [baseclass])
      return ini.set(baseclass, i)
    }, ee.Dictionary({})))
    
