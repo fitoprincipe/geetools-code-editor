@@ -1,5 +1,7 @@
 var lalg = require('users/fitoprincipe/geetools:list_algorithms')
 
+var help = {}
+
 var binary = function(conditions, classes) {
  /*
  Binary decision tree
@@ -82,4 +84,17 @@ var binary = function(conditions, classes) {
  return wrap
 }
 
+help['binary'] = "binary(conditions, classes)\n\n"+
+                 "Implement a binary decision tree given a set of conditions and paths for the classes\n"+
+                 "conditions: it must be a ee.Dictionary or JS object holding the conditional images or values\n"+
+                 "classes: it must be a ee.Dictionary or JS object holding the path for every class.\n"+
+                 "         If one class has more than one path, use '-' to indicate the number, and will be\n"+
+                 "         automatically converted to the same class\n"+
+                 "Return: a function to apply in a map algorithm over a ImageCollection\n"+
+                 "        In each image of the collection will be added a band for each\n"+
+                 "        class\n"+
+                 "EXAMPLE: link to code editor\n"
+
 exports.binary = binary
+exports.help = help
+exports.options = ee.Dictionary(help).keys()
