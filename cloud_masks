@@ -149,7 +149,7 @@ var dt_hollstein_S2 = function(options) {
   }
   var ratio = function(a, b) {
     var wrap = function(img) {
-      return img.select(a).divide(image.select(b))
+      return img.select(a).divide(img.select(b))
     }
     return wrap
   }
