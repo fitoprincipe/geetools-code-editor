@@ -8,6 +8,7 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 var l_algo = require('users/fitoprincipe/geetools:list_algorithms')
+var dt = require('users/fitoprincipe/geetools:decision_tree')
 
 var test_import = function() {
   print('cloud_masks module imported')
@@ -214,6 +215,7 @@ var dt_hollstein_S2 = function(options) {
     var s911 = difference('B9', 'B11')(img).lt(210)
     var s911_2 = difference('B9', 'B11')(img).lt(-970)
     
+    /*
     // CLOUDS
     var cloud1 = b3.not().and(r511).and(s1110).and(s67)
     var cloud2 = b3.not().and(r511).and(s1110.not()).and(b1.not())
@@ -241,9 +243,29 @@ var dt_hollstein_S2 = function(options) {
                                  'shadow':shadow.select([0], ['shadow']), 
                                  'water':water.select([0], ['water']), 
                                  'cirrus':cirrus.select([0], ['cirrus'])})
+    */
+    
+    var dtf = dt.binary({1:b3, 
+                         21:b8a, 22:r511, 
+                         31:s37, 32:r210, 33:s1110, 34:b3_3,
+                         41: s911_2, 42:s911, 43:r29, 44:s67, 45:b1, 46:r15
+                         },
+                         {'snow':[[1,0], [22,0], [34,0]],
+                          'cloud-1':[[1,0], [22,1],[33,1],[44,1]],
+                          'cloud-2':[[1,0], [22,1],[33,0],[45,0]],
+                          'cirrus-1':[[1,0], [22,1],[33,1],[44,0]],
+                          'cirrus-2':[[1,1], [21,0],[32,1],[43,0]],
+                          'shadow-1':[[1,1], [21,1],[31,1],[41,0]],
+                          'shadow-2':[[1,1], [21,1],[31,0],[42,0]],
+                          'shadow-3':[[1,0], [22,0],[34,1],[46,0]],
+                          'water':[[1,1], [21,1],[31,0],[42,1]],
+                         })
+    
+    var results = dtf(img)
+    
     return results
   }
-  
+  /*
   var wrap = function(img) {
     var masks = compute(img).select(opt_list).values() // list of masks
     //print(masks)
@@ -252,7 +274,8 @@ var dt_hollstein_S2 = function(options) {
       return ini.addBands(mask)
     }, img))
   }
-  return wrap
+  return wrap*/
+  return compute
 }
 
 var make = {
