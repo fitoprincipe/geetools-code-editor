@@ -245,8 +245,8 @@ var dt_hollstein_S2 = function(options) {
   }
   
   var wrap = function(img) {
-    print(opt_list)
     var masks = compute(img).select(opt_list).values() // list of masks
+    print(masks)
     return ee.Image(masks.iterate(function(mask, ini){
       ini = ee.Image(img)
       return ini.addBands(mask)
