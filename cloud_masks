@@ -143,7 +143,7 @@ var dt_hollstein_S2 = function(options) {
   
   var difference = function(a, b) {
     var wrap = function(img) {
-      return img.select(a).subtract(image.select(b))
+      return img.select(a).subtract(img.select(b))
     }
     return wrap
   }
