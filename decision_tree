@@ -1,3 +1,10 @@
+/* Simple Decision Tree module
+
+Author: Rodrigo E. Principe
+mail: fitoprincipe82@gmail.com
+LICENSE: MIT
+*/
+
 var lalg = require('users/fitoprincipe/geetools:list_algorithms')
 
 var help = {}
