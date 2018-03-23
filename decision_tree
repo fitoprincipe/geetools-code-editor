@@ -35,7 +35,8 @@ var binary = function(conditions, classes) {
        var boolean = pair.get(1)
        var condition_key = pair.get(0)  // could need var casting
        var condition = cond.get(condition_key)
-       var final_condition = C(boolean, condition)
+       var final_condition = C(condition, boolean)
+       //var final_condition = ee.Image(ee.Algorithms.If(bool, ee.Image(condition), ee.Image(condition).not()))
        return ee.Image(init.and(ee.Image(final_condition)))
      }, ini))
      return result
