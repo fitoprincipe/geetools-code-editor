@@ -154,7 +154,7 @@ var dt_hollstein_S2 = function(options) {
     }
     return wrap
   }
-  var depth = function(a, b, c) {
+  //var depth = function(a, b, c) {
     var wrap = function(img) {
       return img.expression("(a+b)/c",{a:img.select(a),
                                        b:img.select(b),
@@ -162,14 +162,14 @@ var dt_hollstein_S2 = function(options) {
     }
     return wrap
   }
-  var index = function(a, b) {
+  //var index = function(a, b) {
     var wrap = function(img) {
       return img.expression("(a-b)/(a+b)",{a:img.select(a),
                                        b:img.select(b)})
     }
     return wrap
   }
-  var index_take = function(a, b, c, d) {
+  //var index_take = function(a, b, c, d) {
     var wrap = function(img) {
       return img.expression("(a-b)/(c-d)",{a:img.select(a),
                                            b:img.select(b),
@@ -179,7 +179,7 @@ var dt_hollstein_S2 = function(options) {
     }
     return wrap
   }
-  var index_plus = function(a, b, c, d) {
+  //var index_plus = function(a, b, c, d) {
     var wrap = function(img) {
       return img.expression("(a+b)/(c+d)",{a:img.select(a),
                                            b:img.select(b),
@@ -215,36 +215,6 @@ var dt_hollstein_S2 = function(options) {
     var s911 = difference('B9', 'B11')(img).lt(210)
     var s911_2 = difference('B9', 'B11')(img).lt(-970)
     
-    /*
-    // CLOUDS
-    var cloud1 = b3.not().and(r511).and(s1110).and(s67)
-    var cloud2 = b3.not().and(r511).and(s1110.not()).and(b1.not())
-    var cloud = cloud1.or(cloud2)
-    
-    // SNOW
-    var snow = b3.not().and(r511.not()).and(b3_3.not())
-    
-    // SHADOW
-    var shadow1 = b3.and(b8a).and(s37).and(s911.not())
-    var shadow2 = b3.and(b8a).and(s37.not()).and(s911.not())
-    var shadow3 = b3.not().and(r511.not()).and(b3_3).and(r15.not())
-    var shadow = shadow1.or(shadow2).or(shadow3)
-    
-    // WATER
-    var water = b3.and(b8a).and(s37.not()).and(s911)
-    
-    // CIRRUS
-    var cirrus1 = b3.and(b8a.not()).and(r210).and(r29.not())
-    var cirrus2 = b3.not().and(r511).and(s1110).and(s67.not())
-    var cirrus = cirrus1.or(cirrus2)
-    
-    var results = ee.Dictionary({'cloud': cloud.select([0], ['cloud']), 
-                                 'snow':snow.select([0], ['snow']),
-                                 'shadow':shadow.select([0], ['shadow']), 
-                                 'water':water.select([0], ['water']), 
-                                 'cirrus':cirrus.select([0], ['cirrus'])})
-    */
-    
     var dtf = dt.binary({1:b3, 
                          21:b8a, 22:r511, 
                          31:s37, 32:r210, 33:s1110, 34:b3_3,
@@ -265,16 +235,6 @@ var dt_hollstein_S2 = function(options) {
     
     return results
   }
-  /*
-  var wrap = function(img) {
-    var masks = compute(img).select(opt_list).values() // list of masks
-    //print(masks)
-    return ee.Image(masks.iterate(function(mask, ini){
-      ini = ee.Image(ini)
-      return ini.addBands(mask)
-    }, img))
-  }
-  return wrap*/
   return compute
 }
 
