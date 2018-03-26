@@ -24,6 +24,7 @@ var binary = function(conditions, classes, mask_name) {
  */
  
  mask_name = mask_name || 'dt_mask'
+ print(mask_name)
  
  var cond = ee.Dictionary(conditions)
  var paths = ee.Dictionary(classes)
