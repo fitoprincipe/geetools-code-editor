@@ -89,19 +89,18 @@ var binary = function(conditions, classes, mask_name) {
    var mask_img = ee.Image(masks.slice(0, -1).iterate(function(mask, ini){
      ini = ee.Image(ini)
      return ini.addBands(mask)
-   }, masks.get(0)))//.addBands(ee.Image.constant(0).rename(mask_name))
+   }, masks.get(0)))
    
    var init = ee.Image.constant(0).rename(mask_name)
    
    var result = masks.iterate(function(mask, ini){
      ini = ee.Image(ini)
-     //var holl = ini.select(mask_name)
-     //var newholl = ini.or(mask).rename('temp')
-     //return tools.replace_band(ini, mask_name, newholl)
      return ini.or(mask)
    }, init)
    
-   return ee.Image(result).addBands(mask_img)
+   var not_mask = ee.Image(result).not()
+   
+   return mask_img.addBands(not_mask)
    /*
    // ADD CLASSES AS BANDS OF THE IMAGE
    return ee.Image(masks.iterate(function(mask, ini){
