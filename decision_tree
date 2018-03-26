@@ -10,7 +10,7 @@ var tools = require('users/fitoprincipe/geetools:tools')
 
 var help = {}
 
-var binary = function(conditions, classes) {
+var binary = function(conditions, classes, mask_name) {
  /*
  Binary decision tree
  
@@ -22,6 +22,8 @@ var binary = function(conditions, classes) {
                    1 is false and cond 2 is true
  
  */
+ 
+ mask_name = mask_name || 'dt_mask'
  
  var cond = ee.Dictionary(conditions)
  var paths = ee.Dictionary(classes)
@@ -82,10 +84,6 @@ var binary = function(conditions, classes) {
    var new_classes_unique = ee.Dictionary(new_classes_list.iterate(unify, ini))
    
    var masks = new_classes_unique.values() // list of masks
-   
-   print(masks)
-   
-   var mask_name = 'hollstein'
    
    // Return an Image with one band per option and a single one names 'hollstein' with the whole mask
    var mask_img = ee.Image(ee.List(masks)).addBands(ee.Image.constant(0).rename(mask_name))
