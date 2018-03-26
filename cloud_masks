@@ -211,7 +211,7 @@ var hollstein_S2 = function(options) {
                           'shadow-2':[[1,1], [21,1],[31,0],[42,0]],
                           'shadow-3':[[1,0], [22,0],[34,1],[46,0]],
                           'water':[[1,1], [21,1],[31,0],[42,1]],
-                         })
+                         }, 'hollstein')
     
     var results = dtf(img)
     
