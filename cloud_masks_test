@@ -156,8 +156,8 @@ var sentinel2hollstein = function(options) {
   
   var i = ee.Image(col.first())
   var mask = cloud.hollstein_S2(options)(i)
-  Map.addLayer(mask, vis, 'Masked');
-  Map.addLayer(i, vis, ' NOT masked', false);
+  Map.addLayer(mask, vis, 'HOLLSTEIN Masked');
+  Map.addLayer(i, vis, 'HOLLSTEIN NOT masked', false);
 }
  
 exports.sentinel2 = sentinel2
