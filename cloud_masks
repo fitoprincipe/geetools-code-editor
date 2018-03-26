@@ -224,7 +224,7 @@ var make = {
   landsatSR: landsatSR,
   landsatTOA: landsatTOA,
   modisSR: modisSR,
-  hollstein_S2: hollstein_S2
+  //hollstein_S2: hollstein_S2
 }
 
 help['sentinel2'] = 'sentinel2(options)\n\n'+
