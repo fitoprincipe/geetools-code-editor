@@ -90,7 +90,7 @@ var binary = function(conditions, classes) {
    
    var result = masks.iterate(function(mask, ini){
      ini = ee.Image(ini)
-     holl = ini.select(mask_name)
+     var holl = ini.select(mask_name)
      var newholl = holl.or(mask).rename('temp')
      return tools.replace_band(ini, mask_name, newholl)
    }, mask_img)
