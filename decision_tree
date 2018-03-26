@@ -24,8 +24,6 @@ var binary = function(conditions, classes, mask_name) {
  */
  
  mask_name = mask_name || 'dt_mask'
- print(mask_name)
- 
  var cond = ee.Dictionary(conditions)
  var paths = ee.Dictionary(classes)
  
@@ -91,6 +89,8 @@ var binary = function(conditions, classes, mask_name) {
      ini = ee.Image(ini)
      return ini.addBands(mask)
    }, masks.get(0))).addBands(ee.Image.constant(0).rename(mask_name))
+   
+   print(mask_img)
    
    var result = masks.iterate(function(mask, ini){
      ini = ee.Image(ini)
