@@ -10,8 +10,7 @@
  var landsatSR = require('users/fitoprincipe/geetools:cloud_masks').landsatSR
  var cloud = require('users/fitoprincipe/geetools:cloud_masks')
  
- 
- var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
+ var get_img = function(colid, cloud_prop, cloud_percent) {
    var percent = cloud_percent || 40;
    var cent = Map.getCenter();
    var col = ee.ImageCollection(colid)
@@ -21,17 +20,21 @@
              .sort(cloud_prop);
    
    if (col.size().getInfo() !== 0) {
-     var img = ee.Image(col.first());
+     return ee.Image(col.first());
+   }
+   else {
+     print('Collection is empty')
+   }
+ }
+ 
+ var show = function(colid, cloud_prop, viz, name, func, params, cloud_percent) {
+     var img = get_img(colid, cloud_prop, cloud_percent)
      //var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
      var masked = func(params)(img)
      Map.addLayer(masked, viz, name+' masked');
      Map.addLayer(img, viz, name+' NOT masked', false);
      Map.centerObject(img)
      return masked
-   }
-   else {
-     print('Collection is empty')
-   }
  }
  
  var sentinel2 = function(options) {
@@ -154,7 +157,8 @@ var sentinel2hollstein = function(options) {
              .filterMetadata('CLOUDY_PIXEL_PERCENTAGE', 'greater_than', 50)
              .sort('CLOUDY_PIXEL_PERCENTAGE');
   
-  var i = ee.Image(col.first())
+  //var i = ee.Image(col.first())
+  var i = get_img('COPERNICUS/S2', 'CLOUDY_PIXEL_PERCENTAGE')
   var mask = cloud.hollstein_S2(options)(i)
   Map.addLayer(mask, vis, 'HOLLSTEIN Masked');
   Map.addLayer(i, vis, 'HOLLSTEIN NOT masked', false);
