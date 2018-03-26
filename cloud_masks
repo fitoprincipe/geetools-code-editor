@@ -44,10 +44,10 @@ var compute = function(image, mask_band, bits, options) {
   
   return good_pix.not();
 }
-/*
+
 var sentinel2 = function(options) {
   var opt = options || ['opaque', 'cirrus']
-  var rel = {opaque: 10, cirrus:11}
+  var rel = {opaque: [10, 10] , cirrus:[11, 11]}
   var band = 'QA60'
   
   var wrap = function(img){
@@ -58,10 +58,10 @@ var sentinel2 = function(options) {
 }
 
 var landsatSR = function(options) {
-  var sr = {bits: ee.Dictionary({'cloud': 1, 'shadow': 2, 'adjacent': 3, 'snow': 4}),
+  var sr = {bits: ee.Dictionary({'cloud': [1,1], 'shadow': [2,2], 'adjacent': [3,3], 'snow': [4,4]}),
             band: 'sr_cloud_qa'}
   
-  var pix = {bits: ee.Dictionary({'cloud': 5, 'shadow': 3, 'snow': 4}),
+  var pix = {bits: ee.Dictionary({'cloud': [5,5], 'shadow': [3,3], 'snow': [4,4]}),
             band: 'pixel_qa'}
             
   // Parameters
@@ -82,7 +82,7 @@ var landsatSR = function(options) {
 }
 
 var landsatTOA = function(options) {
-  var bits = ee.Dictionary({'cloud': 4, 'shadow': 8, 'snow': 10});
+  var bits = ee.Dictionary({'cloud': [4,4], 'shadow': [8,8], 'snow': [10,10]});
   //var bits = ee.Dictionary({'cloud': [14, 15], 'shadow': [6,7], 'snow': [10, 11]});
   var mask_band = 'BQA'
   
@@ -96,7 +96,7 @@ var landsatTOA = function(options) {
   }
   return wrap
 }
- 
+/*
 var modisSR = function(options) {
   var bits = ee.Dictionary({
     'cloud': 0, 
