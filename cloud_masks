@@ -16,31 +16,6 @@ var test_import = function() {
 
 var help = {};
 
-var computeQAbits = function(start, end, newName) {
-  var pattern = ee.Number(0)
-  
-  start = ee.Number(start).toInt()
-  end = ee.Number(end).toInt()
-  newName = ee.String(newName)
-  
-  var seq = ee.List.sequence(start, end)
-  
-  var patt = seq.iterate(
-    function(element, ini) {
-      ini = ee.Number(ini)
-      var bit = ee.Number(2).pow(ee.Number(element));
-      return ini.add(bit)
-    }, pattern)
-    
-  patt = ee.Number(patt).toInt()
-  
-  var wrap = function(image) {
-    var good_pix = image.select([0], [newName]).bitwiseAnd(patt).rightShift(start);
-    return good_pix.toInt()
-  }
-  return wrap
-}
-
 var compute = function(image, mask_band, bits, options) {
   // cast params in case they are not EE objects
   var bits_dict = ee.Dictionary(bits)
@@ -57,9 +32,11 @@ var compute = function(image, mask_band, bits, options) {
     var cond = bits_dict.contains(option);
     
     // get the mask for the option
-    var mask = computeQAbits(bits_dict.get(option), bits_dict.get(option), option)(image)
+    var mask = tools.computeQAbits(bits_dict.get(option).get(0), 
+                                   bits_dict.get(option).get(1), 
+                                   option)(image)
     return ee.Image(ee.Algorithms.If(cond, 
-                                     i.or(mask), // if condition is true
+                                     i.or(mask), 
                                      i))
   }
   
@@ -105,7 +82,8 @@ var landsatSR = function(options) {
 }
 
 var landsatTOA = function(options) {
-  var bits = ee.Dictionary({'cloud': 4, 'shadow': 8, 'snow': 10});
+  //var bits = ee.Dictionary({'cloud': 4, 'shadow': 8, 'snow': 10});
+  var bits = ee.Dictionary({'cloud': [14, 15], 'shadow': [6,7], 'snow': [10, 11]});
   var mask_band = 'BQA'
   
   // Parameters
@@ -157,7 +135,7 @@ var hollstein_S2 = function(options) {
     }
     return wrap
   }
-  /*var depth = function(a, b, c) {
+  //var depth = function(a, b, c) {
     var wrap = function(img) {
       return img.expression("(a+b)/c",{a:img.select(a),
                                        b:img.select(b),
@@ -165,14 +143,14 @@ var hollstein_S2 = function(options) {
     }
     return wrap
   }
-  var index = function(a, b) {
+  //var index = function(a, b) {
     var wrap = function(img) {
       return img.expression("(a-b)/(a+b)",{a:img.select(a),
                                        b:img.select(b)})
     }
     return wrap
   }
-  var index_take = function(a, b, c, d) {
+  //var index_take = function(a, b, c, d) {
     var wrap = function(img) {
       return img.expression("(a-b)/(c-d)",{a:img.select(a),
                                            b:img.select(b),
@@ -182,7 +160,7 @@ var hollstein_S2 = function(options) {
     }
     return wrap
   }
-  var index_plus = function(a, b, c, d) {
+  //var index_plus = function(a, b, c, d) {
     var wrap = function(img) {
       return img.expression("(a+b)/(c+d)",{a:img.select(a),
                                            b:img.select(b),
@@ -191,7 +169,7 @@ var hollstein_S2 = function(options) {
       })
     }
     return wrap
-  }*/
+  }
   
   var opt_list = ee.List(opt)
   
