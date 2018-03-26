@@ -174,7 +174,7 @@ var hollstein_S2 = function(options) {
   
   var opt_list = ee.List(opt)
   
-  var compute = function(img) {
+  var compute_dt = function(img) {
     
     //1
     var b3 = img.select('B3').lt(3190)
@@ -217,7 +217,7 @@ var hollstein_S2 = function(options) {
     
     return results
   }
-  return compute
+  return compute_dt
 }
 
 var make = {
