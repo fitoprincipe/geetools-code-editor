@@ -32,8 +32,8 @@ var compute = function(image, mask_band, bits, options) {
     var cond = bits_dict.contains(option);
     
     // get the mask for the option
-    var mask = tools.computeQAbits(bits_dict.get(option).get(0), 
-                                   bits_dict.get(option).get(1), 
+    var mask = tools.computeQAbits(bits_dict.get(option),//.get(0), 
+                                   bits_dict.get(option),//.get(1), 
                                    option)(image)
     return ee.Image(ee.Algorithms.If(cond, 
                                      i.or(mask), 
@@ -82,8 +82,8 @@ var landsatSR = function(options) {
 }
 
 var landsatTOA = function(options) {
-  //var bits = ee.Dictionary({'cloud': 4, 'shadow': 8, 'snow': 10});
-  var bits = ee.Dictionary({'cloud': [14, 15], 'shadow': [6,7], 'snow': [10, 11]});
+  var bits = ee.Dictionary({'cloud': 4, 'shadow': 8, 'snow': 10});
+  //var bits = ee.Dictionary({'cloud': [14, 15], 'shadow': [6,7], 'snow': [10, 11]});
   var mask_band = 'BQA'
   
   // Parameters
