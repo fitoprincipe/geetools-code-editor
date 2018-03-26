@@ -226,7 +226,7 @@ var computeQAbits = function(start, end, newName) {
 }
 
 // DEPRECATED
-var ExportCol_ = function(col, folder, scale, type,
+var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
     type = type || "float";
     nimg = nimg || 500;
