@@ -83,6 +83,7 @@ var binary = function(conditions, classes, mask_name) {
    var new_classes_unique = ee.Dictionary(new_classes_list.iterate(unify, ini))
    
    var masks = new_classes_unique.values() // list of masks
+   print(masks)
    
    // Return an Image with one band per option and a single one names 'hollstein' with the whole mask
    
@@ -90,6 +91,7 @@ var binary = function(conditions, classes, mask_name) {
      ini = ee.Image(ini)
      return ini.addBands(mask)
    }, masks.get(0)))
+   print(mask_img)
    
    var init = ee.Image.constant(0).rename(mask_name)
    
