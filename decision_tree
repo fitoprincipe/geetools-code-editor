@@ -111,12 +111,13 @@ var binary = function(conditions, classes, mask_name) {
  return wrap
 }
 
-help['binary'] = "binary(conditions, classes)\n\n"+
+help['binary'] = "binary(conditions, classes, mask_name)\n\n"+
                  "Implement a binary decision tree given a set of conditions and paths for the classes\n"+
                  "conditions: it must be a ee.Dictionary or JS object holding the conditional images or values\n"+
                  "classes: it must be a ee.Dictionary or JS object holding the path for every class.\n"+
                  "         If one class has more than one path, use '-' to indicate the number, and will be\n"+
                  "         automatically converted to the same class\n"+
+                 "mask_name: name for the whole (inverse) mask. Default: dt_mask"
                  "Return: a function to apply in a map algorithm over a ImageCollection\n"+
                  "        In each image of the collection will be added a band for each\n"+
                  "        class\n"+
