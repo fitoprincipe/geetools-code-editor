@@ -145,6 +145,21 @@
    }
  }
  
+var sentinel2hollstein = function(options) {
+  var opt = options || ['cloud', 'snow', 'shadow', 'water', 'cirrus']
+  var cent = Map.getCenter();
+  var vis = {bands:['B8', 'B12', 'B4'], min:0, max:5000}
+  var col = ee.ImageCollection('COPERNICUS/S2')
+             .filterBounds(cent)
+             .filterMetadata('CLOUDY_PIXEL_PERCENTAGE', 'greater_than', 50)
+             .sort('CLOUDY_PIXEL_PERCENTAGE');
+  
+  var i = ee.Image(col.first())
+  var mask = cld.hollstein_S2(options)(i)
+  Map.addLayer(mask, vis, 'Masked');
+  Map.addLayer(i, vis, ' NOT masked', false);
+}
+ 
 exports.sentinel2 = sentinel2
 exports.landsat8SR = landsat8SR
 exports.landsat5SR = landsat5SR
@@ -155,6 +170,7 @@ exports.landsat5TOA = landsat5TOA
 exports.landsat7TOA = landsat7TOA
 exports.landsat8TOA = landsat8TOA
 exports.modisSR = modisSR
+exports.sentinel2hollstein = sentinel2hollstein
 
 exports.options = function() {
   var opt = ['sentinel2',
