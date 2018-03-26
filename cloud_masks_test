@@ -155,7 +155,7 @@ var sentinel2hollstein = function(options) {
              .sort('CLOUDY_PIXEL_PERCENTAGE');
   
   var i = ee.Image(col.first())
-  var mask = cld.hollstein_S2(options)(i)
+  var mask = cloud.hollstein_S2(options)(i)
   Map.addLayer(mask, vis, 'Masked');
   Map.addLayer(i, vis, ' NOT masked', false);
 }
