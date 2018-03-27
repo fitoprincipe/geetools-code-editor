@@ -233,7 +233,7 @@ var random_number = function(start, end, type) {
   s = ee.Number(s)
   e = ee.Number(e)
   
-  var diff = e.subtract(s)
+  var diff = e.add(s)
   
   var value = ee.Number(Math.random())
   
