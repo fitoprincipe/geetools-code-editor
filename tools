@@ -235,9 +235,7 @@ var random_number = function(start, end, type) {
   
   var diff = e.subtract(s)
   
-  var ran = ee.Image.random()
-  var value = ee.Number(get_value(ran, ee.Geometry.Point([0,0]), 100).get('random'))
-  
+  var value = ee.Number(Math.random())
   
   var result = value.multiply(diff).subtract(s)
   
