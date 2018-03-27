@@ -366,5 +366,5 @@ exports.get_value = get_value
 exports.mask_geometry = mask_geometry
 exports.get_options = get_options
 exports.computeQAbits = computeQAbits
-//exports.random_number = random_number
+exports.random_number = random_number
 exports.options = ee.Dictionary(help).keys()
