@@ -52,7 +52,12 @@ var dtf = dt.binary(conditions, classes)
 
 var result = dtf(i)
 
-Map.addLayer(i.updateMask(result.select('class1')), vis, 'class1')
-Map.addLayer(i.updateMask(result.select('class2')), vis, 'class2')
-Map.addLayer(i.updateMask(result.select('class3')), vis, 'class3')
-Map.addLayer(i.updateMask(result.select('dt_mask')), vis, 'Pixels not in any class')
+var class1 = result.select('class1')
+var class2 = result.select('class2')
+var class3 = result.select('class3')
+var noclass = result.select('dt_mask')
+
+Map.addLayer(i.updateMask(class1), vis, 'class1')
+Map.addLayer(i.updateMask(class2), vis, 'class2')
+Map.addLayer(i.updateMask(class3), vis, 'class3')
+Map.addLayer(i.updateMask(noclass), vis, 'Pixels not in any class')
