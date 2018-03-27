@@ -1,7 +1,10 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-/* Example of a binary decision tree 
+/* Example of a binary decision tree
+
+This is just a 'made up' example to show the use of the function, may not make sense in
+a remote sensing way
 
 Author: Rodrigo E. Principe
 mail: fitoprincipe82@gmail.com
@@ -22,7 +25,7 @@ Map.addLayer(i, vis ,'original img')
 // CONDITIONS
 var c1 = i.select('ndvi').gt(0.2) // ndvi value greater than 0.2
 var c2 = i.select('ndvi').gt(0.8) // ndvi value less than 0.8
-var c3 = i.select('B7').gt(3000) // SWIR2 value greater than 2000
+// var c3 = i.select('B7').gt(3000) // SWIR2 value greater than 2000
 
 // dict of conditions
 var conditions = {1:c1, 2:c2, 3:c3, 4:i.select('ndvi').gt(0)}
