@@ -34,6 +34,7 @@ var classes = {'wood': [[1,1], [2,1], [3,0]], // [cond1, true], [cond2, true], [
 var dtf = dt.binary(conditions, classes)
 
 var result = dtf(i)
+//print(result)
 
 Map.addLayer(result.select('wood'), {}, 'Wood mask')
 Map.addLayer(result.select('cloud'), {}, 'Cloud mask')
