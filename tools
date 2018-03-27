@@ -238,7 +238,13 @@ var random = function(start, end, type) {
   var ran = ee.Image.random()
   var value = ee.Number(get_value(ran, ee.Geometry.Point(0,0), 100).get('random'))
   
-  return value.multiply(diff).subtract(s)
+  var result = value.multiply(diff).subtract(s)
+  
+  if (t == 'float') {
+    return result
+  else if (t == 'int') {
+    return result.toInt()
+  }
 }
 
 // DEPRECATED
