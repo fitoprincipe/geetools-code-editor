@@ -224,7 +224,7 @@ var computeQAbits = function(start, end, newName) {
   }
   return wrap
 }
-
+/*
 var random_number = function(start, end, type) {
   var s = start || 0
   var e = end || 1
@@ -247,7 +247,7 @@ var random_number = function(start, end, type) {
     return result.toInt()
     }
   }
-}
+}*/
 
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
@@ -366,5 +366,5 @@ exports.get_value = get_value
 exports.mask_geometry = mask_geometry
 exports.get_options = get_options
 exports.computeQAbits = computeQAbits
-exports.random_number = random_number
+//exports.random_number = random_number
 exports.options = ee.Dictionary(help).keys()
