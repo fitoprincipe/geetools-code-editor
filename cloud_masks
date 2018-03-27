@@ -135,42 +135,6 @@ var hollstein_S2 = function(options) {
     }
     return wrap
   }
-  /*
-  var depth = function(a, b, c) {
-    var wrap = function(img) {
-      return img.expression("(a+b)/c",{a:img.select(a),
-                                       b:img.select(b),
-                                       c:img.select(c)})
-    }
-    return wrap
-  }
-  var index = function(a, b) {
-    var wrap = function(img) {
-      return img.expression("(a-b)/(a+b)",{a:img.select(a),
-                                       b:img.select(b)})
-    }
-    return wrap
-  }
-  var index_take = function(a, b, c, d) {
-    var wrap = function(img) {
-      return img.expression("(a-b)/(c-d)",{a:img.select(a),
-                                           b:img.select(b),
-                                           c:img.select(c),
-                                           d:img.select(d)
-      })
-    }
-    return wrap
-  }
-  var index_plus = function(a, b, c, d) {
-    var wrap = function(img) {
-      return img.expression("(a+b)/(c+d)",{a:img.select(a),
-                                           b:img.select(b),
-                                           c:img.select(c),
-                                           d:img.select(d)
-      })
-    }
-    return wrap
-  }*/
   
   var opt_list = ee.List(opt)
   
