@@ -229,16 +229,16 @@ var random_number = function(start, end, type) {
   var s = start || 0
   var e = end || 1
   var t = type || 'float'
-  print(s, e, t)
-  /*
+  
   s = ee.Number(s)
   e = ee.Number(e)
   
   var diff = e.subtract(s)
   
   var ran = ee.Image.random()
-  var value = ee.Number(get_value(ran, ee.Geometry.Point(0,0), 100).get('random'))
-  
+  var value = ee.Number(get_value(ran, ee.Geometry.Point([0,0]), 100).get('random'))
+  print(value)
+  /*
   var result = value.multiply(diff).subtract(s)
   
   if (t == 'float') {
