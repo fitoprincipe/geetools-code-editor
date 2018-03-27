@@ -233,11 +233,11 @@ var random_number = function(start, end, type) {
   s = ee.Number(s)
   e = ee.Number(e)
   
-  var diff = e.add(s)
+  var diff = e.subtract(s)
   
   var value = ee.Number(Math.random())
   
-  var result = value.multiply(diff).subtract(s)
+  var result = value.multiply(diff).add(s)
   
   if (t == 'float') {
     return result}
