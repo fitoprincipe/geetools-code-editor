@@ -224,13 +224,13 @@ var computeQAbits = function(start, end, newName) {
   }
   return wrap
 }
-/*
+
 var random_number = function(start, end, type) {
   var s = start || 0
   var e = end || 1
   var t = type || 'float'
   print(s, e, t)
-  
+  /*
   s = ee.Number(s)
   e = ee.Number(e)
   
@@ -246,8 +246,8 @@ var random_number = function(start, end, type) {
   else if (t == 'int') {
     return result.toInt()
     }
-  }
-}*/
+  }*/
+}
 
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
