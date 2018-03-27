@@ -28,7 +28,7 @@ var c2 = i.select('ndvi').gt(0.8) // ndvi value less than 0.8
 // var c3 = i.select('B7').gt(3000) // SWIR2 value greater than 2000
 
 // dict of conditions
-var conditions = {1:c1, 2:c2, 3:c3, 4:i.select('ndvi').gt(0)}
+var conditions = {1:c1, 2:c2, 3:i.select('ndvi').gt(0)}
 
 /* Decision Tree
                                                                                    yes-- class1
@@ -42,10 +42,10 @@ NDVI greater than 0? --
 */
 
 // dict of 'paths for classes'
-var classes = {'class1-1': [[4,1], [1,1], [2,1]], // [cond1, true], [cond2, true], [cond3, false]
-               'class1-2': [[4, 1], [1,0]],
-               'class2':[[4, 1], [1,1],[2,0]],
-               'class3':[[4, 0]]
+var classes = {'class1-1': [[3,1], [1,1], [2,1]], // [cond1, true], [cond2, true], [cond3, false]
+               'class1-2': [[3, 1], [1,0]],
+               'class2':[[3, 1], [1,1],[2,0]],
+               'class3':[[3, 0]]
               }
 
 var dtf = dt.binary(conditions, classes)
