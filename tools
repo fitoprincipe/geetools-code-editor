@@ -245,6 +245,7 @@ var random_number = function(start, end, type) {
     return result
   else if (t == 'int') {
     return result.toInt()
+    }
   }
 }
 
