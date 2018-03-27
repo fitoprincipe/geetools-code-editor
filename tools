@@ -242,11 +242,10 @@ var random_number = function(start, end, type) {
   var result = value.multiply(diff).subtract(s)
   
   if (t == 'float') {
-    return result
+    return result}
   else if (t == 'int') {
     return result.toInt()
     }
-  }
 }
 
 // DEPRECATED
