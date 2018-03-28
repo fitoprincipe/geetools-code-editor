@@ -67,3 +67,4 @@
  exports.NDVI = NDVI
  exports.NBR = NBR
  exports.NBR2 = NBR2
+ exports.EVI = EVI
