@@ -88,6 +88,7 @@ var sum_bands = function(name, bands, append_to_image) {
 }
 
 var dict2image = function(bands) {
+  // this is the same as doing ee.Dictionary().toImage()
   
   if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
   
@@ -308,6 +309,7 @@ help['col2drive'] = 'col2drive(col, folder, options)\n\n'+
 
 help['dict2image'] = "dict2image(bands)\n\n"+
                      "Create an Image from dict's key/values pairs\n\n"+
+                     "Is the same as doing ee.Dictionary().toImage()\n"+
                      "For example:\n"+
                      "var i = dict2image({one:1, two:2});\n"+
                      "will return an image with 2 constant bands:\n"+
