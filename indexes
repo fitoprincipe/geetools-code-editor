@@ -38,9 +38,31 @@
    return wrap
  }
  
+ var custom_evi = function(NIR, RED, BLUE) {
+   var wrap = function(img) {
+     var nir = img.select([NIR])
+     var red = img.select([RED])
+     var blue = img.select([BLUE])
+     var L = ee.Number(1)
+     var C1 = ee.Number(6)
+     var C2 = ee.Number(7.5)
+     var index = img.expression('(NIR-R)/(NIR+(C1*R)-(C2*B)+L)', 
+     {NIR: nir, 
+      RED: red,
+      B: blue,
+      L: L,
+      C1: C1,
+      C2: C2
+     }).rename('EVI')
+     return img.addBands(index)
+   }
+   return wrap
+ }
+ 
  var NDVI = {custom: custom_ndvi}
  var NBR = {custom: custom_nbr}
  var NBR2 = {custom: custom_nbr2}
+ var EVI = {custom: custom_evi}
  
  exports.NDVI = NDVI
  exports.NBR = NBR
