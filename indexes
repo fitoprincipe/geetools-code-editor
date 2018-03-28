@@ -46,10 +46,10 @@
      var L = ee.Number(1)
      var C1 = ee.Number(6)
      var C2 = ee.Number(7.5)
-     var index = img.expression('(NIR-R)/(NIR+(C1*R)-(C2*B)+L)', 
+     var index = img.expression('(NIR-RED)/(NIR+(C1*RED)-(C2*BLUE)+L)', 
      {NIR: nir, 
       RED: red,
-      B: blue,
+      BLUE: blue,
       L: L,
       C1: C1,
       C2: C2
