@@ -15,8 +15,9 @@
      var ndvi = img.expression('(NIR-RED)/(NIR+RED)', {NIR: nir, RED:red}).rename('NDVI')
      return img.addBands(ndvi)
    }
+   return wrap
  }
  
- var NDVI = {'custom': custom_ndvi}
+ var NDVI = {custom: custom_ndvi}
  
  exports.NDVI = NDVI
