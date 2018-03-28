@@ -6,4 +6,17 @@
  * License: MIT
  */
  
+ var help = {}
  
+ var custom_ndvi = function(NIR, RED) {
+   var wrap = function(img) {
+     var nir = img.select([NIR])
+     var red = img.select([RED])
+     var ndvi = img.expression('(NIR-RED)/(NIR+RED)', {NIR: nir, RED:red}).rename('NDVI')
+     return img.addBands(ndvi)
+   }
+ }
+ 
+ var NDVI = {'custom': custom_ndvi}
+ 
+ exports.NDVI = NDVI
