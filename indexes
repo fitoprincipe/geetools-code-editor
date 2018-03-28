@@ -18,6 +18,30 @@
    return wrap
  }
  
+ var custom_nbr = function(NIR, SWIR2) {
+   var wrap = function(img) {
+     var nir = img.select([NIR])
+     var swir2 = img.select([SWIR2])
+     var index = img.expression('(NIR-SWIR2)/(NIR+SWIR2)', {NIR: nir, SWIR2:swir2}).rename('NBR')
+     return img.addBands(index)
+   }
+   return wrap
+ }
+ 
+ var custom_nbr2 = function(SWIR, SWIR2) {
+   var wrap = function(img) {
+     var swir = img.select([SWIR])
+     var swir2 = img.select([SWIR2])
+     var index = img.expression('(SWIR-SWIR2)/(SWIR+SWIR2)', {SWIR: swir, SWIR2:swir2}).rename('NBR2')
+     return img.addBands(index)
+   }
+   return wrap
+ }
+ 
  var NDVI = {custom: custom_ndvi}
+ var NBR = {custom: custom_nbr}
+ var NBR2 = {custom: custom_nbr2}
  
  exports.NDVI = NDVI
+ exports.NBR = NBR
+ exports.NBR2 = NBR2
