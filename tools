@@ -247,7 +247,7 @@ var random_number = function(start, end, type) {
     }
 }
 
-var take_decimals = function(places) {
+var trim_decimals = function(places) {
   
   var factor = ee.Number(10).pow(ee.Number(places).toInt())
   
@@ -370,6 +370,11 @@ help['computeQAbits']  = 'computeQAbits(start, end, newName)\n\n'+
                          'get the mask for the "on" bits since start to end and name\n'+
                          'the image with newName.'
 
+help['trim_decimals'] = 'trim_decimals(places)\n\n'+
+                        'Decrease or Increase the number of decimals in a ee.Number\n'+
+                        'places: number of places of the new number\n'+
+                        'returns a function to map over a list'
+
 exports.addLayerCol = addLayerCol
 exports.col2drive = col2drive
 exports.help = help
@@ -382,5 +387,5 @@ exports.mask_geometry = mask_geometry
 exports.get_options = get_options
 exports.computeQAbits = computeQAbits
 exports.random_number = random_number
-exports.take_decimals = take_decimals
+exports.trim_decimals = trim_decimals
 exports.options = ee.Dictionary(help).keys()
