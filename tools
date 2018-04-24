@@ -285,16 +285,7 @@ var aggregate_properties = function(reducer, properties, name) {
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
     
     var properties = list_alg.intersect(prop2use, propnames)
-    print('properties', properties)
     
-    var iftrue = function() {
-      print('true')
-      var properties = list_alg.intersect(ee.List(prop), propnames)
-      return properties
-    }
-    
-    var properties = ee.List(ee.Algorithms.If(prop, iftrue(), propnames))
-    print(properties)
     var values = feature_gets(feat, properties)
     
     return feat.set(n, ee.Number(values.reduce(reduc)))
