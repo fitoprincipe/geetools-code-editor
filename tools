@@ -285,6 +285,7 @@ var aggregate_properties = function(reducer, properties, name) {
     print('propnames', propnames)
     
     var iftrue = function() {
+      print('true')
       var properties = list_alg.intersect(ee.List(prop), propnames)
       return properties
     }
