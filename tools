@@ -283,7 +283,7 @@ var aggregate_properties = function(reducer, properties, name) {
     var propnames = feat.propertyNames()
     print('propnames', propnames)
     
-    var prop2use = ee.List(ee.Algorithms.If(prop, list_alg.intersect(ee.List(prop), propnames), propnames))
+    var prop2use = ee.List(ee.Algorithms.If(prop, ee.List(prop), propnames))
     print('prop2use', prop2use)
     
     var iftrue = function() {
