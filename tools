@@ -279,9 +279,9 @@ var aggregate_properties = function(options) {
                         'properties': ee.Number(0),
                         'name': 'reduction'}
                  
-  var reduc = opt('reducer') || ee.Reducer.mean()
-  var prop = opt('properties') || ee.Number(0)
-  var n = opt('name') || 'reduction'
+  var reduc = opt['reducer'] || ee.Reducer.mean()
+  var prop = opt['properties'] || ee.Number(0)
+  var n = opt['name'] || 'reduction'
   
   var wrap = function(feat) {
     var propnames = feat.propertyNames()
