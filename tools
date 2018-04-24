@@ -276,7 +276,7 @@ var feature_gets = function(feature, properties) {
 
 var aggregate_properties = function(reducer, properties, name) {
   var reduc = reducer || ee.Reducer.mean()
-  var prop = properties || ee.Number(0)
+  var prop = properties || null
   var n = name || 'reduction'
   print(prop)
   
