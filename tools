@@ -422,6 +422,15 @@ help['trim_decimals'] = 'trim_decimals(places)\n\n'+
                         'places: number of places of the new number\n'+
                         'returns a function to map over a list'
 
+help['aggregate_properties'] = 'aggregate_properties(option)\n\n'+
+                               'Apply a reducer over properties of a feature or features\n'+
+                               'in a collection\n'+
+                               'options:\n'+
+                               '  reducer: the reducer to apply over the properties. Defaults: mean\n'+
+                               '  properties: a list of the property names to reduce over. Defaults: all properties\n'+
+                               '  name: name for the resulted property. Defaults: reduction\n'+
+                               '  map: if the functions is going to be applied to a single feature, set it to false. Default: true\n'
+
 exports.addLayerCol = addLayerCol
 exports.col2drive = col2drive
 exports.help = help
