@@ -268,9 +268,10 @@ var trim_decimals = function(places) {
 var feature_gets = function(feature, properties) {
   var list = ee.List(properties) || feature.propertyNames()
   
-  return list.map(function(el){
+  var newlist = list.map(function(el){
     return feature.get(el)
   })
+  return ee.List(newlist)
 }
 
 var aggregate_properties = function(reducer, properties, name) {
