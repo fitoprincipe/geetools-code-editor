@@ -284,7 +284,7 @@ var aggregate_properties = function(options) {
   var n = opt['name'] || 'reduction'
   
   var wrap = function(feat) {
-    var propnames = feat.propertyNames()
+    var propnames = feat.propertyNames().slice(1)
     
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
     
@@ -294,7 +294,7 @@ var aggregate_properties = function(options) {
     
     var casted = values.map(function(el){return ee.Number(el)})
     
-    return feat.set(n, ee.Number(casted.slice(1).reduce(reduc)))
+    return feat.set(n, ee.Number(casted.reduce(reduc)))
   }
   
   return wrap
