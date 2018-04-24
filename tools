@@ -265,11 +265,12 @@ var trim_decimals = function(places) {
   return wrap
 }
 
-var feature_gets = function(feature, properties) {
+var feature_gets = function(feature, properties, cast_to) {
   var list = ee.List(properties) || feature.propertyNames()
+  var cast = cast_to || ee.Number
   
   var newlist = list.map(function(el){
-    return feature.get(el)
+    return cast(feature.get(el))
   })
   return newlist
 }
