@@ -264,7 +264,7 @@ var trim_decimals = function(places) {
   }
   return wrap
 }
-/*
+
 var feature_gets = function(feature, properties) {
   var list = ee.List(properties) || feature.propertyNames()
   
@@ -272,7 +272,7 @@ var feature_gets = function(feature, properties) {
     return feature.get(el)
   })
 }
-
+/*
 var aggregate_properties = function(reducer, properties, name) {
   var reduc = reducer || ee.Reducer.mean()
   var prop = properties || ee.Number(0)
