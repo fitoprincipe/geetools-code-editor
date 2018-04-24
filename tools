@@ -277,15 +277,20 @@ var feature_gets = function(feature, properties) {
 var aggregate_properties = function(options) {
   var opt = options || {'reducer': 'mean',
                         'properties': ee.Number(0),
-                        'name': 'reduction'}
+                        'name': 'reduction',
+                        'map': true}
                  
   var reduc = opt['reducer'] || 'mean'
   var prop = opt['properties'] || ee.Number(0)
   var n = opt['name'] || 'reduction'
+  var map = opt['map'] || true
   
   var wrap = function(feat) {
-    var propnames = feat.propertyNames().slice(1)
     
+    var propnames = ee.List(ee.Algorithms.If(map, 
+                            feat.propertyNames().slice(1), // slice(1) because FeatureCollection adds 'system:index' as a property
+                            feat.propertyNames()))
+                            
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
     
     var properties = list_alg.intersect(prop2use, propnames)
