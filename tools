@@ -288,8 +288,8 @@ var aggregate_properties = function(reducer, properties, name) {
       return properties
     }
     
-    var properties = ee.List(ee.Algorithms.If(prop, iftrue(), propnames)
-    var values = ee.List([])//feature_gets(feat, properties)
+    var properties = ee.List(ee.Algorithms.If(prop, iftrue(), propnames))
+    var values = feature_gets(feat, properties)
     
     return feat.set(n, ee.Number(values.reduce(reduc)))
   }
