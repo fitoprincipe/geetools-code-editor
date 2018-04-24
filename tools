@@ -272,7 +272,7 @@ var feature_gets = function(feature, properties) {
     return feature.get(el)
   })
 }
-/*
+
 var aggregate_properties = function(reducer, properties, name) {
   var reduc = reducer || ee.Reducer.mean()
   var prop = properties || ee.Number(0)
@@ -295,7 +295,7 @@ var aggregate_properties = function(reducer, properties, name) {
   
   return wrap
 }
-*/
+
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
