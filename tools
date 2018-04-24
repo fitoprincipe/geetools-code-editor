@@ -293,7 +293,9 @@ var aggregate_properties = function(options) {
     
     var values = feature_gets(feat, properties)
     
-    return feat.set(n, ee.Number(values.reduce(reduc)))
+    var casted = values.map(function(el){return ee.Number(el)})
+    
+    return feat.set(n, ee.Number(casted.reduce(reduc)))
   }
   
   return wrap
