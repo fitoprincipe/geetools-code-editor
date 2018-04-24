@@ -280,7 +280,7 @@ var aggregate_properties = function(options) {
                         'properties': ee.Number(0),
                         'name': 'reduction'}
                  
-  var reduc = opt['reducer'] || ee.Reducer.mean()
+  var reduc = opt['reducer'] || 'mean'
   var prop = opt['properties'] || ee.Number(0)
   var n = opt['name'] || 'reduction'
   
