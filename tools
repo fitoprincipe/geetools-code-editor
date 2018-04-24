@@ -274,10 +274,14 @@ var feature_gets = function(feature, properties) {
   return newlist
 }
 
-var aggregate_properties = function(reducer, properties, name) {
-  var reduc = reducer || ee.Reducer.mean()
-  var prop = properties || ee.Number(0)
-  var n = name || 'reduction'
+var aggregate_properties = function(options) {
+  var opt = options || {'reducer': 'mean',
+                        'properties': ee.Number(0),
+                        'name': 'reduction'}
+                 
+  var reduc = opt('reducer') || ee.Reducer.mean()
+  var prop = opt('properties') || ee.Number(0)
+  var n = opt('name') || 'reduction'
   
   var wrap = function(feat) {
     var propnames = feat.propertyNames()
