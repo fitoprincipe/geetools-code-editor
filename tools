@@ -283,7 +283,7 @@ var aggregate_properties = function(options) {
   var reduc = opt['reducer'] || 'mean'
   var prop = opt['properties'] || ee.Number(0)
   var n = opt['name'] || 'reduction'
-  if (opt['map']) {
+  if ((opt['map']) or (opt['map'] === undefined)) {
     var map = true
   } else {var map = false}
   //var map = opt['map'] || true
