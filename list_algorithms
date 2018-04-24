@@ -32,7 +32,7 @@ var get_from_dict = function(list, dict) {
   return values
 }
 
-var intersection = function(list1, list2) {
+var intersect = function(list1, list2) {
   var newlist = ee.List([])
     var wrap = function(element, first) {
         first = ee.List(first)
@@ -82,5 +82,5 @@ exports.help = help
 exports.remove_duplicates = remove_duplicates
 exports.get_from_dict = get_from_dict
 exports.filters = filters
-exports.intersection = intersection
+exports.intersect = intersect
 exports.options = ee.Dictionary(help).keys()
