@@ -32,6 +32,18 @@ var get_from_dict = function(list, dict) {
   return values
 }
 
+var intersection = function(list1, list2) {
+  var newlist = ee.List([])
+    var wrap = function(element, first) {
+        first = ee.List(first)
+
+        return ee.Algorithms.If(list2.contains(element), first.add(element), first)
+    }
+    return ee.List(list1.iterate(wrap, newlist))
+}
+
+// FILTERS
+
 var regex = function(list, regex, flags) {
   list = ee.List(list)
   var fl = flags || null
@@ -55,6 +67,9 @@ help['get_from_dict'] = "get_from_dict(list, dict)\n"+
                         "list: list of keys\n"+
                         "dict: dict to get the values for list's keys\n"+
                         'return: ee.List'
+
+help['itersection'] = "intersection(list1, list2)\n"+
+                      "Return the intersection between two lists (common elements)"
 
 help['filters'] = {'regex': 'filters.regex(list, regex, flags)\n'+
                             'Filter a list using a Regular Expression\n'+
