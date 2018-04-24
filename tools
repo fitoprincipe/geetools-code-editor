@@ -277,7 +277,7 @@ var aggregate_properties = function(reducer, properties, name) {
   var reduc = reducer || ee.Reducer.mean()
   var prop = properties || ee.Number(0)
   var n = name || 'reduction'
-  
+  /*
   var wrap(feat) {
     
     var propnames = feat.propertyNames()
@@ -293,7 +293,7 @@ var aggregate_properties = function(reducer, properties, name) {
     return feat.set(n, ee.Number(values.reduce(reduc)))
   }
   
-  return wrap
+  return wrap*/
 }
 
 // DEPRECATED
