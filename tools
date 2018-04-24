@@ -264,7 +264,7 @@ var trim_decimals = function(places) {
   }
   return wrap
 }
-
+/*
 var feature_gets = function(feature, properties) {
   var list = ee.List(properties) || feature.propertyNames()
   
@@ -295,7 +295,7 @@ var aggregate_properties = function(reducer, properties, name) {
   
   return wrap
 }
-
+*/
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
