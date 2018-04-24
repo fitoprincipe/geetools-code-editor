@@ -278,13 +278,13 @@ var aggregate_properties = function(reducer, properties, name) {
   var reduc = reducer || ee.Reducer.mean()
   var prop = properties || ee.Number(0)
   var n = name || 'reduction'
-  print(ee.Algorithms.If(prop, ee.String('TRUE'), ee.String('FALSE')))
   
   var wrap = function(feat) {
-    print(ee.Algorithms.If(prop, ee.String('TRUE'), ee.String('FALSE')))
-    
     var propnames = feat.propertyNames()
     print('propnames', propnames)
+    
+    var prop2use = ee.List(ee.Algorithms.If(prop, list_alg.intersect(ee.List(prop), propnames), propnames))
+    print('prop2use', prop2use)
     
     var iftrue = function() {
       print('true')
