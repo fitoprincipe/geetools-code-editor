@@ -271,7 +271,7 @@ var feature_gets = function(feature, properties) {
   var newlist = list.map(function(el){
     return feature.get(el)
   })
-  return ee.List(newlist)
+  return newlist
 }
 
 var aggregate_properties = function(reducer, properties, name) {
