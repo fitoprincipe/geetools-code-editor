@@ -277,24 +277,15 @@ var feature_gets = function(feature, properties) {
 var aggregate_properties = function(options) {
   var opt = options || {'reducer': 'mean',
                         'properties': ee.Number(0),
-                        'name': 'reduction',
-                        'map': true}
+                        'name': 'reduction'}
                         
   var reduc = opt['reducer'] || 'mean'
   var prop = opt['properties'] || ee.Number(0)
   var n = opt['name'] || 'reduction'
   
-  if (opt['map'] === undefined) {
-    var map = true
-  } else if (opt['map']) {
-    var map = true
-  } else {var map = false}
-  
   var wrap = function(feat) {
     
-    var propnames = ee.List(ee.Algorithms.If(map, 
-                            feat.propertyNames().remove('system:index'), // slice(1) because FeatureCollection adds 'system:index' as a property
-                            feat.propertyNames()))
+    var propnames = feat.propertyNames().remove('system:index')
                             
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
     
@@ -428,8 +419,7 @@ help['aggregate_properties'] = 'aggregate_properties(option)\n\n'+
                                'options:\n'+
                                '  reducer: the reducer to apply over the properties. Defaults: mean\n'+
                                '  properties: a list of the property names to reduce over. Defaults: all properties\n'+
-                               '  name: name for the resulted property. Defaults: reduction\n'+
-                               '  map: if the functions is going to be applied to a single feature, set it to false. Default: true\n'
+                               '  name: name for the resulted property. Defaults: reduction\n'
 
 exports.addLayerCol = addLayerCol
 exports.col2drive = col2drive
