@@ -293,7 +293,7 @@ var aggregate_properties = function(options) {
   var wrap = function(feat) {
     
     var propnames = ee.List(ee.Algorithms.If(map, 
-                            feat.propertyNames().slice(1), // slice(1) because FeatureCollection adds 'system:index' as a property
+                            feat.propertyNames().remove('system:index'), // slice(1) because FeatureCollection adds 'system:index' as a property
                             feat.propertyNames()))
                             
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
