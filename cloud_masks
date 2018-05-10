@@ -179,7 +179,7 @@ var hollstein_S2 = function(options) {
     
     var results = dtf(img)
     
-    return img.addBands(results).updateMask(results.select('hollstein'))
+    return img.addBands(results)//.updateMask(results.select('hollstein'))
   }
   return compute_dt
 }
