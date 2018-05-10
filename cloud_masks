@@ -183,7 +183,7 @@ var hollstein_S2 = function(options) {
     
     var finalmask = optlist.iterate(function(option, ini){
       ini = ee.Image(ini)
-      var mask = results.select([option])
+      var mask = results.select([option]).not()
       return ini.or(mask)
     }, ee.Image.constant(0).select([0], ['hollstein']))
     
