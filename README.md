@@ -1,6 +1,6 @@
 # A set of tools to use in Google Earth Engine Code Editor
 
-Google Earth Engine is a web platform for satellite image processing 
+Google Earth Engine is a web platform for satellite image processing
 (https://earthengine.google.com/). One way to use this platform (I think it is
 the most popular way) is using an online tool called *The Code Editor*, which
 let the user access the platform using a scripting language (JavaScript).
@@ -13,7 +13,7 @@ var module = require('users/fitoprincipe/geetools:NAME_OF_FILE');
 ```
 
 **Important**: Where it says `NAME_OF_FILE` replace with the name of the
-module. 
+module.
 
 **Example**:
 
@@ -34,7 +34,7 @@ var tools = require('users/fitoprincipe/geetools:tools');
 print(tools.help['dict2image']); // Help for dict2image function
 ```
 
-To see all functions inside a module there is a special variable called 
+To see all functions inside a module there is a special variable called
 `options` that will show all options. Example:
 
 ```javascript
@@ -59,7 +59,7 @@ In the `cloud_masks` module exist the following functions:
 var sentinel2function = cloud_masks.sentinel2(options)
 ```
 
-This function is made to use in collection `COPERNICUS/S2`. Options are: 
+This function is made to use in collection `COPERNICUS/S2`. Options are:
 `cirrus` and/or `opaque`. If no argument is passed, will mask both.
 
 ### Landsat SR
@@ -69,7 +69,7 @@ var landsatSRfunction = cloud_masks.landsatSR(options)
 ```
 
 This function is made to use in:
-  
+
 - `LANDSAT/LT04/C01/T1_SR`
 - `LANDSAT/LT05/C01/T1_SR`
 - `LANDSAT/LE07/C01/T1_SR`
@@ -104,7 +104,7 @@ cloud_masks.landsat8SR(['cloud'], 'L8 SR only cloud')  // Test only cloud of Lan
 
 ```javascript
 var cloud_masks = require('users/fitoprincipe/geetools:cloud_masks');
-var sentinel2function = cloud_masks.sentinel2;
+var sentinel2function = cloud_masks.sentinel2();
 
 // The original Image
 var S2Image = ee.Image('COPERNICUS/S2/20171117T142739_20171117T143844_T18GYU');
