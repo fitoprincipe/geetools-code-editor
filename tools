@@ -315,9 +315,16 @@ var aggregate_properties = function(options) {
 
 // SUFFIX TO BAND
 var add_suffix = function(suffix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
   var suf = ee.String(suffix)
   var wrap = function(img) {
-    
+    var bands_ = ee.Algorithms.If(bands, bands, img.bandNames())
+    var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
+    return img.select(bands_, newbands)
   }
   return wrap
 }
