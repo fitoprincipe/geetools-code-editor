@@ -336,8 +336,14 @@ var add_suffix = function(suffix, bands) {
   }
   var suf = ee.String(suffix)
   var wrap = function(img) {
-    var bands_ = ee.Algorithms.If(bands, bands, img.bandNames())
-    var newbands = ee.List(bands_).map(function(band){ return ee.String(band).cat(suf)})
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, ee.String(band).cat(suf))
+    }, allbands)
+    newbands = ee.List(newbands)
+    //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
     return img.select(bands_, newbands)
   }
   return wrap
