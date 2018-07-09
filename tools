@@ -344,7 +344,7 @@ var add_suffix = function(suffix, bands) {
     }, allbands)
     newbands = ee.List(newbands)
     //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
-    return img.select(bands_, newbands)
+    return img.select(allbands, newbands)
   }
   return wrap
 }
