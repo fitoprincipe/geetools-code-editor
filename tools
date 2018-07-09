@@ -350,6 +350,29 @@ var add_suffix = function(suffix, bands) {
 }
 exports.add_suffix = add_suffix
 
+// PREFIX TO BAND
+var add_prefix = function(prefix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
+  var suf = ee.String(suffix)
+  var wrap = function(img) {
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, ee.String(suf).cat(ee.String(band))
+    }, allbands)
+    newbands = ee.List(newbands)
+    //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
+    return img.select(allbands, newbands)
+  }
+  return wrap
+}
+exports.add_prefix = add_prefix
+
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
