@@ -491,5 +491,13 @@ help['aggregate_properties'] = 'aggregate_properties(option)\n\n'+
                                '  properties: a list of the property names to reduce over. Defaults: all properties\n'+
                                '  name: name for the resulted property. Defaults: reduction\n'
 
+help['add_suffix'] = 'add_suffix(suffix, bands)(image)\n\n'+
+                     'Add the specified suffix to the specified bands of image\n'+
+                     'If no bands are specified, all bands are used.'
+                     
+help['add_prefix'] = 'add_suffix(prefix, bands)(image)\n\n'+
+                     'Add the specified prefix to the specified bands of image\n'+
+                     'If no bands are specified, all bands are used.'
+                     
 exports.help = help
 exports.options = ee.Dictionary(help).keys()
