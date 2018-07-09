@@ -59,12 +59,16 @@
    return wrap
  }
  
- var NDVI = {custom: custom_ndvi}
+ var NDVI = {custom: custom_ndvi, sentinel2:custom_ndvi('B8','B4')}
  var NBR = {custom: custom_nbr}
  var NBR2 = {custom: custom_nbr2}
  var EVI = {custom: custom_evi}
+ 
+ help['NDVI'] = 'NDVI["custom"] returns the function that has NIR & RED as arguments\n'
+                +'NDVI["sentinel2"] returns the function for Sentinel 2'
  
  exports.NDVI = NDVI
  exports.NBR = NBR
  exports.NBR2 = NBR2
  exports.EVI = EVI
+ exports.help = help
