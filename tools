@@ -343,7 +343,6 @@ var add_suffix = function(suffix, bands) {
       return all.replace(band, ee.String(band).cat(suf))
     }, allbands)
     newbands = ee.List(newbands)
-    //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
     return img.select(allbands, newbands)
   }
   return wrap
@@ -366,7 +365,6 @@ var add_prefix = function(prefix, bands) {
       return all.replace(band, suf.cat(ee.String(band)))
     }, allbands)
     newbands = ee.List(newbands)
-    //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
     return img.select(allbands, newbands)
   }
   return wrap
