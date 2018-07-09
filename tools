@@ -357,7 +357,7 @@ var add_prefix = function(prefix, bands) {
   } else {
     var bands = ee.List(bands)
   }
-  var suf = ee.String(suffix)
+  var suf = ee.String(prefix)
   var wrap = function(img) {
     var allbands = img.bandNames()
     var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
