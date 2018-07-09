@@ -313,6 +313,15 @@ var aggregate_properties = function(options) {
   return wrap
 }
 
+// SUFFIX TO BAND
+var add_suffix = function(suffix, bands) {
+  var suf = ee.String(suffix)
+  var wrap = function(img) {
+    
+  }
+  return wrap
+}
+
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
