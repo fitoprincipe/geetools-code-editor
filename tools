@@ -11,7 +11,6 @@ var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
 var help = {};
 
 // INTERNAL
-
 var get_options = function(def, options) {
   // fill options dict with default values if not present
   
@@ -26,6 +25,7 @@ var get_options = function(def, options) {
   return opt
 }
 
+// MASK OUT PIXELS INSIDE A GEOMETRY
 var mask_geometry = function(geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
   
@@ -35,6 +35,7 @@ var mask_geometry = function(geometry) {
   return wrap
 }
 
+// GET VALUE FROM A POINT
 var get_value = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
   //var p = point.geometry();
@@ -42,6 +43,7 @@ var get_value = function(image, point, scale) {
   return result
 }
 
+// REPLACE ONE BAND WITH ANOTHER BAND
 var replace_band = function(image, replace_band, add_band) {
     var band = add_band.select([0]);
     var bands = image.bandNames();
@@ -51,6 +53,7 @@ var replace_band = function(image, replace_band, add_band) {
     return img_final
 }
 
+// SUM THE SPECIFIED BANDS
 var sum_bands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
@@ -89,6 +92,7 @@ var sum_bands = function(name, bands, append_to_image) {
   return wrap
 }
 
+// MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
 var dict2image = function(bands) {
   // this is the same as doing ee.Dictionary().toImage()
   
@@ -110,6 +114,7 @@ var dict2image = function(bands) {
   return final.select(bandnames)
 }
 
+// MAKE AN IMAGE FROM A LIST
 var list2image = function(list, value) {
   if (value === undefined) {var val = 0} else {var val = value}
   var listt = ee.List(list)
@@ -124,6 +129,7 @@ var list2image = function(list, value) {
   return final.select(listt)
 }
 
+// ADD COLLECTION TO MAP
 var addLayerCol = function(col, options) {
   
   var fbands = ee.Image(col.first()).bandNames();
@@ -162,6 +168,7 @@ var addLayerCol = function(col, options) {
   }
 }
 
+// COLLECTION TO DRIVE
 var col2drive = function(col, folder, options) {
   
     var def = {
@@ -203,6 +210,7 @@ var col2drive = function(col, folder, options) {
     }
   }
 
+// COMPUTE BITS
 var computeQAbits = function(start, end, newName) {
   var pattern = ee.Number(0)
   
@@ -228,6 +236,7 @@ var computeQAbits = function(start, end, newName) {
   return wrap
 }
 
+// RANDOM NUMBER
 var random_number = function(start, end, type) {
   var s = start || 0
   var e = end || 1
@@ -249,6 +258,7 @@ var random_number = function(start, end, type) {
     }
 }
 
+// TRIM DECIMALS
 var trim_decimals = function(places) {
   
   var factor = ee.Number(10).pow(ee.Number(places).toInt())
@@ -265,6 +275,7 @@ var trim_decimals = function(places) {
   return wrap
 }
 
+// GET FEATURE PROPERTY
 var feature_gets = function(feature, properties) {
   var list = ee.List(properties) || feature.propertyNames()
   
@@ -274,6 +285,7 @@ var feature_gets = function(feature, properties) {
   return newlist
 }
 
+// AGGREGATE PROPERTIES
 var aggregate_properties = function(options) {
   var opt = options || {'reducer': 'mean',
                         'properties': ee.Number(0),
@@ -427,7 +439,7 @@ exports.help = help
 exports.dict2image = dict2image
 exports.list2image = list2image
 exports.sum_bands = sum_bands
-exports.replace_band = replace_band
+exports.replace_band = replace_band
 exports.get_value = get_value
 exports.mask_geometry = mask_geometry
 exports.get_options = get_options
