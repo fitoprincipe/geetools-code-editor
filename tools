@@ -363,7 +363,7 @@ var add_prefix = function(prefix, bands) {
     var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
     var newbands = bands_.iterate(function(band, first){
       var all = ee.List(first)
-      return all.replace(band, ee.String(suf).cat(ee.String(band))
+      return all.replace(band, ee.String(suf).cat(ee.String(band)))
     }, allbands)
     newbands = ee.List(newbands)
     //var newbands = bands_.map(function(band){ return ee.String(band).cat(suf)})
