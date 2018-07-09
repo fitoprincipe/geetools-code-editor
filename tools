@@ -464,4 +464,5 @@ exports.random_number = random_number
 exports.trim_decimals = trim_decimals
 exports.aggregate_properties = aggregate_properties
 exports.feature_gets = feature_gets
+exports.add_suffix = add_suffix
 exports.options = ee.Dictionary(help).keys()
