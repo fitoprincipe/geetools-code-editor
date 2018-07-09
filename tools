@@ -24,6 +24,7 @@ var get_options = function(def, options) {
   } else {var opt = def}
   return opt
 }
+exports.get_options = get_options
 
 // MASK OUT PIXELS INSIDE A GEOMETRY
 var mask_geometry = function(geometry) {
@@ -34,6 +35,7 @@ var mask_geometry = function(geometry) {
   }
   return wrap
 }
+exports.mask_geometry = mask_geometry
 
 // GET VALUE FROM A POINT
 var get_value = function(image, point, scale) {
@@ -42,6 +44,7 @@ var get_value = function(image, point, scale) {
   var result = image.reduceRegion(ee.Reducer.first(), point, sc);
   return result
 }
+exports.get_value = get_value
 
 // REPLACE ONE BAND WITH ANOTHER BAND
 var replace_band = function(image, replace_band, add_band) {
@@ -52,6 +55,7 @@ var replace_band = function(image, replace_band, add_band) {
     var img_final = img_resto.addBands(band);
     return img_final
 }
+exports.replace_band = replace_band
 
 // SUM THE SPECIFIED BANDS
 var sum_bands = function(name, bands, append_to_image) {
@@ -91,6 +95,7 @@ var sum_bands = function(name, bands, append_to_image) {
   }
   return wrap
 }
+exports.sum_bands = sum_bands
 
 // MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
 var dict2image = function(bands) {
@@ -113,6 +118,7 @@ var dict2image = function(bands) {
     }, ee.Image(0)))
   return final.select(bandnames)
 }
+exports.dict2image = dict2image
 
 // MAKE AN IMAGE FROM A LIST
 var list2image = function(list, value) {
@@ -128,6 +134,7 @@ var list2image = function(list, value) {
   }, ee.Image(0)))
   return final.select(listt)
 }
+exports.list2image = list2image
 
 // ADD COLLECTION TO MAP
 var addLayerCol = function(col, options) {
@@ -167,6 +174,7 @@ var addLayerCol = function(col, options) {
     Map.addLayer(img, viz, laylabel, active)
   }
 }
+exports.addLayerCol = addLayerCol
 
 // COLLECTION TO DRIVE
 var col2drive = function(col, folder, options) {
@@ -209,6 +217,7 @@ var col2drive = function(col, folder, options) {
         maxPixels: maxPixels})
     }
   }
+exports.col2drive = col2drive
 
 // COMPUTE BITS
 var computeQAbits = function(start, end, newName) {
@@ -235,6 +244,7 @@ var computeQAbits = function(start, end, newName) {
   }
   return wrap
 }
+exports.computeQAbits = computeQAbits
 
 // RANDOM NUMBER
 var random_number = function(start, end, type) {
@@ -257,6 +267,7 @@ var random_number = function(start, end, type) {
     return result.toInt()
     }
 }
+exports.random_number = random_number
 
 // TRIM DECIMALS
 var trim_decimals = function(places) {
@@ -274,6 +285,7 @@ var trim_decimals = function(places) {
   }
   return wrap
 }
+exports.trim_decimals = trim_decimals
 
 // GET FEATURE PROPERTY
 var feature_gets = function(feature, properties) {
@@ -284,6 +296,7 @@ var feature_gets = function(feature, properties) {
   })
   return newlist
 }
+exports.feature_gets = feature_gets
 
 // AGGREGATE PROPERTIES
 var aggregate_properties = function(options) {
@@ -312,6 +325,7 @@ var aggregate_properties = function(options) {
   
   return wrap
 }
+exports.aggregate_properties = aggregate_properties
 
 // SUFFIX TO BAND
 var add_suffix = function(suffix, bands) {
@@ -328,6 +342,7 @@ var add_suffix = function(suffix, bands) {
   }
   return wrap
 }
+exports.add_suffix = add_suffix
 
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
@@ -449,20 +464,5 @@ help['aggregate_properties'] = 'aggregate_properties(option)\n\n'+
                                '  properties: a list of the property names to reduce over. Defaults: all properties\n'+
                                '  name: name for the resulted property. Defaults: reduction\n'
 
-exports.addLayerCol = addLayerCol
-exports.col2drive = col2drive
 exports.help = help
-exports.dict2image = dict2image
-exports.list2image = list2image
-exports.sum_bands = sum_bands
-exports.replace_band = replace_band
-exports.get_value = get_value
-exports.mask_geometry = mask_geometry
-exports.get_options = get_options
-exports.computeQAbits = computeQAbits
-exports.random_number = random_number
-exports.trim_decimals = trim_decimals
-exports.aggregate_properties = aggregate_properties
-exports.feature_gets = feature_gets
-exports.add_suffix = add_suffix
 exports.options = ee.Dictionary(help).keys()
