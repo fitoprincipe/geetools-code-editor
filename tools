@@ -371,6 +371,30 @@ var add_prefix = function(prefix, bands) {
 }
 exports.add_prefix = add_prefix
 
+// Remove Layer
+// https://gis.stackexchange.com/questions/291199/google-earth-engine-remove-layer-from-the-layer-manager
+var removeLayer = function(name) {
+  var layers = Map.layers()
+  // list of layers names
+  var names = []
+  layers.forEach(function(lay) {
+    var lay_name = lay.getName()
+    names.push(lay_name)
+  })
+  // get index
+  var index = names.indexOf(name)
+  if (index > -1) {
+    // if name in names
+    var layer = layers.get(index)
+    Map.remove(layer)
+  } else {
+    print('Layer '+name+' not found')
+  }
+}
+exports.removeLayer = removeLayer
+help['removeLayer'] = 'removeLayer(name):\n'+
+                      'Remove a Layer from the Map by its name'
+
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
