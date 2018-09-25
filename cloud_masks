@@ -11,10 +11,6 @@ var tools = require('users/fitoprincipe/geetools:tools')
 var l_algo = require('users/fitoprincipe/geetools:list_algorithms')
 var dt = require('users/fitoprincipe/geetools:decision_tree')
 
-var test_import = function() {
-  print('cloud_masks module imported')
-}
-
 var help = {};
 
 var compute = function(image, mask_band, bits, options) {
