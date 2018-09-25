@@ -4,6 +4,7 @@
  * Author: Rodrigo E. Principe
  * email: fitoprincipe82@gmail.com
  * License: MIT
+ * Repository: https://github.com/fitoprincipe/geetools-code-editor
  */
 
 var tools = require('users/fitoprincipe/geetools:tools')
