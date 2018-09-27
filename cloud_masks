@@ -227,7 +227,6 @@ help['make'] = 'Create functions using a key. Example:\n'+
                'var s2 = make.sentinel2()\n'+
                'var LSR = make.landsatSR()'
 
-exports.test_import = test_import
 exports.help = help
 exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
