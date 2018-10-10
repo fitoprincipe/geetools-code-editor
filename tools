@@ -395,6 +395,39 @@ exports.removeLayer = removeLayer
 help['removeLayer'] = 'removeLayer(name):\n'+
                       'Remove a Layer from the Map by its name'
 
+// PAINT GEOMETRIES
+var paint = function(geometry, outline_color, fill_color, outline) {
+    
+    var overlap = function(image_back, image_front) {
+        var mask_back = image_back.mask()
+        var mask_front = image_front.mask()
+        var entire_mask = mask_back.add(mask_front)
+        var mask = mask_back.Not()
+        var masked = image_front.updateMask(mask).unmask()
+    
+        return masked.add(image_back.unmask()).updateMask(entire_mask)
+    }
+    
+    if (fill_color !== null) {
+      var fill = ee.Image().paint(geometry, 1).visualize({palette:[fill_color]})
+    }
+    
+    var out = ee.Image().paint(geometry, 1, outline).visualize({palette:[outline_color]})
+
+    if ((fill_color !== null) & (outline_color !== null)){
+        var rgbVector = overlap(out, fill)
+    }
+    else if (fill_color !== null){
+        var rgbVector = fill
+    }
+    else {
+        var rgbVector = out
+    }
+    
+    return rgbVector
+}
+exports.paintGeometry = paint
+
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
