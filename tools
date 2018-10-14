@@ -406,6 +406,8 @@ var paint = function(geometry, outline_color, fill_color, outline) {
       geometry = ee.FeatureCollection([geometry])
     }
     
+    print(geometry)
+    
     var overlap = function(image_back, image_front) {
         var mask_back = image_back.mask()
         var mask_front = image_front.mask()
