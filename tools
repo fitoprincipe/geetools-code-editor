@@ -400,10 +400,10 @@ var paint = function(geometry, outline_color, fill_color, outline) {
     
     var type = geometry.name()
     if (type === 'Geometry') {
-      geometry = ee.FeatureCollection(ee.Feature(geometry))
+      geometry = ee.FeatureCollection([ee.Feature(geometry)])
     }
     if (type === 'Feature') {
-      geometry = ee.FeatureCollection(geometry)
+      geometry = ee.FeatureCollection([geometry])
     }
     
     var overlap = function(image_back, image_front) {
