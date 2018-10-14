@@ -410,7 +410,7 @@ var paint = function(geometry, outline_color, fill_color, outline) {
         var mask_back = image_back.mask()
         var mask_front = image_front.mask()
         var entire_mask = mask_back.add(mask_front)
-        var mask = mask_back.Not()
+        var mask = mask_back.not()
         var masked = image_front.updateMask(mask).unmask()
     
         return masked.add(image_back.unmask()).updateMask(entire_mask)
