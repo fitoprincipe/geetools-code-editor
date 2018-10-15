@@ -397,6 +397,10 @@ help['removeLayer'] = 'removeLayer(name):\n'+
 
 // PAINT GEOMETRIES
 var paint = function(geometry, outline_color, fill_color, outline) {
+  
+  fill_color = fill_color || null;
+  outline_color = outline_color || 'black';
+  outline = outline || 2;
     
     var type = geometry.name()
     if (type === 'Geometry') {
