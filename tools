@@ -425,7 +425,6 @@ var paint = function(geometry, outline_color, fill_color, outline) {
     }
     
     var out = ee.Image().paint(geometry, 1, outline).visualize({palette:[outline_color]})
-    print(out)
     if ((fill_color !== null) & (outline_color !== null)){
         var rgbVector = overlap(out, fill)
     }
