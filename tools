@@ -396,46 +396,50 @@ help['removeLayer'] = 'removeLayer(name):\n'+
                       'Remove a Layer from the Map by its name'
 
 // PAINT GEOMETRIES
-var paint = function(geometry, outline_color, fill_color, outline) {
+var paint = function(geometry, options) {
   
-  fill_color = fill_color || null;
-  outline_color = outline_color || 'black';
-  outline = outline || 2;
-    
-    var type = geometry.name()
-    if (type === 'Geometry') {
-      geometry = ee.FeatureCollection([ee.Feature(geometry)])
-    }
-    if (type === 'Feature') {
-      geometry = ee.FeatureCollection([geometry])
-    }
-    
-    var overlap = function(image_back, image_front) {
-        var mask_back = image_back.mask()
-        var mask_front = image_front.mask()
-        var entire_mask = mask_back.add(mask_front)
-        var mask = mask_back.not()
-        var masked = image_front.updateMask(mask).unmask()
-    
-        return masked.add(image_back.unmask()).updateMask(entire_mask)
-    }
-    
-    if (fill_color !== null) {
-      var fill = ee.Image().paint(geometry, 1).visualize({palette:[fill_color]})
-    }
-    
-    var out = ee.Image().paint(geometry, 1, outline).visualize({palette:[outline_color]})
-    if ((fill_color !== null) & (outline_color !== null)){
-        var rgbVector = overlap(out, fill)
-    }
-    else if (fill_color !== null){
-        var rgbVector = fill
-    }
-    else {
-        var rgbVector = out
-    }
-    
+  var def = {
+    fillColor: null,
+    borderColor: 'black',
+    border: 2,
+    idFld: null
+  }
+  
+  var opt = get_options(def, options)
+  
+  var type = geometry.name()
+  
+  // build FeatureCollection depending on geometry type
+  if (type === 'Geometry') {
+    geometry = ee.FeatureCollection([ee.Feature(geometry)])
+  } else if (type === 'Feature') {
+    geometry = ee.FeatureCollection([geometry])
+  }
+  
+  // Fill  
+  if (opt.fillColor !== null) {
+    var fill = ee.Image().paint(geometry, 1).visualize({palette:[opt.fillColor]})
+  }
+  
+  // Border
+  var out = ee.Image().paint(geometry, 1, opt.border).visualize({palette:[opt.borderColor]})
+  
+  // Fill & Border
+  if ((opt.fillColor !== null) & (opt.borderColor !== null)){ var rgbVector = fill.blend(out)}
+  
+  // Only Fill
+  else if (opt.fillColor !== null){ var rgbVector = fill } 
+  
+  // Only Border
+  else { var rgbVector = out }
+  
+  // Get id image
+  if (opt.idFld !== null) {
+    var idImg = geometry.reduceToImage([opt.idFld], ee.Reducer.first()).rename(opt.idFld)
+    return rgbVector.addBands(idImg)
+  } else {
     return rgbVector
+  }
 }
 exports.paintGeometry = paint
 
