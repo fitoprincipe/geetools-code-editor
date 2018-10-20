@@ -1,0 +1,60 @@
+/*
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Easy way to access common satellites (Landsat, Sentinel, MODIS) information
+*/
+
+var Landsat = function(number, process, tier) {
+  var number_code = {
+    5: 'LT05', 7:'LE07', 8:'LC08'
+  }
+  
+}
+
+var BANDS = {
+  'Landsat 8': {
+    'blue': 'B2',
+    'green': 'B3',
+    'red': 'B4',
+    'nir': 'B5',
+    'swir1': 'B6',
+    'swir2': 'B7',
+    'pan': 'B8',
+    'cirrus': 'B9',
+    'thermal1': 'B10',
+    'thermal2': 'B11'
+  }
+}
+
+var FAMILY = {
+  'Landsat 8': ['Landsat 8 SR', 'Landsat 8 TOA', 'Landsat 8 RAW']
+}
+
+var GROUPS = {
+  'Landsat 8 SR': ['LANDSAT/LC08/C01/T1_SR', 'LANDSAT/LC08/C01/T2_SR'],
+  'Landsat 7 SR': ['LANDSAT/LE07/C01/T1_SR', 'LANDSAT/LE07/C01/T2_SR'],
+  'Landsat 5 SR': ['LANDSAT/LT05/C01/T1_SR', 'LANDSAT/LT05/C01/T2_SR'],
+  'Landsat 8 TOA': ['LANDSAT/LC08/C01/T1_TOA', 'LANDSAT/LC08/C01/T2_TOA'],
+  'Landsat 7 TOA': ['LANDSAT/LE07/C01/T1_TOA', 'LANDSAT/LE07/C01/T2_TOA'],
+  'Landsat 5 TOA': ['LANDSAT/LT05/C01/T1_TOA', 'LANDSAT/LT05/C01/T2_TOA'],
+}
+
+var INFORMATION = {
+  'LANDSAT/LC08/C01/T1_SR': {
+    'group': 'Landsat 8 SR',
+    'family': 'Landsat 8',
+  }
+}
+
+var Satellite = function(id) {
+  this.collection = ee.ImageCollection(id);
+  this.group = INFORMATION[id]['group'];
+  this.family = INFORMATION[id]['family'];
+  
+  switch (id) {
+    case 'LANDSAT/LC08/C01/T1_SR':
+      var common = BANDS[this.family]
+  }
+}
