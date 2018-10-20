@@ -24,6 +24,25 @@ var Landsat = function(number, process, tier, sensor) {
       this.sensor = 'OLI'
       break
   }
+  
+  switch (process) {
+    case 'SR':
+      this.bands.pixel_qa = 'pixel_qa'
+      this.bands.radsat_qa = 'radsat_qa'
+      switch (number) {
+        case 4: case 5: case 7:
+          this.bands.atmos_opacity = 'sr_atmos_opacity'
+          this.bands.cloud_qa = 'sr_cloud_qa'
+          break
+        case 8:
+          this.bands.aerosol = 'sr_aerosol'
+      }
+      break
+    case 'TOA':
+      
+      
+  }
+  
   var NUMBER = {
     4: {'TM':'LT04', 'MSS':'LM04'}, 
     5: {'TM':'LT05', 'MSS':'LM05'}, 
@@ -44,15 +63,29 @@ var Landsat = function(number, process, tier, sensor) {
         case 'TM':
           this.bands = {
             'blue':'B1', 'green':'B2', 'red':'B3', 'nir':'B4', 
-            'swir1':'B5', 'thermal1': 'B6', 'swir2': 'B7'
+            'swir':'B5', 'thermal1': 'B6', 'swir2': 'B7'
           }
+          break
+        case 'MSS':
+          this.bands = {
+            'green': 'B1', 'red': 'B2', 'nir': 'B3', 'nir2': 'B4'
+          }
+          break
       }
+      break
+    case 8:
+      this.bands = {
+        'ublue': 'B1', 'blue': 'B2', 'green': 'B3', 'red': 'B4',
+        'nir':'B5', 'swir':'B6', 'swir2':'B7'
+      }
+      break
   }
   
 }
 
 var l5 = new Landsat(4, 'SR', 1)
 print(l5.id)
+print(l5.bands)
 
 var BANDS = {
   'Landsat 8': {
