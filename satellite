@@ -45,6 +45,7 @@ var Landsat = function(number, process, sensor, tier) {
   this.id = 'LANDSAT/'+NUMBER[this.number][this.sensor]
                       +'/C01/'+TIER[this.tier]
                       +PROCESS[this.process]
+                      
   this.collection = ee.ImageCollection(this.id)
   
   // BANDS by NUMBER
@@ -59,7 +60,6 @@ var Landsat = function(number, process, sensor, tier) {
           }
           break
         case 'MSS':
-          
           this.bands = {
             'green': 'B1', 'red': 'B2', 'nir': 'B3', 'nir2': 'B4'
           }
