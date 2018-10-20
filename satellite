@@ -30,6 +30,7 @@ var Landsat = function(number, process, tier, sensor) {
       break
   }
   
+  // ID CONSTRUCTOR
   var NUMBER = {
     4: {'TM':'LT04', 'MSS':'LM04'}, 
     5: {'TM':'LT05', 'MSS':'LM05'}, 
@@ -40,10 +41,11 @@ var Landsat = function(number, process, tier, sensor) {
   var PROCESS = {'RAW': '', 'SR': '_SR', 'TOA': '_TOA'}
   
   this.id = 'LANDSAT/'+NUMBER[this.number][this.sensor]
-                      +'/C01/'+TIER[tier]+PROCESS[process]
+                      +'/C01/'+TIER[this.tier]
+                      +PROCESS[this.process]
   this.collection = ee.ImageCollection(this.id)
   
-  // COMMON BANDS
+  // BANDS by NUMBER
   switch (this.number) {
     case 4: case 5: case 7:
       switch (this.sensor) {
@@ -68,8 +70,8 @@ var Landsat = function(number, process, tier, sensor) {
       break
   }
   
-  // EXTRA BANDS
-  switch (process) {
+  // BANDS by PROCESS
+  switch (this.process) {
     case 'SR':
       this.bands.pixel_qa = 'pixel_qa'
       this.bands.radsat_qa = 'radsat_qa'
@@ -110,6 +112,7 @@ var Landsat = function(number, process, tier, sensor) {
 var l5 = new Landsat(4, 'TOA')
 print(l5.id)
 print(l5.bands)
+print(l5.tier)
 
 var BANDS = {
   'Landsat 8': {
