@@ -8,8 +8,13 @@ Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 
 var Landsat = function(number, process, tier, sensor) {
   this.number = number;
-  this.tier = tier;
   this.process = process;
+  if (tier === undefined || tier === null) {
+    this.tier = 1;
+  } else {
+    this.tier = tier;
+  }
+  
   // SENSOR
   switch (number) {
     case 4: case 5:
