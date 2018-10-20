@@ -72,29 +72,37 @@ var Landsat = function(number, process, tier, sensor) {
         case 4: case 5: case 7:
           this.bands.atmos_opacity = 'sr_atmos_opacity'
           this.bands.cloud_qa = 'sr_cloud_qa'
+          this.bands.thermal = 'B6'
           break
         case 8:
           this.bands.aerosol = 'sr_aerosol'
-      }
-      break
-    case 'TOA':
-      this.bands.bqa = 'BQA'
-      switch (number === 7 || number === 8) {
-        case true:
-          this.bands.pan = 'B8'
           break
       }
+      break
+    case 'TOA': case 'RAW':
+      this.bands.bqa = 'BQA'
       switch (number) {
         case 4: case 5:
           this.bands.thermal = 'B6'
+          break
         case 7:
-          
+          this.bands.thermal1 = 'B6_VCID_1'
+          this.bands.thermal2 = 'B6_VCID_2'
+          break
+        case 7: case 8:
+          this.bands.pan = 'B8'
+          break
+        case  8:
+          this.bands.cirrus = 'B9'
+          this.bands.thermal = 'B10'
+          this.bands.thermal2 = 'B11'
+          break
       }
-      
+      break
   }
 }
 
-var l5 = new Landsat(4, 'SR', 1)
+var l5 = new Landsat(4, 'TOA')
 print(l5.id)
 print(l5.bands)
 
