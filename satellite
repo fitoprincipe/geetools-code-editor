@@ -6,12 +6,53 @@
 Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
-var Landsat = function(number, process, tier) {
-  var number_code = {
-    5: 'LT05', 7:'LE07', 8:'LC08'
+var Landsat = function(number, process, tier, sensor) {
+  this.number = number;
+  this.tier = tier;
+  this.process = process;
+  // SENSOR
+  switch (number) {
+    case 4: case 5:
+      if (sensor === undefined || sensor === null) {
+        this.sensor = 'TM'
+      }
+      break
+    case 7:
+      this.sensor = 'ETM'
+      break
+    case 8:
+      this.sensor = 'OLI'
+      break
+  }
+  var NUMBER = {
+    4: {'TM':'LT04', 'MSS':'LM04'}, 
+    5: {'TM':'LT05', 'MSS':'LM05'}, 
+    7: {'ETM':'LE07'}, 
+    8: {'OLI':'LC08'}
+  }
+  var TIER = {1: 'T1', 2: 'T2'}
+  var PROCESS = {'RAW': '', 'SR': '_SR', 'TOA': '_TOA'}
+  
+  this.id = 'LANDSAT/'+NUMBER[this.number][this.sensor]
+                      +'/C01/'+TIER[tier]+PROCESS[process]
+  this.collection = ee.ImageCollection(this.id)
+  
+  // BANDS
+  switch (this.number) {
+    case 4: case 5: case 7:
+      switch (this.sensor) {
+        case 'TM':
+          this.bands = {
+            'blue':'B1', 'green':'B2', 'red':'B3', 'nir':'B4', 
+            'swir1':'B5', 'thermal1': 'B6', 'swir2': 'B7'
+          }
+      }
   }
   
 }
+
+var l5 = new Landsat(4, 'SR', 1)
+print(l5.id)
 
 var BANDS = {
   'Landsat 8': {
