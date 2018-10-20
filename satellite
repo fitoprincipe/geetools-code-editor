@@ -25,24 +25,6 @@ var Landsat = function(number, process, tier, sensor) {
       break
   }
   
-  switch (process) {
-    case 'SR':
-      this.bands.pixel_qa = 'pixel_qa'
-      this.bands.radsat_qa = 'radsat_qa'
-      switch (number) {
-        case 4: case 5: case 7:
-          this.bands.atmos_opacity = 'sr_atmos_opacity'
-          this.bands.cloud_qa = 'sr_cloud_qa'
-          break
-        case 8:
-          this.bands.aerosol = 'sr_aerosol'
-      }
-      break
-    case 'TOA':
-      
-      
-  }
-  
   var NUMBER = {
     4: {'TM':'LT04', 'MSS':'LM04'}, 
     5: {'TM':'LT05', 'MSS':'LM05'}, 
@@ -56,14 +38,14 @@ var Landsat = function(number, process, tier, sensor) {
                       +'/C01/'+TIER[tier]+PROCESS[process]
   this.collection = ee.ImageCollection(this.id)
   
-  // BANDS
+  // COMMON BANDS
   switch (this.number) {
     case 4: case 5: case 7:
       switch (this.sensor) {
         case 'TM':
           this.bands = {
             'blue':'B1', 'green':'B2', 'red':'B3', 'nir':'B4', 
-            'swir':'B5', 'thermal1': 'B6', 'swir2': 'B7'
+            'swir':'B5', 'swir2': 'B7'
           }
           break
         case 'MSS':
@@ -81,6 +63,35 @@ var Landsat = function(number, process, tier, sensor) {
       break
   }
   
+  // EXTRA BANDS
+  switch (process) {
+    case 'SR':
+      this.bands.pixel_qa = 'pixel_qa'
+      this.bands.radsat_qa = 'radsat_qa'
+      switch (number) {
+        case 4: case 5: case 7:
+          this.bands.atmos_opacity = 'sr_atmos_opacity'
+          this.bands.cloud_qa = 'sr_cloud_qa'
+          break
+        case 8:
+          this.bands.aerosol = 'sr_aerosol'
+      }
+      break
+    case 'TOA':
+      this.bands.bqa = 'BQA'
+      switch (number === 7 || number === 8) {
+        case true:
+          this.bands.pan = 'B8'
+          break
+      }
+      switch (number) {
+        case 4: case 5:
+          this.bands.thermal = 'B6'
+        case 7:
+          
+      }
+      
+  }
 }
 
 var l5 = new Landsat(4, 'SR', 1)
