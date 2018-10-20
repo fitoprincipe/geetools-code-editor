@@ -6,9 +6,11 @@
 Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
-var Landsat = function(number, process, tier, sensor) {
+var Landsat = function(number, process, sensor, tier) {
   this.number = number;
   this.process = process;
+  this.sensor = sensor;
+  
   if (tier === undefined || tier === null) {
     this.tier = 1;
   } else {
@@ -48,6 +50,7 @@ var Landsat = function(number, process, tier, sensor) {
   // BANDS by NUMBER
   switch (this.number) {
     case 4: case 5: case 7:
+      // by SENSOR
       switch (this.sensor) {
         case 'TM': case 'ETM':
           this.bands = {
@@ -56,6 +59,7 @@ var Landsat = function(number, process, tier, sensor) {
           }
           break
         case 'MSS':
+          
           this.bands = {
             'green': 'B1', 'red': 'B2', 'nir': 'B3', 'nir2': 'B4'
           }
@@ -111,7 +115,7 @@ var Landsat = function(number, process, tier, sensor) {
   }
 }
 
-var l5 = new Landsat(8, 'TOA')
+var l5 = new Landsat(4, 'RAW', 'MSS')
 print(l5.id)
 print(l5.bands)
 print(l5.tier)
