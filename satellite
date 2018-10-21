@@ -35,8 +35,9 @@ var Landsat = function(number, process, sensor, tier) {
   // IF SENSOR IS NOT AVAILABLE
   switch (number) {
     case 4: case 5:
-      if (this.process === 'SR' && this.sensor !== 'TM') {
-        print('Lansat '+this.number+' SR has no sensor '+this.sensor)
+      if ((this.process === 'SR' || this.process === 'TOA') 
+          && this.sensor !== 'TM') {
+        print('Lansat '+this.number+' '+this.process+' has no sensor '+this.sensor)
         print('Switching to TM..')
         this.sensor = 'TM'
       } 
@@ -61,11 +62,6 @@ var Landsat = function(number, process, sensor, tier) {
       }
       break
   }
-  
-  //print(this.number)
-  //print(this.process)
-  //print(this.sensor)
-  //print(this.tier)
   
   // ID CONSTRUCTOR
   var NUMBER = {
@@ -167,19 +163,15 @@ for (var s in sats) {
       var sen = sensors[se]
       for (var t in tiers) {
         var tie = tiers[t]
-        print(sat, proc, sen, tie)
         //
         var satellite = new Landsat(sat, proc, sen, tie)
         print(satellite.id)
+        print(satellite.collection.limit(1))
       }
     }
   }
 }
 
-var l5 = new Landsat(4, 'TOA', 'MSS')
-print(l5.id)
-print(l5.bands)
-print(l5.tier)
 
 var BANDS = {
   'Landsat 8': {
