@@ -11,6 +11,7 @@ var Landsat = function(number, process, sensor, tier) {
   this.process = process;
   this.sensor = sensor;
   
+  // TIER
   if (tier === undefined || tier === null) {
     this.tier = 1;
   } else {
@@ -73,6 +74,7 @@ var Landsat = function(number, process, sensor, tier) {
   var TIER = {1: 'T1', 2: 'T2'}
   var PROCESS = {'RAW': '', 'SR': '_SR', 'TOA': '_TOA'}
   
+  // MAKE ID
   this.id = 'LANDSAT/'+NUMBER[this.number][this.sensor]
                       +'/C01/'+TIER[this.tier]
                       +PROCESS[this.process]
