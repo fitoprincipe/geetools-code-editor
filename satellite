@@ -150,6 +150,9 @@ var Landsat = function(number, process, sensor, tier) {
       }
       break
   }
+  
+  // CLOUD COVER
+  this.cloud_cover = 'CLOUD_COVER'
 }
 
 var sats = [4,5,7,8]
