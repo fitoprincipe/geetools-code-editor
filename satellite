@@ -32,6 +32,41 @@ var Landsat = function(number, process, sensor, tier) {
       break
   }
   
+  // IF SENSOR IS NOT AVAILABLE
+  switch (number) {
+    case 4: case 5:
+      if (this.process === 'SR' && this.sensor !== 'TM') {
+        print('Lansat '+this.number+' SR has no sensor '+this.sensor)
+        print('Switching to TM..')
+        this.sensor = 'TM'
+      } 
+      else if (this.sensor !== 'TM' && this.sensor !== 'MSS') {
+        print('Lansat '+this.number+' has no sensor '+this.sensor)
+        print('Switching to TM..')
+        this.sensor = 'TM'
+      }
+      break
+    case 7:
+      if (this.sensor !== 'ETM') {
+        print('Lansat 7 has no sensor '+this.sensor)
+        print('Switching to ETM..')
+        this.sensor = 'ETM'
+      }
+      break
+    case 8:
+      if (this.sensor !== 'OLI') {
+        print('Lansat 8 has no sensor '+this.sensor)
+        print('Switching to OLI..')
+        this.sensor = 'OLI'
+      }
+      break
+  }
+  
+  //print(this.number)
+  //print(this.process)
+  //print(this.sensor)
+  //print(this.tier)
+  
   // ID CONSTRUCTOR
   var NUMBER = {
     4: {'TM':'LT04', 'MSS':'LM04'}, 
@@ -119,7 +154,29 @@ var Landsat = function(number, process, sensor, tier) {
   }
 }
 
-var l5 = new Landsat(4, 'RAW')
+var sats = [4,5,7,8]
+var process = ['RAW', 'TOA', 'SR']
+var sensors = ['TM', 'MSS', 'ETM', 'OLI']
+var tiers = [1, 2]
+
+for (var s in sats) {
+  var sat = sats[s]
+  for (var p in process) {
+    var proc = process[p]
+    for (var se in sensors) {
+      var sen = sensors[se]
+      for (var t in tiers) {
+        var tie = tiers[t]
+        print(sat, proc, sen, tie)
+        //
+        var satellite = new Landsat(sat, proc, sen, tie)
+        print(satellite.id)
+      }
+    }
+  }
+}
+
+var l5 = new Landsat(4, 'TOA', 'MSS')
 print(l5.id)
 print(l5.bands)
 print(l5.tier)
