@@ -228,12 +228,12 @@ var Landsat = function(number, process, sensor, tier) {
   }
   
   // CLOUD MASKS
-  print(this.process)
   switch (this.process) {
     case 'SR':
       this.cloud_mask = cld.landsatSR
       break
     case ('TOA' || 'RAW'):
+      print(this.process)
       this.cloud_mask = cld.landsatTOA
       break
   }
