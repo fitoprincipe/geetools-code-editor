@@ -312,8 +312,8 @@ var Sentinel = function(number) {
   }
   
   this.collection = ee.ImageCollection(this.id)
-  
 }
+exports.Sentinel = Sentinel
 
 var fromID = function(id) {
   var list = id.split('/')
@@ -327,6 +327,15 @@ var fromID = function(id) {
     var tier = tier_process.split('_')[0].substring(1)
     var process = tier_process.split('_')[1] || 'RAW'
     return new Landsat(number, process, sensor, tier)
+  }
+  if (sat === 'COPERNICUS') {
+    if (list[1] === 'S1_GRD') {
+      return new Sentinel(1)
+    } else if (list[1] === 'S2') {
+      return new Sentinel(2)
+    } else if (list[1] === 'S3') {
+      return new Sentinel(3)
+    }
   }
 }
 exports.fromID = fromID
