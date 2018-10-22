@@ -153,6 +153,44 @@ var Landsat = function(number, process, sensor, tier) {
       break
   }
   
+  // RESOLUTIONS by NUMBER
+  switch (this.number) {
+    case 4: case 5:
+      // by SENSOR
+      switch (this.sensor) {
+        case 'TM':
+          this.resolution = {
+            'blue':30, 'green':30, 
+            'red':30, 'nir':30, 
+            'swir':30, 'swir2':30, 
+            'thermal':120
+          }
+          break
+        case 'MSS':
+          this.resolution = {
+            'green': 60, 'red': 60, 
+            'nir': 60, 'nir2': 60
+          }
+          break
+      }
+      break
+    case 7:
+      this.resolution = {
+        'blue': 30, 'green': 30, 'red': 30,
+        'nir':30, 'swir':30, 'swir2':30,
+        'pan':15, 'thermal':100, 
+      }
+      break
+    case 8:
+      this.resolution = {
+        'ublue': 30, 'blue': 30, 
+        'green': 30, 'red': 30,
+        'nir':30, 'swir':30, 'swir2':30,
+        'pan':15, 'thermal':100, 'thermal2':100
+      }
+      break
+  }
+  
   // CLOUD COVER
   this.cloud_cover = 'CLOUD_COVER'
 }
