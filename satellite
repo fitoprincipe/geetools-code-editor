@@ -306,6 +306,8 @@ var Sentinel = function(number) {
         'qa': cld.sentinel2, 
         'hollstein': cld.hollstein_S2
       }
+      this.min = 0
+      this.max = 10000
       break
     case 3:
       break
