@@ -228,7 +228,8 @@ var Landsat = function(number, process, sensor, tier) {
   }
   
   // CLOUD MASKS
-  switch (process) {
+  print(this.process)
+  switch (this.process) {
     case 'SR':
       this.cloud_mask = cld.landsatSR
       break
