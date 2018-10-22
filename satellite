@@ -6,6 +6,8 @@
 Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
+var indices = require('users/fitoprincipe/geetools:indexes')
+
 var Landsat = function(number, process, sensor, tier) {
   this.number = number || null;
   this.process = process || null;
@@ -205,6 +207,22 @@ var Landsat = function(number, process, sensor, tier) {
       break
     case ('SR'):
       this.max = 10000
+      break
+  }
+  
+  // INDEXES
+  switch (number) {
+    case 4: case 5: case 7:
+      this.ndvi = indexes.NDVI.landsat457
+      this.evi = indexes.EVI.landsat457
+      this.nbr = indexes.NBR.landsat457
+      this.nbr2 = indexes.NBR2.landsat457
+      break
+    case 8:
+      this.ndvi = indexes.NDVI.landsat8
+      this.evi = indexes.EVI.landsat8
+      this.nbr = indexes.NBR.landsat8
+      this.nbr2 = indexes.NBR2.landsat8
       break
   }
 }
