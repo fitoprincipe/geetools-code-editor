@@ -88,13 +88,15 @@ var Landsat = function(number, process, sensor, tier) {
       switch (this.sensor) {
         case 'TM': case 'ETM':
           this.bands = {
-            'blue':'B1', 'green':'B2', 'red':'B3', 'nir':'B4', 
+            'blue':'B1', 'green':'B2', 
+            'red':'B3', 'nir':'B4', 
             'swir':'B5', 'swir2': 'B7'
           }
           break
         case 'MSS':
           this.bands = {
-            'green': 'B1', 'red': 'B2', 'nir': 'B3', 'nir2': 'B4'
+            'green': 'B1', 'red': 'B2', 
+            'nir': 'B3', 'nir2': 'B4'
           }
           break
       }
