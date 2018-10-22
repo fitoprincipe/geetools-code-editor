@@ -24,15 +24,15 @@ var Landsat = function(number, process, sensor, tier) {
     return null;
   }
   if (processes.indexOf(process) === -1) {
-    print('Landsat '+process+' not available')
+    print('Landsat '+number+' '+process+' not available')
     return null;
   }
   if (sensors.indexOf(sensor) === -1) {
-    print('Landsat '+sensor+' not available')
+    print('Landsat sensor '+sensor+' not available')
     return null;
   }
   if (tiers.indexOf(tier) === -1) {
-    print('Landsat '+tier+' not available')
+    print('Landsat tier '+tier+' not available')
     return null;
   }
   
