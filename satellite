@@ -211,7 +211,11 @@ for (var s in sats) {
         //
         var satellite = new Landsat(sat, proc, sen, tie)
         print(satellite.id)
-        print(satellite.collection.limit(1))
+        var col = satellite.collection.limit(1)
+        var i = ee.Image(col.first())
+        var bands = i.bandNames()
+        print(bands.sort(), 
+        ee.Dictionary(satellite.bands).values().sort())
       }
     }
   }
