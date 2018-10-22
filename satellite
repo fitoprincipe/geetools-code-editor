@@ -7,6 +7,7 @@ Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
 var indices = require('users/fitoprincipe/geetools:indexes')
+var cld = require('users/fitoprincipe/geetools:cloud_masks')
 
 var Landsat = function(number, process, sensor, tier) {
   this.number = number || null;
@@ -225,6 +226,17 @@ var Landsat = function(number, process, sensor, tier) {
       this.nbr2 = indexes.NBR2.landsat8
       break
   }
+  
+  // CLOUD MASKS
+  switch (process) {
+    case 'SR':
+      this.cloud_mask = cld.landsatSR
+      break
+    case ('TOA' || 'SR'):
+      this.cloud_mask = cld.landsatTOA
+      break
+  }
+  
 }
 exports.Landsat = Landsat
 
