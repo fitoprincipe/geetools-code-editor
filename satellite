@@ -195,6 +195,7 @@ var Landsat = function(number, process, sensor, tier) {
   this.cloud_cover = 'CLOUD_COVER'
 }
 
+// TEST
 var sats = [4,5,7,8]
 var process = ['RAW', 'TOA', 'SR']
 var sensors = ['TM', 'MSS', 'ETM', 'OLI']
@@ -216,54 +217,9 @@ for (var s in sats) {
         var bands = i.bandNames()
         var bands2 = ee.Dictionary(satellite.bands).values()
         print(bands.containsAll(bands2))
+        
       }
     }
   }
-}
-
-
-var BANDS = {
-  'Landsat 8': {
-    'blue': 'B2',
-    'green': 'B3',
-    'red': 'B4',
-    'nir': 'B5',
-    'swir1': 'B6',
-    'swir2': 'B7',
-    'pan': 'B8',
-    'cirrus': 'B9',
-    'thermal1': 'B10',
-    'thermal2': 'B11'
-  }
-}
-
-var FAMILY = {
-  'Landsat 8': ['Landsat 8 SR', 'Landsat 8 TOA', 'Landsat 8 RAW']
-}
-
-var GROUPS = {
-  'Landsat 8 SR': ['LANDSAT/LC08/C01/T1_SR', 'LANDSAT/LC08/C01/T2_SR'],
-  'Landsat 7 SR': ['LANDSAT/LE07/C01/T1_SR', 'LANDSAT/LE07/C01/T2_SR'],
-  'Landsat 5 SR': ['LANDSAT/LT05/C01/T1_SR', 'LANDSAT/LT05/C01/T2_SR'],
-  'Landsat 8 TOA': ['LANDSAT/LC08/C01/T1_TOA', 'LANDSAT/LC08/C01/T2_TOA'],
-  'Landsat 7 TOA': ['LANDSAT/LE07/C01/T1_TOA', 'LANDSAT/LE07/C01/T2_TOA'],
-  'Landsat 5 TOA': ['LANDSAT/LT05/C01/T1_TOA', 'LANDSAT/LT05/C01/T2_TOA'],
-}
-
-var INFORMATION = {
-  'LANDSAT/LC08/C01/T1_SR': {
-    'group': 'Landsat 8 SR',
-    'family': 'Landsat 8',
-  }
-}
-
-var Satellite = function(id) {
-  this.collection = ee.ImageCollection(id);
-  this.group = INFORMATION[id]['group'];
-  this.family = INFORMATION[id]['family'];
-  
-  switch (id) {
-    case 'LANDSAT/LC08/C01/T1_SR':
-      var common = BANDS[this.family]
-  }
+  break
 }
