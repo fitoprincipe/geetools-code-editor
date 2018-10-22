@@ -198,7 +198,13 @@ var Landsat = function(number, process, sensor, tier) {
   this.min = 0
   switch (process) {
     case ('RAW'):
-      this.max = null
+      this.max = 255
+      break
+    case ('TOA'):
+      this.max = 1
+      break
+    case ('SR'):
+      this.max = 10000
       break
   }
 }
