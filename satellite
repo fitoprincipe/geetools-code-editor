@@ -6,7 +6,7 @@
 Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
-var indices = require('users/fitoprincipe/geetools:indexes')
+var indexes = require('users/fitoprincipe/geetools:indexes')
 var cld = require('users/fitoprincipe/geetools:cloud_masks')
 
 var Landsat = function(number, process, sensor, tier) {
