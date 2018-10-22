@@ -197,13 +197,17 @@ var Landsat = function(number, process, sensor, tier) {
   // BANDS RANGE
   this.min = 0
   switch (process) {
-    case ('RAW') {
-      this.max = 
-    }
+    case ('RAW'):
+      this.max = null
+      break
   }
   
 }
 exports.Landsat = Landsat
+
+var fromCollection = function(collection) {
+  
+}
 
 // TEST
 var sats = [4,5,7,8]
