@@ -104,7 +104,7 @@ var Landsat = function(number, process, sensor, tier) {
     case 8:
       this.bands = {
         'ublue': 'B1', 'blue': 'B2', 'green': 'B3', 'red': 'B4',
-        'nir':'B5', 'swir':'B6', 'swir2':'B7'
+        'nir':'B5', 'swir':'B6', 'swir2':'B7', 'thermal':'B10', 'thermal2':'B11'
       }
       break
   }
@@ -159,7 +159,7 @@ var Landsat = function(number, process, sensor, tier) {
       // by SENSOR
       switch (this.sensor) {
         case 'TM':
-          this.resolution = {
+          this.scale = {
             'blue':30, 'green':30, 
             'red':30, 'nir':30, 
             'swir':30, 'swir2':30, 
@@ -167,7 +167,7 @@ var Landsat = function(number, process, sensor, tier) {
           }
           break
         case 'MSS':
-          this.resolution = {
+          this.scale = {
             'green': 60, 'red': 60, 
             'nir': 60, 'nir2': 60
           }
@@ -175,14 +175,14 @@ var Landsat = function(number, process, sensor, tier) {
       }
       break
     case 7:
-      this.resolution = {
+      this.scale = {
         'blue': 30, 'green': 30, 'red': 30,
         'nir':30, 'swir':30, 'swir2':30,
         'pan':15, 'thermal':100, 
       }
       break
     case 8:
-      this.resolution = {
+      this.scale = {
         'ublue': 30, 'blue': 30, 
         'green': 30, 'red': 30,
         'nir':30, 'swir':30, 'swir2':30,
@@ -193,6 +193,15 @@ var Landsat = function(number, process, sensor, tier) {
   
   // CLOUD COVER
   this.cloud_cover = 'CLOUD_COVER'
+  
+  // BANDS RANGE
+  this.min = 0
+  switch (process) {
+    case ('RAW') {
+      this.max = 
+    }
+  }
+  
 }
 
 // TEST
@@ -203,6 +212,7 @@ var tiers = [1, 2]
 
 for (var s in sats) {
   var sat = sats[s]
+  if (sat !== 4) { continue }
   for (var p in process) {
     var proc = process[p]
     for (var se in sensors) {
@@ -214,12 +224,32 @@ for (var s in sats) {
         print(satellite.id)
         var col = satellite.collection.limit(1)
         var i = ee.Image(col.first())
-        var bands = i.bandNames()
-        var bands2 = ee.Dictionary(satellite.bands).values()
-        print(bands.containsAll(bands2))
+        var bands_dict = ee.Dictionary(satellite.bands)
+        var inverse = ee.Dictionary.fromLists(bands_dict.values(), bands_dict.keys())
+        var bands = bands_dict.values()
+        print(satellite.scale)
+        /*
+        var bands2 = i.bandNames()
+        var cont = bands2.containsAll(bands)
         
+        if (cont.getInfo() === false) {
+          print('real', bands)
+          print('module', bands2)
+        }
+        
+        var ibands = bands.getInfo()
+        
+        for (var band in ibands) {
+          var b = ibands[band]
+          var name = inverse.get(b).getInfo()
+          print(b, name)
+          var ib = i.select(b)
+          var scale_real = ib.projection().nominalScale().getInfo()
+          var scale_mine = satellite.scale[name]
+          print(scale_real === scale_mine)
+        }*/
       }
     }
   }
-  break
+  //break
 }
