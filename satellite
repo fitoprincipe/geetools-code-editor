@@ -38,8 +38,8 @@ var Landsat = function(number, process, sensor, tier) {
     print('Landsat sensor '+sensor+' not available')
     return null;
   }
-  if (tiers.indexOf(tier) === -1) {
-    print('Landsat tier '+tier+' not available')
+  if (tiers.indexOf(this.tier) === -1) {
+    print('Landsat tier '+this.tier+' not available')
     return null;
   }
   
