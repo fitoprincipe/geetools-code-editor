@@ -266,22 +266,13 @@ exports.Landsat = Landsat
 var Sentinel = function(number) {
   this.number = number
   
-  var numbers = [1, 2, 3]
+  var numbers = [2]
   if (numbers.indexOf(number) === -1) {
     print('Sentinel '+number+' not available')
     return null;
   }
   
   switch (number) {
-    case 1:
-      this.band = {
-        'HH': 'HH', 'HV': 'HV', 'VV': 'VV', 'VH':'VH',
-        'angle': 'angle'
-      }
-      this.id = 'COPERNICUS/S1_GRD'
-      this.process = 'RADAR'
-      this.cloud_cover = null;
-      break
     case 2:
       this.band = {
         'aerosol': 'B1', 'blue': 'B2', 'green': 'B3', 'red':'B4',
@@ -308,8 +299,6 @@ var Sentinel = function(number) {
       }
       this.min = 0
       this.max = 10000
-      break
-    case 3:
       break
   }
   
