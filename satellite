@@ -214,8 +214,8 @@ for (var s in sats) {
         var col = satellite.collection.limit(1)
         var i = ee.Image(col.first())
         var bands = i.bandNames()
-        print(bands.sort(), 
-        ee.Dictionary(satellite.bands).values().sort())
+        var bands2 = ee.Dictionary(satellite.bands).values()
+        print(bands.containsAll(bands2))
       }
     }
   }
