@@ -232,7 +232,7 @@ var Landsat = function(number, process, sensor, tier) {
     case 'SR':
       this.cloud_mask = cld.landsatSR
       break
-    case ('TOA' || 'SR'):
+    case ('TOA' || 'RAW'):
       this.cloud_mask = cld.landsatTOA
       break
   }
