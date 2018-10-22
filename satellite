@@ -19,7 +19,7 @@ var Landsat = function(number, process, sensor, tier) {
   var sensors = ['TM', 'MSS', 'ETM', 'OLI']
   var tiers = [1, 2]
   
-  if (!numbers.includes(number)) {
+  if (numbers.indexOf(number) === -1) {
     print('Number '+number+' not available')
     return null;
   }
