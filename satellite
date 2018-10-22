@@ -87,14 +87,14 @@ var Landsat = function(number, process, sensor, tier) {
       // by SENSOR
       switch (this.sensor) {
         case 'TM': case 'ETM':
-          this.bands = {
+          this.band = {
             'blue':'B1', 'green':'B2', 
             'red':'B3', 'nir':'B4', 
             'swir':'B5', 'swir2': 'B7'
           }
           break
         case 'MSS':
-          this.bands = {
+          this.band = {
             'green': 'B1', 'red': 'B2', 
             'nir': 'B3', 'nir2': 'B4'
           }
@@ -102,7 +102,7 @@ var Landsat = function(number, process, sensor, tier) {
       }
       break
     case 8:
-      this.bands = {
+      this.band = {
         'ublue': 'B1', 'blue': 'B2', 'green': 'B3', 'red': 'B4',
         'nir':'B5', 'swir':'B6', 'swir2':'B7', 'thermal':'B10', 'thermal2':'B11'
       }
@@ -112,48 +112,48 @@ var Landsat = function(number, process, sensor, tier) {
   // BANDS by PROCESS
   switch (this.process) {
     case 'SR':
-      this.bands.pixel_qa = 'pixel_qa'
-      this.bands.radsat_qa = 'radsat_qa'
+      this.band.pixel_qa = 'pixel_qa'
+      this.band.radsat_qa = 'radsat_qa'
       switch (this.number) {
         case 4: case 5: case 7:
-          this.bands.atmos_opacity = 'sr_atmos_opacity'
-          this.bands.cloud_qa = 'sr_cloud_qa'
-          this.bands.thermal = 'B6'
+          this.band.atmos_opacity = 'sr_atmos_opacity'
+          this.band.cloud_qa = 'sr_cloud_qa'
+          this.band.thermal = 'B6'
           break
         case 8:
-          this.bands.aerosol = 'sr_aerosol'
+          this.band.aerosol = 'sr_aerosol'
           break
       }
       break
     case 'TOA': case 'RAW':
-      this.bands.bqa = 'BQA'
+      this.band.bqa = 'BQA'
       switch (this.number) {
         case 4: case 5:
           switch (this.sensor) {
             case 'TM':
-              this.bands.thermal = 'B6'
+              this.band.thermal = 'B6'
               break
           }
           break
         case 7: case 8:
-          this.bands.pan = 'B8'
+          this.band.pan = 'B8'
           break
       }
       switch (this.number) {
         case 7:
-          this.bands.thermal1 = 'B6_VCID_1'
-          this.bands.thermal2 = 'B6_VCID_2'
+          this.band.thermal1 = 'B6_VCID_1'
+          this.band.thermal2 = 'B6_VCID_2'
           break
         case 8:
-          this.bands.cirrus = 'B9'
-          this.bands.thermal = 'B10'
-          this.bands.thermal2 = 'B11'
+          this.band.cirrus = 'B9'
+          this.band.thermal = 'B10'
+          this.band.thermal2 = 'B11'
           break
       }
       break
   }
   
-  // RESOLUTIONS by NUMBER
+  // SCALE by NUMBER
   switch (this.number) {
     case 4: case 5:
       // by SENSOR
