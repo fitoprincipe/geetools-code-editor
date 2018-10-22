@@ -10,9 +10,19 @@ var indexes = require('users/fitoprincipe/geetools:indexes')
 var cld = require('users/fitoprincipe/geetools:cloud_masks')
 
 var Landsat = function(number, process, sensor, tier) {
-  this.number = number || null;
-  this.process = process || null;
-  this.sensor = sensor || null;
+  this.number = number;
+  this.process = process;
+  this.sensor = sensor;
+  
+  var numbers = [4, 5, 7, 8]
+  var processes = ['RAW', 'TOA', 'SR']
+  var sensors = ['TM', 'MSS', 'ETM', 'OLI']
+  var tiers = [1, 2]
+  
+  if (!numbers.includes(number)) {
+    print('Number '+number+' not available')
+    return null;
+  }
   
   // TIER
   if (tier === undefined || tier === null) {
