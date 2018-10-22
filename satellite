@@ -252,16 +252,68 @@ var Landsat = function(number, process, sensor, tier) {
   // CLOUD MASKS
   switch (this.process) {
     case 'SR':
-      this.cloud_mask = cld.landsatSR
+      this.cloud_masks = {'qa': cld.landsatSR}
       break
     case 'TOA': case 'RAW':
       print(this.process)
-      this.cloud_mask = cld.landsatTOA
+      this.cloud_masks = {'qa': cld.landsatTOA}
       break
   }
   
 }
 exports.Landsat = Landsat
+
+var Sentinel = function(number) {
+  this.number = number
+  
+  var numbers = [1, 2, 3]
+  if (numbers.indexOf(number) === -1) {
+    print('Sentinel '+number+' not available')
+    return null;
+  }
+  
+  switch (number) {
+    case 1:
+      this.band = {
+        'HH': 'HH', 'HV': 'HV', 'VV': 'VV', 'VH':'VH',
+        'angle': 'angle'
+      }
+      this.id = 'COPERNICUS/S1_GRD'
+      this.process = 'RADAR'
+      this.cloud_cover = null;
+      break
+    case 2:
+      this.band = {
+        'aerosol': 'B1', 'blue': 'B2', 'green': 'B3', 'red':'B4',
+        'red_edge_1': 'B5', 'red_edge_2': 'B6', 'red_edge_3': 'B7',
+        'nir': 'B8', 'red_edge_4': 'B8A', 'vapor': 'B9', 'cirrus': 'B10',
+        'swir': 'B11', 'swir2': 'B12', 'qa': 'QA60'
+      }
+      this.scale = {
+        'aerosol': 60, 'blue': 10, 'green': 10, 'red':10,
+        'red_edge_1': 20, 'red_edge_2': 20, 'red_edge_3': 20,
+        'nir': 10, 'red_edge_4': 20, 'vapor': 60, 'cirrus': 60,
+        'swir': 20, 'swir2': 20, 'qa': 60
+      }
+      this.id = 'COPERNICUS/S2'
+      this.process = 'SR'
+      this.cloud_cover = 'CLOUD_COVERAGE_ASSESSMENT'
+      this.ndvi = indexes.NDVI.sentinel2
+      this.evi = indexes.EVI.sentinel2
+      this.nbr = indexes.NBR.sentinel2
+      this.nbr2 = indexes.NBR2.sentinel2
+      this.cloud_masks = {
+        'qa': cld.sentinel2, 
+        'hollstein': cld.hollstein_S2
+      }
+      break
+    case 3:
+      break
+  }
+  
+  this.collection = ee.ImageCollection(this.id)
+  
+}
 
 var fromID = function(id) {
   var list = id.split('/')
