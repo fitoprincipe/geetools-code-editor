@@ -20,7 +20,19 @@ var Landsat = function(number, process, sensor, tier) {
   var tiers = [1, 2]
   
   if (numbers.indexOf(number) === -1) {
-    print('Number '+number+' not available')
+    print('Landsat '+number+' not available')
+    return null;
+  }
+  if (processes.indexOf(process) === -1) {
+    print('Landsat '+process+' not available')
+    return null;
+  }
+  if (sensors.indexOf(sensor) === -1) {
+    print('Landsat '+sensor+' not available')
+    return null;
+  }
+  if (tiers.indexOf(tier) === -1) {
+    print('Landsat '+tier+' not available')
     return null;
   }
   
