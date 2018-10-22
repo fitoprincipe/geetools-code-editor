@@ -7,9 +7,9 @@ Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 */
 
 var Landsat = function(number, process, sensor, tier) {
-  this.number = number;
-  this.process = process;
-  this.sensor = sensor;
+  this.number = number || null;
+  this.process = process || null;
+  this.sensor = sensor || null;
   
   // TIER
   if (tier === undefined || tier === null) {
@@ -201,60 +201,79 @@ var Landsat = function(number, process, sensor, tier) {
       this.max = null
       break
   }
-  
 }
 exports.Landsat = Landsat
 
-var fromCollection = function(collection) {
-  
+var fromID = function(id) {
+  var list = id.split('/')
+  var sat = list[0]
+  if (sat === 'LANDSAT') {
+    var sensors = {'LT': 'TM', 'LM': 'MSS', 'LE': 'ETM', 'LC': 'OLI'}
+    var number_sensor = list[1]
+    var number = Number(number_sensor.substring(2,4))
+    var sensor = sensors[number_sensor.substring(0,2)]
+    var tier_process = list[3]
+    var tier = tier_process.split('_')[0].substring(1)
+    var process = tier_process.split('_')[1] || 'RAW'
+    return new Landsat(number, process, sensor, tier)
+  }
 }
+exports.fromID = fromID
+
+var fromCollection = function(collection) {
+  var id = collection.get('system:id').getInfo()
+  return fromID(id)
+}
+exports.fromCollection = fromCollection
 
 // TEST
-var sats = [4,5,7,8]
-var process = ['RAW', 'TOA', 'SR']
-var sensors = ['TM', 'MSS', 'ETM', 'OLI']
-var tiers = [1, 2]
-
-for (var s in sats) {
-  var sat = sats[s]
-  if (sat !== 4) { continue }
-  for (var p in process) {
-    var proc = process[p]
-    for (var se in sensors) {
-      var sen = sensors[se]
-      for (var t in tiers) {
-        var tie = tiers[t]
-        //
-        var satellite = new Landsat(sat, proc, sen, tie)
-        print(satellite.id)
-        var col = satellite.collection.limit(1)
-        var i = ee.Image(col.first())
-        var bands_dict = ee.Dictionary(satellite.bands)
-        var inverse = ee.Dictionary.fromLists(bands_dict.values(), bands_dict.keys())
-        var bands = bands_dict.values()
-        print(satellite.scale)
-        /*
-        var bands2 = i.bandNames()
-        var cont = bands2.containsAll(bands)
-        
-        if (cont.getInfo() === false) {
-          print('real', bands)
-          print('module', bands2)
+var test = function() {
+  var sats = [4,5,7,8]
+  var process = ['RAW', 'TOA', 'SR']
+  var sensors = ['TM', 'MSS', 'ETM', 'OLI']
+  var tiers = [1, 2]
+  
+  for (var s in sats) {
+    var sat = sats[s]
+    if (sat !== 4) { continue }
+    for (var p in process) {
+      var proc = process[p]
+      for (var se in sensors) {
+        var sen = sensors[se]
+        for (var t in tiers) {
+          var tie = tiers[t]
+          //
+          var satellite = new Landsat(sat, proc, sen, tie)
+          print(satellite.id)
+          var col = satellite.collection.limit(1)
+          var i = ee.Image(col.first())
+          var bands_dict = ee.Dictionary(satellite.bands)
+          var inverse = ee.Dictionary.fromLists(bands_dict.values(), bands_dict.keys())
+          var bands = bands_dict.values()
+          print(satellite.scale)
+          /*
+          var bands2 = i.bandNames()
+          var cont = bands2.containsAll(bands)
+          
+          if (cont.getInfo() === false) {
+            print('real', bands)
+            print('module', bands2)
+          }
+          
+          var ibands = bands.getInfo()
+          
+          for (var band in ibands) {
+            var b = ibands[band]
+            var name = inverse.get(b).getInfo()
+            print(b, name)
+            var ib = i.select(b)
+            var scale_real = ib.projection().nominalScale().getInfo()
+            var scale_mine = satellite.scale[name]
+            print(scale_real === scale_mine)
+          }*/
         }
-        
-        var ibands = bands.getInfo()
-        
-        for (var band in ibands) {
-          var b = ibands[band]
-          var name = inverse.get(b).getInfo()
-          print(b, name)
-          var ib = i.select(b)
-          var scale_real = ib.projection().nominalScale().getInfo()
-          var scale_mine = satellite.scale[name]
-          print(scale_real === scale_mine)
-        }*/
       }
     }
+    //break
   }
-  //break
 }
