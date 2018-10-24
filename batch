@@ -44,11 +44,11 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
     }
     
   var opt = tools.get_options(defaults, options)
-  var n = col.size().getInfo();
+  var n = collection.size().getInfo();
     
-  var colList = col.toList(col.size());
+  var colList = collection.toList(col.size());
   
-  var colID = col.getInfo()['id'].replace('/','_') || "ImageCollection"
+  var colID = collection.getInfo()['id'].replace('/','_') || "ImageCollection"
   
   for (var i = 0; i < n; i++) {
     var img = ee.Image(colList.get(i));
@@ -76,11 +76,11 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var opt = tools.get_options(defaults, options)
     
-    var n = col.size().getInfo();
+    var n = collection.size().getInfo();
     
-    var colList = col.toList(col.size());
+    var colList = collection.toList(col.size());
     
-    var colID = col.getInfo()['id'].replace('/','_') || ""
+    var colID = collection.getInfo()['id'].replace('/','_') || ""
     
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
