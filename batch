@@ -8,12 +8,13 @@ var tools = require('users/fitoprincipe/geetools:tools')
 
 var Export = {}
 
-Export.ImageCollection = function(col, folder, region, options) {
+Export.ImageCollection = function(col, folder, options) {
     
     var defaults = {
       scale: 1000,
       maxPixels: 1e13,
       type: 'float',
+      region: null,
     }
     
     var opt = tools.get_options(defaults, options)
