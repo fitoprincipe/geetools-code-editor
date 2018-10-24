@@ -28,7 +28,7 @@ Export.ImageCollection = function(col, folder, options) {
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
       var id = img.id().getInfo() || colID+'_image_'+i.toString();
-      region = region || img.geometry().bounds().getInfo()["coordinates"];
+      region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
       var imgtype = {"float":img.toFloat(), 
                      "byte":img.toByte(), 
@@ -46,13 +46,13 @@ Export.ImageCollection = function(col, folder, options) {
                     }
       
       Export.image.toDrive({
-        image:imgtype[type],
+        image:imgtype[opt.type],
         description: id,
         folder: folder,
         fileNamePrefix: id,
         region: region,
-        scale: scale,
-        maxPixels: maxPixels})
+        scale: opt.scale,
+        maxPixels: opt.maxPixels})
     }
   }
   
