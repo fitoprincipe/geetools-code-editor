@@ -12,6 +12,7 @@ var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
 var help = {};
 var string = {};
 var geometry = {};
+var image = {};
 
 // INTERNAL
 var get_options = function(def, options) {
@@ -29,7 +30,9 @@ var get_options = function(def, options) {
 }
 exports.get_options = get_options
 
-// FORMAT STRING
+/** STRINGS */
+
+// format
 string.format = function(string, replacement) {
   var str = ee.String(string)
   var repl = ee.Dictionary(replacement)
@@ -52,9 +55,9 @@ string.format = function(string, replacement) {
   return ee.String(newstr)
 }
 
-/** GEOMETRIES **/
+/** GEOMETRIES */
 
-// MASK OUT PIXELS INSIDE A GEOMETRY
+// mask out pixels inside a geometry (return a function for mapping)
 geometry.mask_inside = function(geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
   
@@ -64,7 +67,7 @@ geometry.mask_inside = function(geometry) {
   return wrap
 }
 
-// PAINT GEOMETRIES
+// paint geometries
 geometry.paint = function(geometry, options) {
   
   var def = {
@@ -111,14 +114,14 @@ geometry.paint = function(geometry, options) {
   }
 }
 
+/** IMAGES */
+
 // GET VALUE FROM A POINT
-var get_value = function(image, point, scale) {
+image.get_value = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
-  //var p = point.geometry();
   var result = image.reduceRegion(ee.Reducer.first(), point, sc);
   return result
 }
-exports.get_value = get_value
 
 // REPLACE ONE BAND WITH ANOTHER BAND
 var replace_band = function(image, replace_band, add_band) {
@@ -601,3 +604,4 @@ exports.help = help
 exports.options = ee.Dictionary(help).keys()
 exports.geometry = geometry
 exports.string = string
+exports.image = image
