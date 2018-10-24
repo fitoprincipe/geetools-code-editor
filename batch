@@ -28,7 +28,7 @@ Export.ImageCollection = function(col, folder, options) {
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
       var id = img.id().getInfo() || colID+'_image_'+i.toString();
-      region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
+      var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
       var imgtype = {"float":img.toFloat(), 
                      "byte":img.toByte(), 
