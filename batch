@@ -6,9 +6,9 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 
-var Download = {}
+var Download = {'ImageCollection': {}}
 
-Download.ImageCollection = function(col, folder, options) {
+Download.ImageCollection.toDrive = function(col, folder, options) {
     
     var defaults = {
       scale: 1000,
