@@ -46,7 +46,7 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
   var opt = tools.get_options(defaults, options)
   var n = collection.size().getInfo();
     
-  var colList = collection.toList(col.size());
+  var colList = collection.toList(n);
   
   var colID = collection.getInfo()['id'].replace('/','_') || "ImageCollection"
   
@@ -78,7 +78,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var n = collection.size().getInfo();
     
-    var colList = collection.toList(col.size());
+    var colList = collection.toList(n);
     
     var colID = collection.getInfo()['id'].replace('/','_') || ""
     
