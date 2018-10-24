@@ -49,7 +49,7 @@ Download.ImageCollection.toDrive = function(col, folder, options) {
       var id = img.id().getInfo() || colID+'_image_'+i.toString();
       var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
-      var imtype = IMAGE_TYPES(img, type)
+      var imtype = IMAGE_TYPES(img, opt.type)
       
       Export.image.toDrive({
         image: imtype,
