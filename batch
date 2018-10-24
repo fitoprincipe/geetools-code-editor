@@ -19,7 +19,7 @@ Export.ImageCollection = function(col, folder, options) {
     
     var opt = tools.get_options(defaults, options)
     
-    var n = colList.size().getInfo();
+    var n = col.size().getInfo();
     
     var colList = col.toList(col.size());
     
