@@ -51,7 +51,8 @@ string.format = function(string, replacement) {
   }, str)
   return ee.String(newstr)
 }
-exports.string = string
+
+/** GEOMETRIES **/
 
 // MASK OUT PIXELS INSIDE A GEOMETRY
 geometry.mask_inside = function(geometry) {
@@ -62,7 +63,53 @@ geometry.mask_inside = function(geometry) {
   }
   return wrap
 }
-exports.geometry = geometry
+
+// PAINT GEOMETRIES
+geometry.paint = function(geometry, options) {
+  
+  var def = {
+    fillColor: null,
+    borderColor: 'black',
+    border: 2,
+    idFld: null
+  }
+  
+  var opt = get_options(def, options)
+  
+  var type = geometry.name()
+  
+  // build FeatureCollection depending on geometry type
+  if (type === 'Geometry') {
+    geometry = ee.FeatureCollection([ee.Feature(geometry)])
+  } else if (type === 'Feature') {
+    geometry = ee.FeatureCollection([geometry])
+  }
+  
+  // Fill  
+  if (opt.fillColor !== null) {
+    var fill = ee.Image().paint(geometry, 1).visualize({palette:[opt.fillColor]})
+  }
+  
+  // Border
+  var out = ee.Image().paint(geometry, 1, opt.border).visualize({palette:[opt.borderColor]})
+  
+  // Fill & Border
+  if ((opt.fillColor !== null) & (opt.borderColor !== null)){ var rgbVector = fill.blend(out)}
+  
+  // Only Fill
+  else if (opt.fillColor !== null){ var rgbVector = fill } 
+  
+  // Only Border
+  else { var rgbVector = out }
+  
+  // Get id image
+  if (opt.idFld !== null) {
+    var idImg = geometry.reduceToImage([opt.idFld], ee.Reducer.first()).rename(opt.idFld)
+    return rgbVector.addBands(idImg)
+  } else {
+    return rgbVector
+  }
+}
 
 // GET VALUE FROM A POINT
 var get_value = function(image, point, scale) {
@@ -422,54 +469,6 @@ exports.removeLayer = removeLayer
 help['removeLayer'] = 'removeLayer(name):\n'+
                       'Remove a Layer from the Map by its name'
 
-// PAINT GEOMETRIES
-var paint = function(geometry, options) {
-  
-  var def = {
-    fillColor: null,
-    borderColor: 'black',
-    border: 2,
-    idFld: null
-  }
-  
-  var opt = get_options(def, options)
-  
-  var type = geometry.name()
-  
-  // build FeatureCollection depending on geometry type
-  if (type === 'Geometry') {
-    geometry = ee.FeatureCollection([ee.Feature(geometry)])
-  } else if (type === 'Feature') {
-    geometry = ee.FeatureCollection([geometry])
-  }
-  
-  // Fill  
-  if (opt.fillColor !== null) {
-    var fill = ee.Image().paint(geometry, 1).visualize({palette:[opt.fillColor]})
-  }
-  
-  // Border
-  var out = ee.Image().paint(geometry, 1, opt.border).visualize({palette:[opt.borderColor]})
-  
-  // Fill & Border
-  if ((opt.fillColor !== null) & (opt.borderColor !== null)){ var rgbVector = fill.blend(out)}
-  
-  // Only Fill
-  else if (opt.fillColor !== null){ var rgbVector = fill } 
-  
-  // Only Border
-  else { var rgbVector = out }
-  
-  // Get id image
-  if (opt.idFld !== null) {
-    var idImg = geometry.reduceToImage([opt.idFld], ee.Reducer.first()).rename(opt.idFld)
-    return rgbVector.addBands(idImg)
-  } else {
-    return rgbVector
-  }
-}
-exports.paintGeometry = paint
-
 // DEPRECATED
 var ExportCol = function(col, folder, scale, type,
                          nimg, maxPixels, region) {
@@ -600,3 +599,5 @@ help['add_prefix'] = 'add_suffix(prefix, bands)(image)\n\n'+
                      
 exports.help = help
 exports.options = ee.Dictionary(help).keys()
+exports.geometry = geometry
+exports.string = string
