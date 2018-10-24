@@ -1,0 +1,17 @@
+/*
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Sub Modules export
+*/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+exports.tools = tools
+
+var satellite = require('users/fitoprincipe/geetools:satellite')
+exports.satellite = satellite
+
+//var tools = require('users/fitoprincipe/geetools:tools')
+
+//var tools = require('users/fitoprincipe/geetools:tools')
