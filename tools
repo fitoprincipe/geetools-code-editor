@@ -133,8 +133,8 @@ image.replace_band = function(image, replace_band, add_band) {
     return img_final
 }
 
-// SUM THE SPECIFIED BANDS
-var sum_bands = function(name, bands, append_to_image) {
+// sum the specified bands
+image.sum_bands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
   name = name || 'sum_bands';
@@ -171,7 +171,6 @@ var sum_bands = function(name, bands, append_to_image) {
   }
   return wrap
 }
-exports.sum_bands = sum_bands
 
 // MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
 var dict2image = function(bands) {
@@ -251,49 +250,6 @@ var addLayerCol = function(col, options) {
   }
 }
 exports.addLayerCol = addLayerCol
-
-// COLLECTION TO DRIVE
-var col2drive = function(col, folder, options) {
-  
-    var def = {
-      'type': 'float',
-      'scale': 500,
-      'maxPixels': 1e13,
-      'region': undefined
-    }
-    
-    var opt = get_options(def, options)
-    var nimg = opt.nimg
-    var scale = opt.scale
-    var maxPixels = opt.maxPixels
-    var type = opt.type
-    var region = opt.region
-    
-    var n = col.size().getInfo();
-    var colList = col.toList(n);
-
-    for (var i = 0; i < n; i++) {
-      var img = ee.Image(colList.get(i));
-      var id = img.id().getInfo();
-      region = region || img.geometry().bounds().getInfo()["coordinates"];
-
-      var imgtype = {"float":img.toFloat(),
-                     "byte":img.toByte(),
-                     "int":img.toInt(),
-                     "double":img.toDouble()
-                    }
-
-      Export.image.toDrive({
-        image:imgtype[type],
-        description: id,
-        folder: folder,
-        fileNamePrefix: id,
-        region: region,
-        scale: scale,
-        maxPixels: maxPixels})
-    }
-  }
-exports.col2drive = col2drive
 
 // COMPUTE BITS
 var computeQAbits = function(start, end, newName) {
