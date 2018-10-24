@@ -116,15 +116,15 @@ geometry.paint = function(geometry, options) {
 
 /** IMAGES */
 
-// GET VALUE FROM A POINT
+// get value from point
 image.get_value = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
   var result = image.reduceRegion(ee.Reducer.first(), point, sc);
   return result
 }
 
-// REPLACE ONE BAND WITH ANOTHER BAND
-var replace_band = function(image, replace_band, add_band) {
+// replace one band with another band
+image.replace_band = function(image, replace_band, add_band) {
     var band = add_band.select([0]);
     var bands = image.bandNames();
     var resto = bands.remove(replace_band);
@@ -132,7 +132,6 @@ var replace_band = function(image, replace_band, add_band) {
     var img_final = img_resto.addBands(band);
     return img_final
 }
-exports.replace_band = replace_band
 
 // SUM THE SPECIFIED BANDS
 var sum_bands = function(name, bands, append_to_image) {
