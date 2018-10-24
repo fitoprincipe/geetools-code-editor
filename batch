@@ -1,0 +1,56 @@
+/* 
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+ */
+
+var tools = require('users/fitoprincipe/geetools:tools')
+
+var Export = {}
+
+Export.ImageCollection = function(col, folder, region, options) {
+    
+    var defaults = {
+      scale: 1000,
+      maxPixels: 1e13,
+      type: 'float',
+    }
+    
+    var opt = tools.get_options(defaults, options)
+    
+    var n = colList.size().getInfo();
+    
+    var colList = col.toList(col.size());
+    
+    var colID = col.getInfo()['id'].replace('/','_') || ""
+    
+    for (var i = 0; i < n; i++) {
+      var img = ee.Image(colList.get(i));
+      var id = img.id().getInfo() || colID+'_image_'+i.toString();
+      region = region || img.geometry().bounds().getInfo()["coordinates"];
+      
+      var imgtype = {"float":img.toFloat(), 
+                     "byte":img.toByte(), 
+                     "int":img.toInt(),
+                     "double":img.toDouble(),
+                     "long": img.toLong(),
+                     "short": img.toShort(),
+                     "int8": img.toInt8(),
+                     "int16": img.toInt16(),
+                     "int32": img.toInt32(),
+                     "int64": img.toInt64(),
+                     "uint8": img.toUint8(),
+                     "uint16": img.toUint16(),
+                     "uint32": img.toUint32(),
+                    }
+      
+      Export.image.toDrive({
+        image:imgtype[type],
+        description: id,
+        folder: folder,
+        fileNamePrefix: id,
+        region: region,
+        scale: scale,
+        maxPixels: maxPixels})
+    }
+  }
