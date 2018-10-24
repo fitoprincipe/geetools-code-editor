@@ -6,9 +6,9 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 
-var Export = {}
+var Download = {}
 
-Export.ImageCollection = function(col, folder, options) {
+Download.ImageCollection = function(col, folder, options) {
     
     var defaults = {
       scale: 1000,
@@ -56,4 +56,4 @@ Export.ImageCollection = function(col, folder, options) {
     }
   }
   
-exports.Export = Export
+exports.Download = Download
