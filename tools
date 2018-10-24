@@ -11,6 +11,7 @@ var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
 // SCOPES
 var help = {};
 var string = {};
+var geometry = {};
 
 // INTERNAL
 var get_options = function(def, options) {
@@ -53,7 +54,7 @@ string.format = function(string, replacement) {
 exports.string = string
 
 // MASK OUT PIXELS INSIDE A GEOMETRY
-var mask_geometry = function(geometry) {
+geometry.mask_inside = function(geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
   
   var wrap = function(img) {
@@ -61,7 +62,7 @@ var mask_geometry = function(geometry) {
   }
   return wrap
 }
-exports.mask_geometry = mask_geometry
+exports.geometry = geometry
 
 // GET VALUE FROM A POINT
 var get_value = function(image, point, scale) {
