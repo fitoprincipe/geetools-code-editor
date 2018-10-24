@@ -38,6 +38,7 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
   }
   
   var defaults = {
+      name: null,
       scale: 1000,
       maxPixels: 1e13,
       region: null,
@@ -48,7 +49,7 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
     
   var colList = collection.toList(n);
   
-  var colID = collection.getInfo()['id'].replace('/','_') || "ImageCollection"
+  var colID = opt.name || collection.getInfo()['id'].replace('/','_') || "ImageCollection"
   
   for (var i = 0; i < n; i++) {
     var img = ee.Image(colList.get(i));
