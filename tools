@@ -172,6 +172,48 @@ image.sum_bands = function(name, bands, append_to_image) {
   return wrap
 }
 
+// SUFFIX TO BAND
+image.add_suffix = function(suffix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
+  var suf = ee.String(suffix)
+  var wrap = function(img) {
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, ee.String(band).cat(suf))
+    }, allbands)
+    newbands = ee.List(newbands)
+    return img.select(allbands, newbands)
+  }
+  return wrap
+}
+
+// PREFIX TO BAND
+image.add_prefix = function(prefix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
+  var suf = ee.String(prefix)
+  var wrap = function(img) {
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, suf.cat(ee.String(band)))
+    }, allbands)
+    newbands = ee.List(newbands)
+    return img.select(allbands, newbands)
+  }
+  return wrap
+}
+
 // MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
 var dict2image = function(bands) {
   // this is the same as doing ee.Dictionary().toImage()
@@ -358,50 +400,6 @@ var aggregate_properties = function(options) {
   return wrap
 }
 exports.aggregate_properties = aggregate_properties
-
-// SUFFIX TO BAND
-var add_suffix = function(suffix, bands) {
-  if (bands == undefined) {
-    var bands = null
-  } else {
-    var bands = ee.List(bands)
-  }
-  var suf = ee.String(suffix)
-  var wrap = function(img) {
-    var allbands = img.bandNames()
-    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
-    var newbands = bands_.iterate(function(band, first){
-      var all = ee.List(first)
-      return all.replace(band, ee.String(band).cat(suf))
-    }, allbands)
-    newbands = ee.List(newbands)
-    return img.select(allbands, newbands)
-  }
-  return wrap
-}
-exports.add_suffix = add_suffix
-
-// PREFIX TO BAND
-var add_prefix = function(prefix, bands) {
-  if (bands == undefined) {
-    var bands = null
-  } else {
-    var bands = ee.List(bands)
-  }
-  var suf = ee.String(prefix)
-  var wrap = function(img) {
-    var allbands = img.bandNames()
-    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
-    var newbands = bands_.iterate(function(band, first){
-      var all = ee.List(first)
-      return all.replace(band, suf.cat(ee.String(band)))
-    }, allbands)
-    newbands = ee.List(newbands)
-    return img.select(allbands, newbands)
-  }
-  return wrap
-}
-exports.add_prefix = add_prefix
 
 // Remove Layer
 // https://gis.stackexchange.com/questions/291199/google-earth-engine-remove-layer-from-the-layer-manager
