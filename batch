@@ -6,7 +6,26 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 
+var IMAGE_TYPES = function(img, type) {
+ var types = {  "float":img.toFloat(), 
+                "byte":img.toByte(), 
+                "int":img.toInt(),
+                "double":img.toDouble(),
+                "long": img.toLong(),
+                "short": img.toShort(),
+                "int8": img.toInt8(),
+                "int16": img.toInt16(),
+                "int32": img.toInt32(),
+                "int64": img.toInt64(),
+                "uint8": img.toUint8(),
+                "uint16": img.toUint16(),
+                "uint32": img.toUint32()}
+  
+  return types[type]
+}
+
 var Download = {'ImageCollection': {}}
+
 
 Download.ImageCollection.toDrive = function(col, folder, options) {
     
@@ -30,23 +49,10 @@ Download.ImageCollection.toDrive = function(col, folder, options) {
       var id = img.id().getInfo() || colID+'_image_'+i.toString();
       var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
-      var imgtype = {"float":img.toFloat(), 
-                     "byte":img.toByte(), 
-                     "int":img.toInt(),
-                     "double":img.toDouble(),
-                     "long": img.toLong(),
-                     "short": img.toShort(),
-                     "int8": img.toInt8(),
-                     "int16": img.toInt16(),
-                     "int32": img.toInt32(),
-                     "int64": img.toInt64(),
-                     "uint8": img.toUint8(),
-                     "uint16": img.toUint16(),
-                     "uint32": img.toUint32(),
-                    }
+      var imtype = IMAGE_TYPES(img, type)
       
       Export.image.toDrive({
-        image:imgtype[opt.type],
+        image: imtype,
         description: id,
         folder: folder,
         fileNamePrefix: id,
