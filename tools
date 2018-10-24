@@ -427,39 +427,6 @@ exports.removeLayer = removeLayer
 help['removeLayer'] = 'removeLayer(name):\n'+
                       'Remove a Layer from the Map by its name'
 
-// DEPRECATED
-var ExportCol = function(col, folder, scale, type,
-                         nimg, maxPixels, region) {
-    type = type || "float";
-    nimg = nimg || 500;
-    scale = scale || 1000;
-    maxPixels = maxPixels || 1e13;
-
-    var colList = col.toList(nimg);
-    var n = colList.size().getInfo();
-
-    for (var i = 0; i < n; i++) {
-      var img = ee.Image(colList.get(i));
-      var id = img.id().getInfo();
-      region = region || img.geometry().bounds().getInfo()["coordinates"];
-
-      var imgtype = {"float":img.toFloat(),
-                     "byte":img.toByte(),
-                     "int":img.toInt(),
-                     "double":img.toDouble()
-                    }
-
-      Export.image.toDrive({
-        image:imgtype[type],
-        description: id,
-        folder: folder,
-        fileNamePrefix: id,
-        region: region,
-        scale: scale,
-        maxPixels: maxPixels})
-    }
-  }
-  
 help['gitHub'] = 'https://github.com/fitoprincipe/geetools-code-editor'
 
 help['addLayerCol'] = 'addLayerCol()\n\n'+
