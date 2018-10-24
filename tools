@@ -8,7 +8,9 @@ Some tools
 
 var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
 
+// SCOPES
 var help = {};
+var string = {};
 
 // INTERNAL
 var get_options = function(def, options) {
@@ -25,6 +27,30 @@ var get_options = function(def, options) {
   return opt
 }
 exports.get_options = get_options
+
+// FORMAT STRING
+string.format = function(string, replacement) {
+  var str = ee.String(string)
+  var repl = ee.Dictionary(replacement)
+  var keys = repl.keys()
+  var values = repl.values()
+  var z = keys.zip(values)
+  
+  var newstr = z.iterate(function(kv, ini){
+    var keyval = ee.List(kv)
+    ini = ee.String(ini)
+    
+    var key = ee.String(keyval.get(0))
+    var value = ee.String(keyval.get(1))
+    
+    var pattern = ee.String('{').cat(key).cat(ee.String('}'))
+    
+    return ini.replace(pattern, value)
+    
+  }, str)
+  return ee.String(newstr)
+}
+exports.string = string
 
 // MASK OUT PIXELS INSIDE A GEOMETRY
 var mask_geometry = function(geometry) {
