@@ -10,11 +10,6 @@ var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
 
 var help = {};
 
-// SUB MODULES
-var satellite = require('users/fitoprincipe/geetools:satellite')
-exports.satellite = satellite
-
-
 // INTERNAL
 var get_options = function(def, options) {
   // fill options dict with default values if not present
