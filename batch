@@ -54,3 +54,5 @@ Export.ImageCollection = function(col, folder, region, options) {
         maxPixels: maxPixels})
     }
   }
+  
+exports.Export = Export
