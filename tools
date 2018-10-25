@@ -415,7 +415,8 @@ list.sequence = function(ini, end, step) {
     if (step === 0){
         step = 1
     }
-    var mod = ee.Number(end).mod(step)
+    var amplitude = end.subtract(ini)
+    var mod = amplitude.mod(step)
     var seq = ee.List.sequence(ini, end, step)
     var condition = mod.neq(0)
     var final = ee.Algorithms.If(condition, seq.add(end), seq)
