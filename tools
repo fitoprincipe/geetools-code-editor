@@ -435,6 +435,31 @@ list.removeDuplicates = function(list) {
   return ee.List(list.iterate(wrap, newlist));
 }
 
+// Intersection
+list.intersect = function(list1, list2) {
+  var newlist = ee.List([])
+    var wrap = function(element, first) {
+        first = ee.List(first)
+
+        return ee.Algorithms.If(list2.contains(element), first.add(element), first)
+    }
+    return ee.List(list1.iterate(wrap, newlist))
+}
+
+// Filter a list with a regex value
+list.filterRegex = function(list, regex, flags) {
+  list = ee.List(list)
+  var fl = flags || null
+  var i = ee.List([])
+  var f = list.iterate(function(el, first){
+    var f = ee.List(first)
+    var e = ee.String(el);
+    var matched = ee.List(e.match(regex, fl))
+    return ee.Algorithms.If(matched.size().gt(0), f.add(el), f)
+  }, i)
+  return ee.List(f)
+}
+
 /** DICTIONARIES */
 var dictionary = {};
 
