@@ -397,7 +397,7 @@ feature.aggregate = function(options) {
     
     var properties = list_alg.intersect(prop2use, propnames)
     
-    var values = feature_gets(feat, properties)
+    var values = feature.gets(feat, properties)
     
     var casted = values.map(function(el){return ee.Number(el)})
     
