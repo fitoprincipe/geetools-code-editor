@@ -410,6 +410,11 @@ list.intersection = function(list1, list2) {
     return ee.List(list1.iterate(wrap, newlist))
 }
 
+// Difference
+list.difference = function(list1, list2) {
+  return list1.removeAll(list2).add(list2.removeAll(list1)).flatten()
+}
+
 // Filter a list with a regex value
 list.filterRegex = function(list, regex, flags) {
   list = ee.List(list)
