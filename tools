@@ -366,7 +366,7 @@ feature.reduce = function(options) {
                             
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
     
-    var properties = list.intersect(prop2use, propnames)
+    var properties = list.intersection(prop2use, propnames)
     
     var values = feature.gets(feat, properties)
     
