@@ -408,7 +408,6 @@ var list = {};
 
 
 // Sequence
-
 list.sequence = function(ini, end, step) {
     var step = step || 1
     var end = ee.Number(end)
