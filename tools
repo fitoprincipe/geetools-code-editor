@@ -6,8 +6,6 @@
 Some tools
 */
 
-var list_alg = require('users/fitoprincipe/geetools:list_algorithms')
-
 var msg = "geetools ver. 0.1.0\n\n"+
 "If you code depends on this module, and has \n"+
 "stopped working, please contact \n"+
