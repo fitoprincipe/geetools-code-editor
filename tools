@@ -63,7 +63,7 @@ string.format = function(string, replacement) {
 var geometry = {};
 
 // mask out pixels inside a geometry (return a function for mapping)
-geometry.mask_inside = function(geometry) {
+geometry.maskInside = function(geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
   
   var wrap = function(img) {
@@ -123,14 +123,14 @@ geometry.paint = function(geometry, options) {
 var image = {};
 
 // get value from point
-image.get_value = function(image, point, scale) {
+image.getValue = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
   var result = image.reduceRegion(ee.Reducer.first(), point, sc);
   return result
 }
 
 // replace one band with another band
-image.replace_band = function(image, replace_band, add_band) {
+image.replaceBand = function(image, replace_band, add_band) {
     var band = add_band.select([0]);
     var bands = image.bandNames();
     var resto = bands.remove(replace_band);
@@ -140,7 +140,7 @@ image.replace_band = function(image, replace_band, add_band) {
 }
 
 // sum the specified bands
-image.sum_bands = function(name, bands, append_to_image) {
+image.sumBands = function(name, bands, append_to_image) {
   
   bands = bands || ee.List([]);
   name = name || 'sum_bands';
@@ -179,7 +179,7 @@ image.sum_bands = function(name, bands, append_to_image) {
 }
 
 // SUFFIX TO BAND
-image.add_suffix = function(suffix, bands) {
+image.addSuffix = function(suffix, bands) {
   if (bands == undefined) {
     var bands = null
   } else {
@@ -200,7 +200,7 @@ image.add_suffix = function(suffix, bands) {
 }
 
 // PREFIX TO BAND
-image.add_prefix = function(prefix, bands) {
+image.addPrefix = function(prefix, bands) {
   if (bands == undefined) {
     var bands = null
   } else {
@@ -346,7 +346,7 @@ number.random = function(start, end, type) {
 }
 
 // TRIM DECIMALS
-number.trim_decimals = function(places) {
+number.trimDecimals = function(places) {
   
   var factor = ee.Number(10).pow(ee.Number(places).toInt())
   
@@ -406,7 +406,6 @@ feature.aggregate = function(options) {
 /** LIST */
 var list = {};
 
-
 // Sequence
 list.sequence = function(ini, end, step) {
     var step = step || 1
@@ -423,6 +422,34 @@ list.sequence = function(ini, end, step) {
     return ee.List(final)
 }
 
+// Remove duplicate values
+list.removeDuplicates = function(list) {
+  var newlist = ee.List([]);
+  list = ee.List(list)
+  var wrap = function(element, init) {
+    init = ee.List(init);
+    var contained = init.contains(element);
+    
+    return ee.Algorithms.If(contained, init, init.add(element));
+  };
+  return ee.List(list.iterate(wrap, newlist));
+}
+
+/** DICTIONARIES */
+var dictionary = {};
+
+// Extract values from a list of keys
+dictionary.extractList = function(dict, list) {
+  var empty = ee.List([])
+  list = ee.List(list)
+  dict = ee.Dictionary(dict)
+  var values = ee.List(list.iterate(function(el, first) {
+    var f = ee.List(first)
+    var cond = dict.contains(el);
+    return ee.Algorithms.If(cond, f.add(dict.get(el)), f)
+  }, empty))
+  return values
+}
 
 /** MISC */
 
@@ -561,3 +588,4 @@ exports.map = map
 exports.number = number
 exports.feature = feature
 exports.list = list
+exports.dictionary = dictionary
