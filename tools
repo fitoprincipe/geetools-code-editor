@@ -403,6 +403,29 @@ feature.aggregate = function(options) {
   return wrap
 }
 
+/** LIST */
+var list = {};
+
+// Sequence
+list.sequence = function(ini, end, step=1) {
+    /* Create a sequence from ini to end by step. Similar to
+    ee.List.sequence, but if end != last item then adds the end to the end
+    of the resuting list
+    */
+    var end = ee.Number(end)
+    if (step === 0){
+        step = 1
+    }
+    var mod = ee.Number(end).mod(step)
+    var seq = ee.List.sequence(ini, end, step)
+    var condition = mod.neq(0)
+    var final = ee.Algorithms.If(condition, seq.add(end), seq)
+    
+    return ee.List(final)
+}
+
+
+
 /** MISC */
 
 // COMPUTE BITS
@@ -539,3 +562,4 @@ exports.image = image
 exports.map = map
 exports.number = number
 exports.feature = feature
+exports.list = list
