@@ -227,7 +227,7 @@ image.removeBands = function(image, bands) {
   var bands = ee.List(bands)
   
   var inter = list.intersection(bnames, bands)
-  var diff = list.difference(bnames, inter)
+  var diff = list.subtract(bnames, inter)
   
   return image.select(diff)
 }
@@ -420,8 +420,8 @@ list.intersection = function(list1, list2) {
     return ee.List(list1.iterate(wrap, newlist))
 }
 
-// Difference
-list.difference = function(list1, list2) {
+// Substract two lists
+list.subtract = function(list1, list2) {
   return list1.removeAll(list2).add(list2.removeAll(list1)).flatten()
 }
 
