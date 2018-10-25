@@ -229,17 +229,16 @@ var map = {};
 map.addImageCollection = function(col, options) {
   
   var fbands = ee.Image(col.first()).bandNames();
-  var def_viz = {bands: [fbands.get(0).getInfo(), 
-                         fbands.get(1).getInfo(), 
-                         fbands.get(2).getInfo()], min:0, max:1};
   
-  var def = {viz: def_viz, active: false, label:'ID'};
+  var def = {
+    vis: {bands: [fbands.get(0).getInfo(), 
+                  fbands.get(1).getInfo(), 
+                  fbands.get(2).getInfo()], min:0, max:1},
+    active: false,
+    label: 'system_id'
+  }
   
-  if (options !== undefined) {var opt = options} else {var opt = def}
-  
-  if (opt['viz'] !== undefined) {var viz = opt['viz']} else {var viz = def['viz']}
-  if (opt['active'] !== undefined) {var active = opt['active']} else {var active = def['active']}
-  if (opt['label'] !== undefined) {var label = opt['label']} else {var label = def['label']}
+  var opt = get_options(def, options)
   
   // var label = label;
   var n = col.size().getInfo();
@@ -247,20 +246,20 @@ map.addImageCollection = function(col, options) {
   // var active = active;
   for (var i = 0; i < n; i++) {
     var img = ee.Image(list.get(i));
-    if (label == "ID") {
+    if (opt.label == "system_id") {
       var id = img.id().getInfo();
-      var laylabel = label+" "+id;
-    } else if (label == "system_date") {
+      var laylabel = opt.label+" "+id;
+    } else if (opt.label == "system_date") {
       var date = img.date().format().getInfo()
       var laylabel = date;
-    } else if (img.propertyNames().contains(label).getInfo() === true) {
-      var p = img.get(label).getInfo();
-      var laylabel = label+" "+p
+    } else if (img.propertyNames().contains(opt.label).getInfo() === true) {
+      var p = img.get(opt.label).getInfo();
+      var laylabel = opt.label+" "+p
     } else {
-      print(label+" not found")
+      print(opt.label+" not found")
       var laylabel = "No. "+i.toString();
     }
-    Map.addLayer(img, viz, laylabel, active)
+    Map.addLayer(img, opt.vis, laylabel, opt.active)
   }
 }
 
