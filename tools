@@ -222,6 +222,16 @@ image.fromList = function(list, value) {
   return final.select(listt)
 }
 
+image.removeBands = function(image, bands) {
+  var bnames = image.bandNames()
+  var bands = ee.List(bands)
+  
+  var inter = list.intersection(bnames, bands)
+  var diff = list.difference(bnames, inter)
+  
+  return image.select(diff)
+}
+
 /** MAP */
 var map = {};
 
