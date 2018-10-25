@@ -423,7 +423,6 @@ list.sequence = function(ini, end, step) {
     return ee.List(final)
 }
 
-print(list.sequence(0,20,2))
 
 /** MISC */
 
