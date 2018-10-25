@@ -315,6 +315,48 @@ map.removeLayer = function(name) {
   }
 }
 
+/** NUMBER */
+var number = {};
+
+// RANDOM NUMBER
+number.random = function(start, end, type) {
+  var s = start || 0
+  var e = end || 1
+  var t = type || 'float'
+  
+  s = ee.Number(s)
+  e = ee.Number(e)
+  
+  var diff = e.subtract(s)
+  
+  var value = ee.Number(Math.random())
+  
+  var result = value.multiply(diff).add(s)
+  
+  if (t == 'float') {
+    return result}
+  else if (t == 'int') {
+    return result.toInt()
+    }
+}
+
+// TRIM DECIMALS
+number.trim_decimals = function(places) {
+  
+  var factor = ee.Number(10).pow(ee.Number(places).toInt())
+  
+  var wrap = function(number) {
+    var n = ee.Number(number)
+    
+    var floor = n.floor()
+    var decimals = n.subtract(floor)
+    var take = decimals.multiply(factor).toInt()
+    var newdecimals = take.toFloat().divide(factor)
+    return floor.add(newdecimals).toFloat()
+  }
+  return wrap
+}
+
 
 // COMPUTE BITS
 var computeQAbits = function(start, end, newName) {
@@ -342,47 +384,6 @@ var computeQAbits = function(start, end, newName) {
   return wrap
 }
 exports.computeQAbits = computeQAbits
-
-// RANDOM NUMBER
-var random_number = function(start, end, type) {
-  var s = start || 0
-  var e = end || 1
-  var t = type || 'float'
-  
-  s = ee.Number(s)
-  e = ee.Number(e)
-  
-  var diff = e.subtract(s)
-  
-  var value = ee.Number(Math.random())
-  
-  var result = value.multiply(diff).add(s)
-  
-  if (t == 'float') {
-    return result}
-  else if (t == 'int') {
-    return result.toInt()
-    }
-}
-exports.random_number = random_number
-
-// TRIM DECIMALS
-var trim_decimals = function(places) {
-  
-  var factor = ee.Number(10).pow(ee.Number(places).toInt())
-  
-  var wrap = function(number) {
-    var n = ee.Number(number)
-    
-    var floor = n.floor()
-    var decimals = n.subtract(floor)
-    var take = decimals.multiply(factor).toInt()
-    var newdecimals = take.toFloat().divide(factor)
-    return floor.add(newdecimals).toFloat()
-  }
-  return wrap
-}
-exports.trim_decimals = trim_decimals
 
 // GET FEATURE PROPERTY
 var feature_gets = function(feature, properties) {
@@ -528,3 +529,5 @@ exports.options = ee.Dictionary(help).keys()
 exports.geometry = geometry
 exports.string = string
 exports.image = image
+exports.map = map
+exports.number = number
