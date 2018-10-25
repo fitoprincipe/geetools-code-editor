@@ -143,45 +143,6 @@ image.replaceBand = function(image, replace_band, add_band) {
     return img_final
 }
 
-// sum the specified bands
-image.sumBands = function(name, bands, append_to_image) {
-  
-  bands = bands || ee.List([]);
-  name = name || 'sum_bands';
-  
-  var append;
-  switch (append_to_image) {
-    case undefined:
-        append = ee.Number(1);
-        break;
-    case true:
-        append = ee.Number(1);
-        break;
-    case false:
-        append = ee.Number(0);}
-  
-  // print(bands, name, append)
-  
-  var wrap = function(image) {
-        var bn = ee.Algorithms.If(bands, ee.List(bands), image.bandNames());
-        var nim = ee.Image(0).select([0], [name]);
-
-        // TODO: check if passed band names are in band names
-        var sumBandas = function(n, ini) {
-            return ee.Image(ini).add(image.select([n]))
-        }
-
-        var newimg = ee.Image(ee.List(bn).iterate(sumBandas, nim))
-        
-        var total = ee.Image(ee.Algorithms.If(append, 
-                                              image.addBands(newimg),
-                                              newimg))
-        
-        return total
-  }
-  return wrap
-}
-
 // SUFFIX TO BAND
 image.addSuffix = function(suffix, bands) {
   if (bands == undefined) {
