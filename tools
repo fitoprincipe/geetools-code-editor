@@ -340,7 +340,7 @@ feature.gets = function(feature, properties) {
 }
 
 // AGGREGATE PROPERTIES
-feature.aggregate = function(options) {
+feature.reduce = function(options) {
   var opt = options || {'reducer': 'mean',
                         'properties': ee.Number(0),
                         'name': 'reduction'}
