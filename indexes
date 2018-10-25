@@ -17,6 +17,7 @@ var custom_ndvi = function(NIR, RED) {
  }
  return wrap
 }
+exports.ndvi = custom_ndvi
 
 var custom_nbr = function(NIR, SWIR2) {
  var wrap = function(img) {
@@ -27,6 +28,7 @@ var custom_nbr = function(NIR, SWIR2) {
  }
  return wrap
 }
+exports.nbr = custom_nbr
 
 var custom_nbr2 = function(SWIR, SWIR2) {
  var wrap = function(img) {
@@ -37,6 +39,7 @@ var custom_nbr2 = function(SWIR, SWIR2) {
  }
  return wrap
 }
+exports.nbr2 = custom_nbr2
 
 var custom_evi = function(NIR, RED, BLUE) {
  var wrap = function(img) {
@@ -58,6 +61,7 @@ var custom_evi = function(NIR, RED, BLUE) {
  }
  return wrap
 }
+exports.evi = custom_evi
 
 var NDVI = {
  custom: custom_ndvi, 

@@ -1,0 +1,104 @@
+/* 
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Some batch useful tools
+*/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+
+var IMAGE_TYPES = function(img, type) {
+ var types = {  "float":img.toFloat(), 
+                "byte":img.toByte(), 
+                "int":img.toInt(),
+                "double":img.toDouble(),
+                "long": img.toLong(),
+                "short": img.toShort(),
+                "int8": img.toInt8(),
+                "int16": img.toInt16(),
+                "int32": img.toInt32(),
+                "int64": img.toInt64(),
+                "uint8": img.toUint8(),
+                "uint16": img.toUint16(),
+                "uint32": img.toUint32()}
+  
+  return types[type]
+}
+
+var Download = {'ImageCollection': {}}
+
+Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
+  var root = ee.data.getAssetRoots()[0]['id']
+  var folder = assetFolder
+  if (folder !== null && folder !== undefined) {
+    var assetFolder = root+'/'+folder+'/'
+  } else {
+    var assetFolder = root+'/'
+  }
+  
+  var defaults = {
+      name: null,
+      scale: 1000,
+      maxPixels: 1e13,
+      region: null,
+    }
+    
+  var opt = tools.get_options(defaults, options)
+  var n = collection.size().getInfo();
+    
+  var colList = collection.toList(n);
+  
+  var colID = opt.name || collection.getInfo()['id'].replace('/','_') || "ImageCollection"
+  
+  for (var i = 0; i < n; i++) {
+    var img = ee.Image(colList.get(i));
+    var id = img.id().getInfo() || 'image_'+i.toString();
+    var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
+    
+    Export.image.toAsset({
+      image: img,
+      description: id,
+      assetId: assetFolder+colID+'/'+id,
+      region: region,
+      scale: opt.scale,
+      maxPixels: opt.maxPixels})
+  }
+}
+
+Download.ImageCollection.toDrive = function(collection, folder, options) {
+    
+    var defaults = {
+      scale: 1000,
+      maxPixels: 1e13,
+      type: 'float',
+      region: null,
+    }
+    
+    var opt = tools.get_options(defaults, options)
+    
+    var n = collection.size().getInfo();
+    
+    var colList = collection.toList(n);
+    
+    var colID = collection.getInfo()['id'].replace('/','_') || ""
+    
+    for (var i = 0; i < n; i++) {
+      var img = ee.Image(colList.get(i));
+      var id = img.id().getInfo() || colID+'_image_'+i.toString();
+      var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
+      
+      var imtype = IMAGE_TYPES(img, opt.type)
+      
+      Export.image.toDrive({
+        image: imtype,
+        description: id,
+        folder: folder,
+        fileNamePrefix: id,
+        region: region,
+        scale: opt.scale,
+        maxPixels: opt.maxPixels})
+    }
+  }
+  
+exports.Download = Download

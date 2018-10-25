@@ -1,0 +1,390 @@
+/*
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Easy way to access common satellites (Landsat, Sentinel, MODIS) information
+*/
+
+var indexes = require('users/fitoprincipe/geetools:indexes')
+var cld = require('users/fitoprincipe/geetools:cloud_masks')
+
+var Landsat = function(number, process, sensor, tier) {
+  this.number = number;
+  this.process = process;
+  this.sensor = sensor;
+  
+  // TIER
+  if (tier === undefined || tier === null) {
+    this.tier = 1;
+  } else {
+    this.tier = tier;
+  }
+  
+  var numbers = [4, 5, 7, 8]
+  var processes = ['RAW', 'TOA', 'SR']
+  var sensors = ['TM', 'MSS', 'ETM', 'OLI']
+  var tiers = [1, 2]
+  
+  if (numbers.indexOf(number) === -1) {
+    print('Landsat '+number+' not available')
+    return null;
+  }
+  if (processes.indexOf(process) === -1) {
+    print('Landsat '+number+' '+process+' not available')
+    return null;
+  }
+  if (sensors.indexOf(sensor) === -1) {
+    print('Landsat sensor '+sensor+' not available')
+    return null;
+  }
+  if (tiers.indexOf(this.tier) === -1) {
+    print('Landsat tier '+this.tier+' not available')
+    return null;
+  }
+  
+  // SENSOR
+  switch (number) {
+    case 4: case 5:
+      if (sensor === undefined || sensor === null) {
+        this.sensor = 'TM'
+      }
+      break
+    case 7:
+      this.sensor = 'ETM'
+      break
+    case 8:
+      this.sensor = 'OLI'
+      break
+  }
+  
+  // IF SENSOR IS NOT AVAILABLE
+  switch (number) {
+    case 4: case 5:
+      if ((this.process === 'SR' || this.process === 'TOA') 
+          && this.sensor !== 'TM') {
+        print('Lansat '+this.number+' '+this.process+' has no sensor '+this.sensor)
+        print('Switching to TM..')
+        this.sensor = 'TM'
+      } 
+      else if (this.sensor !== 'TM' && this.sensor !== 'MSS') {
+        print('Lansat '+this.number+' has no sensor '+this.sensor)
+        print('Switching to TM..')
+        this.sensor = 'TM'
+      }
+      break
+    case 7:
+      if (this.sensor !== 'ETM') {
+        print('Lansat 7 has no sensor '+this.sensor)
+        print('Switching to ETM..')
+        this.sensor = 'ETM'
+      }
+      break
+    case 8:
+      if (this.sensor !== 'OLI') {
+        print('Lansat 8 has no sensor '+this.sensor)
+        print('Switching to OLI..')
+        this.sensor = 'OLI'
+      }
+      break
+  }
+  
+  // ID CONSTRUCTOR
+  var NUMBER = {
+    4: {'TM':'LT04', 'MSS':'LM04'}, 
+    5: {'TM':'LT05', 'MSS':'LM05'}, 
+    7: {'ETM':'LE07'}, 
+    8: {'OLI':'LC08'}
+  }
+  var TIER = {1: 'T1', 2: 'T2'}
+  var PROCESS = {'RAW': '', 'SR': '_SR', 'TOA': '_TOA'}
+  
+  // MAKE ID
+  this.id = 'LANDSAT/'+NUMBER[this.number][this.sensor]
+                      +'/C01/'+TIER[this.tier]
+                      +PROCESS[this.process]
+                      
+  this.collection = ee.ImageCollection(this.id)
+  
+  // BANDS by NUMBER
+  switch (this.number) {
+    case 4: case 5: case 7:
+      // by SENSOR
+      switch (this.sensor) {
+        case 'TM': case 'ETM':
+          this.band = {
+            'blue':'B1', 'green':'B2', 
+            'red':'B3', 'nir':'B4', 
+            'swir':'B5', 'swir2': 'B7'
+          }
+          break
+        case 'MSS':
+          this.band = {
+            'green': 'B1', 'red': 'B2', 
+            'nir': 'B3', 'nir2': 'B4'
+          }
+          break
+      }
+      break
+    case 8:
+      this.band = {
+        'ublue': 'B1', 'blue': 'B2', 'green': 'B3', 'red': 'B4',
+        'nir':'B5', 'swir':'B6', 'swir2':'B7', 'thermal':'B10', 'thermal2':'B11'
+      }
+      break
+  }
+  
+  // BANDS by PROCESS
+  switch (this.process) {
+    case 'SR':
+      this.band.pixel_qa = 'pixel_qa'
+      this.band.radsat_qa = 'radsat_qa'
+      switch (this.number) {
+        case 4: case 5: case 7:
+          this.band.atmos_opacity = 'sr_atmos_opacity'
+          this.band.cloud_qa = 'sr_cloud_qa'
+          this.band.thermal = 'B6'
+          break
+        case 8:
+          this.band.aerosol = 'sr_aerosol'
+          break
+      }
+      break
+    case 'TOA': case 'RAW':
+      this.band.bqa = 'BQA'
+      switch (this.number) {
+        case 4: case 5:
+          switch (this.sensor) {
+            case 'TM':
+              this.band.thermal = 'B6'
+              break
+          }
+          break
+        case 7: case 8:
+          this.band.pan = 'B8'
+          break
+      }
+      switch (this.number) {
+        case 7:
+          this.band.thermal1 = 'B6_VCID_1'
+          this.band.thermal2 = 'B6_VCID_2'
+          break
+        case 8:
+          this.band.cirrus = 'B9'
+          this.band.thermal = 'B10'
+          this.band.thermal2 = 'B11'
+          break
+      }
+      break
+  }
+  
+  // SCALE by NUMBER
+  switch (this.number) {
+    case 4: case 5:
+      // by SENSOR
+      switch (this.sensor) {
+        case 'TM':
+          this.scale = {
+            'blue':30, 'green':30, 
+            'red':30, 'nir':30, 
+            'swir':30, 'swir2':30, 
+            'thermal':120
+          }
+          break
+        case 'MSS':
+          this.scale = {
+            'green': 60, 'red': 60, 
+            'nir': 60, 'nir2': 60
+          }
+          break
+      }
+      break
+    case 7:
+      this.scale = {
+        'blue': 30, 'green': 30, 'red': 30,
+        'nir':30, 'swir':30, 'swir2':30,
+        'pan':15, 'thermal':100, 
+      }
+      break
+    case 8:
+      this.scale = {
+        'ublue': 30, 'blue': 30, 
+        'green': 30, 'red': 30,
+        'nir':30, 'swir':30, 'swir2':30,
+        'pan':15, 'thermal':100, 'thermal2':100
+      }
+      break
+  }
+  
+  // CLOUD COVER
+  this.cloud_cover = 'CLOUD_COVER'
+  
+  // BANDS RANGE
+  this.min = 0
+  switch (process) {
+    case ('RAW'):
+      this.max = 255
+      break
+    case ('TOA'):
+      this.max = 1
+      break
+    case ('SR'):
+      this.max = 10000
+      break
+  }
+  
+  // INDEXES
+  switch (number) {
+    case 4: case 5: case 7:
+      this.ndvi = indexes.NDVI.landsat457
+      this.evi = indexes.EVI.landsat457
+      this.nbr = indexes.NBR.landsat457
+      this.nbr2 = indexes.NBR2.landsat457
+      break
+    case 8:
+      this.ndvi = indexes.NDVI.landsat8
+      this.evi = indexes.EVI.landsat8
+      this.nbr = indexes.NBR.landsat8
+      this.nbr2 = indexes.NBR2.landsat8
+      break
+  }
+  
+  // CLOUD MASKS
+  switch (this.process) {
+    case 'SR':
+      this.cloud_masks = {'qa': cld.landsatSR}
+      break
+    case 'TOA': case 'RAW':
+      print(this.process)
+      this.cloud_masks = {'qa': cld.landsatTOA}
+      break
+  }
+  
+}
+exports.Landsat = Landsat
+
+var Sentinel = function(number) {
+  this.number = number
+  
+  var numbers = [2]
+  if (numbers.indexOf(number) === -1) {
+    print('Sentinel '+number+' not available')
+    return null;
+  }
+  
+  switch (number) {
+    case 2:
+      this.band = {
+        'aerosol': 'B1', 'blue': 'B2', 'green': 'B3', 'red':'B4',
+        'red_edge_1': 'B5', 'red_edge_2': 'B6', 'red_edge_3': 'B7',
+        'nir': 'B8', 'red_edge_4': 'B8A', 'vapor': 'B9', 'cirrus': 'B10',
+        'swir': 'B11', 'swir2': 'B12', 'qa': 'QA60'
+      }
+      this.scale = {
+        'aerosol': 60, 'blue': 10, 'green': 10, 'red':10,
+        'red_edge_1': 20, 'red_edge_2': 20, 'red_edge_3': 20,
+        'nir': 10, 'red_edge_4': 20, 'vapor': 60, 'cirrus': 60,
+        'swir': 20, 'swir2': 20, 'qa': 60
+      }
+      this.id = 'COPERNICUS/S2'
+      this.process = 'SR'
+      this.cloud_cover = 'CLOUD_COVERAGE_ASSESSMENT'
+      this.ndvi = indexes.NDVI.sentinel2
+      this.evi = indexes.EVI.sentinel2
+      this.nbr = indexes.NBR.sentinel2
+      this.nbr2 = indexes.NBR2.sentinel2
+      this.cloud_masks = {
+        'qa': cld.sentinel2, 
+        'hollstein': cld.hollstein_S2
+      }
+      this.min = 0
+      this.max = 10000
+      break
+  }
+  
+  this.collection = ee.ImageCollection(this.id)
+}
+exports.Sentinel = Sentinel
+
+var fromID = function(id) {
+  var list = id.split('/')
+  var sat = list[0]
+  if (sat === 'LANDSAT') {
+    var sensors = {'LT': 'TM', 'LM': 'MSS', 'LE': 'ETM', 'LC': 'OLI'}
+    var number_sensor = list[1]
+    var number = Number(number_sensor.substring(2,4))
+    var sensor = sensors[number_sensor.substring(0,2)]
+    var tier_process = list[3]
+    var tier = tier_process.split('_')[0].substring(1)
+    var process = tier_process.split('_')[1] || 'RAW'
+    return new Landsat(number, process, sensor, tier)
+  }
+  if (sat === 'COPERNICUS') {
+    if (list[1] === 'S1_GRD') {
+      return new Sentinel(1)
+    } else if (list[1] === 'S2') {
+      return new Sentinel(2)
+    } else if (list[1] === 'S3') {
+      return new Sentinel(3)
+    }
+  }
+}
+exports.fromID = fromID
+
+var fromCollection = function(collection) {
+  var id = collection.get('system:id').getInfo()
+  return fromID(id)
+}
+exports.fromCollection = fromCollection
+
+// TEST
+var test = function() {
+  var sats = [4,5,7,8]
+  var process = ['RAW', 'TOA', 'SR']
+  var sensors = ['TM', 'MSS', 'ETM', 'OLI']
+  var tiers = [1, 2]
+  
+  for (var s in sats) {
+    var sat = sats[s]
+    if (sat !== 4) { continue }
+    for (var p in process) {
+      var proc = process[p]
+      for (var se in sensors) {
+        var sen = sensors[se]
+        for (var t in tiers) {
+          var tie = tiers[t]
+          //
+          var satellite = new Landsat(sat, proc, sen, tie)
+          print(satellite.id)
+          var col = satellite.collection.limit(1)
+          var i = ee.Image(col.first())
+          var bands_dict = ee.Dictionary(satellite.bands)
+          var inverse = ee.Dictionary.fromLists(bands_dict.values(), bands_dict.keys())
+          var bands = bands_dict.values()
+          print(satellite.scale)
+          /*
+          var bands2 = i.bandNames()
+          var cont = bands2.containsAll(bands)
+          
+          if (cont.getInfo() === false) {
+            print('real', bands)
+            print('module', bands2)
+          }
+          
+          var ibands = bands.getInfo()
+          
+          for (var band in ibands) {
+            var b = ibands[band]
+            var name = inverse.get(b).getInfo()
+            print(b, name)
+            var ib = i.select(b)
+            var scale_real = ib.projection().nominalScale().getInfo()
+            var scale_mine = satellite.scale[name]
+            print(scale_real === scale_mine)
+          }*/
+        }
+      }
+    }
+    //break
+  }
+}
