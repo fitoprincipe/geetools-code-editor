@@ -12,7 +12,7 @@ var msg = "geetools ver. 1.0.0\n\n"+
 "If you code depends on this module, and has \n"+
 "stopped working, please contact \n"+
 "fitoprincipe82@gmail.com or visit \n"+
-"https://github.com/fitoprincipe/geetools-code-editor"
+"https://github.com/fitoprincipe/geetools-code-editor/wiki"
 
 print(msg)
 
