@@ -214,7 +214,7 @@ image.add_prefix = function(prefix, bands) {
 }
 
 // MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
-var dict2image = function(bands) {
+image.fromDict = function(bands) {
   // this is the same as doing ee.Dictionary().toImage()
   
   if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
@@ -234,10 +234,9 @@ var dict2image = function(bands) {
     }, ee.Image(0)))
   return final.select(bandnames)
 }
-exports.dict2image = dict2image
 
 // MAKE AN IMAGE FROM A LIST
-var list2image = function(list, value) {
+image.fromList = function(list, value) {
   if (value === undefined) {var val = 0} else {var val = value}
   var listt = ee.List(list)
   
@@ -250,7 +249,6 @@ var list2image = function(list, value) {
   }, ee.Image(0)))
   return final.select(listt)
 }
-exports.list2image = list2image
 
 /** MAP */
 var map = {};
@@ -357,6 +355,48 @@ number.trim_decimals = function(places) {
   return wrap
 }
 
+/** FEATURE */
+var feature = {};
+
+// GET FEATURE PROPERTY
+feature.gets = function(feature, properties) {
+  var list = ee.List(properties) || feature.propertyNames()
+  
+  var newlist = list.map(function(el){
+    return feature.get(el)
+  })
+  return newlist
+}
+
+// AGGREGATE PROPERTIES
+feature.aggregate = function(options) {
+  var opt = options || {'reducer': 'mean',
+                        'properties': ee.Number(0),
+                        'name': 'reduction'}
+                        
+  var reduc = opt['reducer'] || 'mean'
+  var prop = opt['properties'] || ee.Number(0)
+  var n = opt['name'] || 'reduction'
+  
+  var wrap = function(feat) {
+    
+    var propnames = feat.propertyNames().remove('system:index')
+                            
+    var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
+    
+    var properties = list_alg.intersect(prop2use, propnames)
+    
+    var values = feature_gets(feat, properties)
+    
+    var casted = values.map(function(el){return ee.Number(el)})
+    
+    return feat.set(n, ee.Number(casted.reduce(reduc)))
+  }
+  
+  return wrap
+}
+
+/** MISC */
 
 // COMPUTE BITS
 var computeQAbits = function(start, end, newName) {
@@ -384,46 +424,6 @@ var computeQAbits = function(start, end, newName) {
   return wrap
 }
 exports.computeQAbits = computeQAbits
-
-// GET FEATURE PROPERTY
-var feature_gets = function(feature, properties) {
-  var list = ee.List(properties) || feature.propertyNames()
-  
-  var newlist = list.map(function(el){
-    return feature.get(el)
-  })
-  return newlist
-}
-exports.feature_gets = feature_gets
-
-// AGGREGATE PROPERTIES
-var aggregate_properties = function(options) {
-  var opt = options || {'reducer': 'mean',
-                        'properties': ee.Number(0),
-                        'name': 'reduction'}
-                        
-  var reduc = opt['reducer'] || 'mean'
-  var prop = opt['properties'] || ee.Number(0)
-  var n = opt['name'] || 'reduction'
-  
-  var wrap = function(feat) {
-    
-    var propnames = feat.propertyNames().remove('system:index')
-                            
-    var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
-    
-    var properties = list_alg.intersect(prop2use, propnames)
-    
-    var values = feature_gets(feat, properties)
-    
-    var casted = values.map(function(el){return ee.Number(el)})
-    
-    return feat.set(n, ee.Number(casted.reduce(reduc)))
-  }
-  
-  return wrap
-}
-exports.aggregate_properties = aggregate_properties
 
 
 help['removeLayer'] = 'removeLayer(name):\n'+
@@ -531,3 +531,4 @@ exports.string = string
 exports.image = image
 exports.map = map
 exports.number = number
+exports.feature = feature
