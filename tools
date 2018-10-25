@@ -440,7 +440,7 @@ list.removeDuplicates = function(list) {
 }
 
 // Intersection
-list.intersect = function(list1, list2) {
+list.intersection = function(list1, list2) {
   var newlist = ee.List([])
     var wrap = function(element, first) {
         first = ee.List(first)
