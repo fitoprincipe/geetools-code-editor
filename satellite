@@ -329,11 +329,11 @@ var fromId = function(id) {
     }
   }
 }
-exports.fromID = fromID
+exports.fromId = fromId
 
 var fromCollection = function(collection) {
   var id = collection.get('system:id').getInfo()
-  return fromID(id)
+  return fromId(id)
 }
 exports.fromCollection = fromCollection
 
