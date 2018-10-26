@@ -306,7 +306,7 @@ var Sentinel = function(number) {
 }
 exports.Sentinel = Sentinel
 
-var fromID = function(id) {
+var fromId = function(id) {
   var list = id.split('/')
   var sat = list[0]
   if (sat === 'LANDSAT') {
