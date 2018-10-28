@@ -388,4 +388,3 @@ var test = function() {
     //break
   }
 }
-test()
