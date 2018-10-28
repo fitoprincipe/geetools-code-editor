@@ -26,6 +26,21 @@ var Landsat = function(number, process, sensor, tier) {
   var sensors = ['TM', 'MSS', 'ETM', 'OLI']
   var tiers = [1, 2]
   
+  // SENSOR
+  switch (number) {
+    case 4: case 5:
+      if (sensor === undefined || sensor === null) {
+        this.sensor = 'TM'
+      }
+      break
+    case 7:
+      this.sensor = 'ETM'
+      break
+    case 8:
+      this.sensor = 'OLI'
+      break
+  }
+  
   if (numbers.indexOf(number) === -1) {
     print('Landsat '+number+' not available')
     return null;
@@ -41,21 +56,6 @@ var Landsat = function(number, process, sensor, tier) {
   if (tiers.indexOf(this.tier) === -1) {
     print('Landsat tier '+this.tier+' not available')
     return null;
-  }
-  
-  // SENSOR
-  switch (number) {
-    case 4: case 5:
-      if (sensor === undefined || sensor === null) {
-        this.sensor = 'TM'
-      }
-      break
-    case 7:
-      this.sensor = 'ETM'
-      break
-    case 8:
-      this.sensor = 'OLI'
-      break
   }
   
   // IF SENSOR IS NOT AVAILABLE
@@ -388,3 +388,4 @@ var test = function() {
     //break
   }
 }
+test()
