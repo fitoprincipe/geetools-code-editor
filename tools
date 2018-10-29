@@ -12,7 +12,7 @@ var msg = "geetools ver. 0.1.0\n\n"+
 "fitoprincipe82@gmail.com or visit \n"+
 "https://github.com/fitoprincipe/geetools-code-editor/wiki"
 
-print(msg)
+//print(msg)
 
 var version = "0.1.0";
 exports.version = version
