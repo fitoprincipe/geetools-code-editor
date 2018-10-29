@@ -260,6 +260,23 @@ var Landsat = function(number, process, sensor, tier) {
       break
   }
   
+  // VISAULIZATION
+  this.vis = {};
+  this.vis.NSR = {
+    bands:[this.band.nir, this.band.swir, this.band.red],
+    min: 0,
+    max: this.max/2
+  }
+  this.vis.RGB = {
+    bands:[this.band.red, this.band.green, this.band.blue],
+    min: 0,
+    max: this.max/3
+  }
+  this.vis.falseColor = {
+    bands:[this.band.nir, this.band.red, this.band.green],
+    min: 0,
+    max: this.max/2
+  }
 }
 exports.Landsat = Landsat
 
@@ -274,12 +291,14 @@ var Sentinel = function(number) {
   
   switch (number) {
     case 2:
+      // BANDS
       this.band = {
         'aerosol': 'B1', 'blue': 'B2', 'green': 'B3', 'red':'B4',
         'red_edge_1': 'B5', 'red_edge_2': 'B6', 'red_edge_3': 'B7',
         'nir': 'B8', 'red_edge_4': 'B8A', 'vapor': 'B9', 'cirrus': 'B10',
         'swir': 'B11', 'swir2': 'B12', 'qa': 'QA60'
       }
+      // SCALES
       this.scale = {
         'aerosol': 60, 'blue': 10, 'green': 10, 'red':10,
         'red_edge_1': 20, 'red_edge_2': 20, 'red_edge_3': 20,
@@ -299,6 +318,25 @@ var Sentinel = function(number) {
       }
       this.min = 0
       this.max = 10000
+      
+      // VISAULIZATION
+      this.vis = {};
+      this.vis.NSR = {
+        bands:[this.band.nir, this.band.swir, this.band.red],
+        min: 0,
+        max: this.max/2
+      }
+      this.vis.RGB = {
+        bands:[this.band.red, this.band.green, this.band.blue],
+        min: 0,
+        max: this.max/3
+      }
+      this.vis.falseColor = {
+        bands:[this.band.nir, this.band.red, this.band.green],
+        min: 0,
+        max: this.max/2
+      }
+      
       break
   }
   
