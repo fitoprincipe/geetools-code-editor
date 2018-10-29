@@ -89,8 +89,6 @@ var Landsat = function(number, process, sensor, tier) {
       break
   }
   
-  print(this.number,this.process, this.sensor, this.tier)
-  
   // ID CONSTRUCTOR
   var NUMBER = {
     4: {'TM':'LT04', 'MSS':'LM04'}, 
