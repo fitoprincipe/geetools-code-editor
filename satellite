@@ -53,7 +53,6 @@ var Landsat = function(number, process, sensor, tier) {
     print('Landsat sensor '+sensor+' not available')
     return null;
   }
-  print('tiers', tiers, 'tier', this.tier, 'index', tiers.indexOf(this.tier))
   if (tiers.indexOf(this.tier) === -1) {
     print('Landsat tier '+this.tier+' not available')
     return null;
