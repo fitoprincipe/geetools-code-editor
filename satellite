@@ -352,16 +352,11 @@ var fromId = function(id) {
     var sensors = {'LT': 'TM', 'LM': 'MSS', 'LE': 'ETM', 'LC': 'OLI'}
     var number_sensor = list[1]
     var number = Number(number_sensor.substring(2,4))
-    print('number', number)
     var sensor = sensors[number_sensor.substring(0,2)]
-    print('sensor', sensor)
     var tier_process = list[3]
-    print('tier process',tier_process)
     var tier = tier_process.split('_')[0].substring(1)
-    print('tier', tier)
     var process = tier_process.split('_')[1] || 'RAW'
-    print('process', process)
-    return new Landsat(number, process, sensor, tier)
+    return new Landsat(number, process, sensor, Number(tier))
   }
   if (sat === 'COPERNICUS') {
     if (list[1] === 'S1_GRD') {
