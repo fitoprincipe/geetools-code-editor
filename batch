@@ -49,7 +49,8 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
     
   var colList = collection.toList(n);
   
-  var colID = opt.name || collection.getInfo()['id'].replace('/','_') || "ImageCollection"
+  var colID = opt.name || collection.getInfo()['id'] || "ImageCollection"
+  colID = colID.replace('/','_')
   
   for (var i = 0; i < n; i++) {
     var img = ee.Image(colList.get(i));
@@ -73,6 +74,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       maxPixels: 1e13,
       type: 'float',
       region: null,
+      name: null,
     }
     
     var opt = tools.get_options(defaults, options)
@@ -81,7 +83,8 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var colList = collection.toList(n);
     
-    var colID = collection.getInfo()['id'].replace('/','_') || ""
+    var colID = name || collection.getInfo()['id'] || ""
+    colID = colID.replace('/','_')
     
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
