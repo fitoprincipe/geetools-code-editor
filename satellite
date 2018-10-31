@@ -255,7 +255,7 @@ var Landsat = function(number, process, sensor, tier) {
       this.cloud_masks = {'qa': cld.landsatSR}
       break
     case 'TOA': case 'RAW':
-      print(this.process)
+      //print(this.process)
       this.cloud_masks = {'qa': cld.landsatTOA}
       break
   }
