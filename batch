@@ -8,6 +8,16 @@ Some batch useful tools
 
 var tools = require('users/fitoprincipe/geetools:tools')
 
+// TASK CLASS
+var Task = function(taskId, config) {
+  this.id = taskId
+  this.config = config
+}
+
+Task.prototype.start = function() {
+    ee.data.startProcessing(this.id, this.config)
+}
+
 var IMAGE_TYPES = function(img, type) {
  var types = {  "float":img.toFloat(), 
                 "byte":img.toByte(), 
@@ -103,5 +113,23 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         maxPixels: opt.maxPixels})
     }
   }
+  
+Download.Table.toAsset = function(collection, options) {
+  var def = {
+    description: 'myExportTableTask',
+    assetId: null
+  }
+  var opt = tools.get_options(def, options)
+  
+  var full_config = {
+      'type': 'EXPORT_FEATURES',
+      'json': collection.serialize(),
+      'description': opt.description,
+      'state': 'UNSUBMITTED',
+  }
+  full_config.assetId = opt.assetId
+  var task = new Task(ee.data.newTaskId()[0], full_config)
+  return task
+}
   
 exports.Download = Download
