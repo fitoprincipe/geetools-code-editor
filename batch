@@ -36,7 +36,7 @@ var IMAGE_TYPES = function(img, type) {
   return types[type]
 }
 
-var Download = {'ImageCollection': {}}
+var Download = {'ImageCollection': {}, 'Table': {}}
 
 Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
   var root = ee.data.getAssetRoots()[0]['id']
