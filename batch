@@ -93,7 +93,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var colList = collection.toList(n);
     
-    var colID = name || collection.getInfo()['id'] || ""
+    var colID = opt.name || collection.getInfo()['id'] || ""
     colID = colID.replace('/','_')
     
     for (var i = 0; i < n; i++) {
