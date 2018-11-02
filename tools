@@ -628,3 +628,4 @@ exports.number = number
 exports.feature = feature
 exports.list = list
 exports.dictionary = dictionary
+exports.featureCollection = featureCollection
