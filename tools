@@ -350,13 +350,25 @@ number.trimDecimals = function(places) {
   return wrap
 }
 
+/** FEATURECOLLECTION **/
+var featureCollection = {};
+
+// GET UNIQUE PROPERTY VALUES
+featureCollection.propertyValues = function(collection, property) {
+  var collist = collection.toList(collection.size())
+  var newlist = collist.map(function(feat){
+    return ee.Feature(feat).get(property)
+  }).removeAll([null])
+  return newlist
+}
+
+
 /** FEATURE */
 var feature = {};
 
 // GET FEATURE PROPERTY
 feature.gets = function(feature, properties) {
   var list = ee.List(properties) || feature.propertyNames()
-  
   var newlist = list.map(function(el){
     return feature.get(el)
   })
@@ -374,17 +386,11 @@ feature.reduce = function(options) {
   var n = opt['name'] || 'reduction'
   
   var wrap = function(feat) {
-    
     var propnames = feat.propertyNames().remove('system:index')
-                            
     var prop2use = ee.List(ee.Algorithms.If(prop, prop, propnames))
-    
     var properties = list.intersection(prop2use, propnames)
-    
     var values = feature.gets(feat, properties)
-    
     var casted = values.map(function(el){return ee.Number(el)})
-    
     return feat.set(n, ee.Number(casted.reduce(reduc)))
   }
   
