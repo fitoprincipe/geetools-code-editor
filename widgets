@@ -22,15 +22,15 @@ var ClosePanel = function(options) {
   
   this.opt = tools.get_options(def, options)
   
-  this.style = this.opt.style
-  this.widgets = this.opt.widgets
+  this.inner_style = this.opt.style
+  this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
   this.backgroundColor = this.opt.backgroundColor
   
   this.inner = ui.Panel({
-    widgets: this.widgets,
+    widgets: this.inner_widgets,
     layout: this.layout,
-    style: this.style
+    style: this.inner_style
   })
   
   this.closeButton = ui.Button({
@@ -55,8 +55,8 @@ var ClosePanel = function(options) {
   this.insert = function(index, widget) {this.inner.insert(index, widget)}
   this.remove = function(widget) {this.inner.remove(widget)}
   this.setLayout = function(layout) {this.inner.setLayout(layout)}
-  //this.style = function() {return this.inner.style()}
-  //this.widgets = function() {return this.inner.widgets()}
+  this.style = function() {return this.inner.style()}
+  this.widgets = function() {return this.inner.widgets()}
 }
 
 ClosePanel.prototype.close = function() {
