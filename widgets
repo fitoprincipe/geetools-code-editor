@@ -9,6 +9,8 @@ var tools = require('users/fitoprincipe/geetools:tools')
 
 var ClosePanel = function(options) {
   
+  this.name = 'ClosePanel'
+  
   var def = {
     style: {
       backgroundColor: 'white',
