@@ -1,0 +1,78 @@
+/***
+ * Custom Widgets
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * Licence: MIT
+ ***/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+
+var ClosePanel = function(options) {
+  
+  var def = {
+    style: {
+      backgroundColor: 'white',
+      margin: 0,
+      shown: true
+    },
+    widgets: [],
+    layout: ui.Panel.Layout.flow('vertical'),
+    backgroundColor: 'white'
+  }
+  
+  this.opt = tools.get_options(def, options)
+  
+  this.style = this.opt.style
+  this.widgets = this.opt.widgets
+  this.layout = this.opt.layout
+  this.backgroundColor = this.opt.backgroundColor
+  
+  this.inner = ui.Panel({
+    widgets: this.widgets,
+    layout: this.layout,
+    style: this.style
+  })
+  
+  this.closeButton = ui.Button({
+    label: 'X',
+    onClick: this.close(),
+  })
+  
+  this.shell = ui.Panel({
+    widgets: [this.closeButton, this.inner],
+    style: {
+      border: '1px solid black',
+      backgroundColor: this.backgroundColor
+    }
+  })
+  
+  this.parent = null
+  
+  // Inherit methods
+  this.add = function(widget) {this.shell.add(widget)}
+  this.clear = function() {this.shell.clear()}
+  this.getLayout = function() {this.shell.getLayout()}
+  this.insert = function(index, widget) {this.shell.insert(index, widget)}
+  this.remove = function(widget) {this.shell.remove(widget)}
+  this.setLayout = function(layout) {this.shell.setLayout(layout)}
+  this.style = function() {return this.shell.style()}
+  this.widgets = function() {return this.shell.widgets()}
+}
+
+ClosePanel.prototype.close = function() {
+  var panel = this
+  var wrap = function() {
+    var wids = panel.parent.widgets()
+    wids.remove(panel.shell)
+  }
+  return wrap
+}
+
+ClosePanel.prototype.build = function() {
+  return this.shell
+}
+
+ClosePanel.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+}
