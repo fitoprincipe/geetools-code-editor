@@ -11,13 +11,16 @@ var ClosePanel = function(options) {
   
   this.name = 'ClosePanel'
   
-  var def = {
-    style: {
+  var def_style = {
       backgroundColor: 'white',
       margin: 0,
       shown: true,
       position: 'top-center'
-    },
+    }
+    
+  var opt_style = tools.get_options(def_style, options.style)
+  
+  var def = {
     widgets: [],
     layout: ui.Panel.Layout.flow('vertical'),
     backgroundColor: 'white'
@@ -108,4 +111,4 @@ var test = function() {
   closepanel.addTo(testPanel)
   Map.add(testPanel)
 }
-//test()
+test()
