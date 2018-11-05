@@ -42,7 +42,7 @@ var ClosePanel = function(options) {
   
   this.closeButton = ui.Button({
     label: 'X',
-    onClick: this.close(),
+    onClick: this.close()
   })
   
   this.shell = ui.Panel({
