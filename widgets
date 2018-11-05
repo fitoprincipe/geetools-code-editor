@@ -76,3 +76,5 @@ ClosePanel.prototype.addTo = function(widget) {
   widget.add(this.build())
   this.parent = widget
 }
+
+exports.ClosePanel = ClosePanel
