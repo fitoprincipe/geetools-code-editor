@@ -78,3 +78,29 @@ ClosePanel.prototype.addTo = function(widget) {
 }
 
 exports.ClosePanel = ClosePanel
+
+var test = function() {
+  var closepanel = new ClosePanel({
+    widgets: [ui.Label('Hello'), ui.Button('Click'), ui.Select()],
+    layout: ui.Panel.Layout.flow('horizontal'),
+    style: {
+      height: '200px',
+      backgroundColor: 'red'
+    },
+    backgroundColor: 'blue'
+  })
+  
+  //closepanel.addTo(Map)
+  
+  var testPanel = ui.Panel({
+    style: {
+      width: '500px',
+      height: '500px'
+    }
+  })
+  
+  closepanel.addTo(testPanel)
+  Map.add(testPanel)
+}
+
+//test()
