@@ -49,14 +49,14 @@ var ClosePanel = function(options) {
   this.parent = null
   
   // Inherit methods
-  this.add = function(widget) {this.shell.add(widget)}
-  this.clear = function() {this.shell.clear()}
-  this.getLayout = function() {this.shell.getLayout()}
-  this.insert = function(index, widget) {this.shell.insert(index, widget)}
-  this.remove = function(widget) {this.shell.remove(widget)}
-  this.setLayout = function(layout) {this.shell.setLayout(layout)}
-  this.style = function() {return this.shell.style()}
-  this.widgets = function() {return this.shell.widgets()}
+  this.add = function(widget) {this.inner.add(widget)}
+  this.clear = function() {this.inner.clear()}
+  this.getLayout = function() {this.inner.getLayout()}
+  this.insert = function(index, widget) {this.inner.insert(index, widget)}
+  this.remove = function(widget) {this.inner.remove(widget)}
+  this.setLayout = function(layout) {this.inner.setLayout(layout)}
+  this.style = function() {return this.inner.style()}
+  this.widgets = function() {return this.inner.widgets()}
 }
 
 ClosePanel.prototype.close = function() {
