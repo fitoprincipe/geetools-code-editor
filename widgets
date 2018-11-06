@@ -72,14 +72,14 @@ ClosePanel.prototype.closeCallback = function() {
   var wrap = function() {
     var wids = panel.parent.widgets()
     wids.remove(panel.shell)
-    return panel
+    //return panel
   }
   return wrap
 }
 
 ClosePanel.prototype.close = function() {
-  var panel = this.closeCallback()()
-  return panel
+  this.closeCallback()()
+  //return panel
 }
 
 ClosePanel.prototype.build = function() {
