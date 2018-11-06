@@ -42,7 +42,7 @@ var ClosePanel = function(options) {
   
   this.closeButton = ui.Button({
     label: 'X',
-    onClick: this.close()
+    onClick: this.closeCallback()
   })
   
   this.shell = ui.Panel({
@@ -67,13 +67,19 @@ var ClosePanel = function(options) {
   this.widgets = function() {return this.inner.widgets()}
 }
 
-ClosePanel.prototype.close = function() {
+ClosePanel.prototype.closeCallback = function() {
   var panel = this
   var wrap = function() {
     var wids = panel.parent.widgets()
     wids.remove(panel.shell)
+    return panel
   }
   return wrap
+}
+
+ClosePanel.prototype.close = function() {
+  var panel = this.closeCallback()()
+  return panel
 }
 
 ClosePanel.prototype.build = function() {
