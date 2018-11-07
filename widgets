@@ -18,12 +18,17 @@ var ClosePanel = function(options) {
       position: 'top-center'
     }
     
-  var opt_style = tools.get_options(def_style, options.style)
+  if (options.style) {
+    var opt_style = tools.get_options(def_style, options.style)
+  } else {
+    var opt_style = def_style
+  }
   
   var def = {
     widgets: [],
     layout: ui.Panel.Layout.flow('vertical'),
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    style: opt_style
   }
   
   this.opt = tools.get_options(def, options)
@@ -32,9 +37,8 @@ var ClosePanel = function(options) {
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
   this.backgroundColor = this.opt.backgroundColor
-  //this.position = this.opt.style.position
-  print(this.opt_style)
-  this.position = this.opt_style.position
+  this.position = this.opt.style.position
+  //this.position = this.opt_style.position
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
@@ -102,7 +106,8 @@ var test = function() {
     layout: ui.Panel.Layout.flow('horizontal'),
     style: {
       height: '200px',
-      backgroundColor: 'red'
+      backgroundColor: 'red',
+      position: 'top-left'
     },
     backgroundColor: 'blue'
   })
@@ -120,3 +125,12 @@ var test = function() {
   Map.add(testPanel)
 }
 //test()
+
+var test2 = function() {
+  var panel = new ClosePanel({
+    widgets:[ui.Label('Hello'), ui.Button('World')],
+    style: {position: 'top-left'}
+  })
+  panel.addTo(Map)
+}
+//test2()
