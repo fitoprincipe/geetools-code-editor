@@ -34,44 +34,4 @@ var FeatureCollection = function(collection) {
     this.collection = newft
   }
 }
-
-/*
-var FeatureCollection = function(collection) {
-  this.originalCollection = collection
-  this.size = this.originalCollection.size().getInfo()
-  
-  this.set = function(feature, key, value) {
-    var id = feature.id().getInfo()
-    for (var i in this.listCollection) {
-      var mutable = this.listCollection[i]
-      var mutid = mutable.id
-      if (mutid === id) {
-        mutable.set(key, value)
-      }
-    }
-  }
-  
-  this.init = function() {
-    var output = []
-    var flist = this.originalCollection.toList(this.size)
-    for (var i=0; i<this.size; i++) {
-      var feat = ee.Feature(flist.get(i))
-      var mut = new Feature(feat)
-      output.push(mut)
-    }
-    return output
-  }
-  
-  this.listCollection = this.init()
-  
-  this.featureCollection = function() {
-    var mutablelist = this.listCollection
-    var featlist = []
-    for (var mut in mutablelist) {
-      var mutable = mutablelist[mut]
-      featlist.push(mutable.feature)
-    }
-    return ee.FeatureCollection(featlist)
-  }
-}*/
 exports.FeatureCollection = FeatureCollection
