@@ -6,6 +6,7 @@
  * email: fitoprincipe82@gmail.com
  * licence: MIT
  ****************/
+var tools = require('users/fitoprincipe/geetools:tools')
 
 var Feature = function(feature) {
   this.feature = feature
@@ -24,6 +25,11 @@ var FeatureCollection = function(collection) {
   
   this.set = function(feature, property, value) {
     var fid = feature.id()
+    print(tools.string.format(ee.String('setting {p} to {v} of {f}'), {
+      p: property,
+      v: value,
+      f: fid.getInfo()
+    }))
     var newft = this.collection.map(function(feat) {
       feat = ee.Feature(feat)
       var featid = feat.id()
