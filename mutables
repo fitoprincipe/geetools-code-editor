@@ -20,6 +20,22 @@ var Feature = function(feature) {
 exports.Feature = Feature
 
 var FeatureCollection = function(collection) {
+  this.collection = collection
+  
+  this.set = function(feature, key, value) {
+    var fid = feature.id()
+    var newft = this.collection.map(function(feat) {
+      feat = ee.Feature(feat)
+      var featid = feat.id()
+      var cond = fid.compareTo(featid).eq(0)
+      return ee.Feature(ee.Algorithms.If(cond, feat.set(key, val), feat))
+    })
+    this.collection = newft
+  }
+}
+
+/*
+var FeatureCollection = function(collection) {
   this.originalCollection = collection
   this.size = this.originalCollection.size().getInfo()
   
@@ -56,5 +72,5 @@ var FeatureCollection = function(collection) {
     }
     return ee.FeatureCollection(featlist)
   }
-}
+}*/
 exports.FeatureCollection = FeatureCollection
