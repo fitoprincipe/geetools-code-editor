@@ -15,7 +15,7 @@ var Feature = function(feature) {
   this.get = function(property) {
     return this.feature.get(property)
   }
-  this.id = this.feature.id().getInfo()
+  this.id = this.feature.id()
 }
 exports.Feature = Feature
 
