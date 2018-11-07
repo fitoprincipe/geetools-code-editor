@@ -32,7 +32,8 @@ var ClosePanel = function(options) {
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
   this.backgroundColor = this.opt.backgroundColor
-  this.position = this.opt.style.position || 'top-center'
+  //this.position = this.opt.style.position
+  this.position = this.opt_style.position
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
