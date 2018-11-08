@@ -106,6 +106,12 @@ ClosePanel.prototype.addTo = function(widget) {
   return widget
 }
 
+ClosePanel.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
+
 exports.ClosePanel = ClosePanel
 
 var test = function() {
@@ -125,13 +131,15 @@ var test = function() {
   //closepanel.addTo(Map)
   
   var testPanel = ui.Panel({
+    widgets: [ui.Label('in Parent label'), ui.Button('in parent button')],
     style: {
       width: '500px',
       height: '500px'
     }
   })
   
-  closepanel.addTo(testPanel)
+  //closepanel.addTo(testPanel)
+  closepanel.insertTo(testPanel, 1)
   Map.add(testPanel)
 }
 //test()
