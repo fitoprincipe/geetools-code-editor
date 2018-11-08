@@ -16,6 +16,7 @@ var ClosePanel = function(options) {
       margin: 0,
       shown: true,
       position: 'top-center',
+      stretch: 'horizontal'
     }
     
   if (options.style) {
