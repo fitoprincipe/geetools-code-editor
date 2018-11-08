@@ -11,41 +11,51 @@ var ClosePanel = function(options) {
   
   this.name = 'ClosePanel'
   
-  var def_style = {
+  // OUTTER STYLE
+  var def_outter_style = {
       backgroundColor: 'white',
       margin: 0,
       shown: true,
       position: 'top-center',
-      stretch: 'horizontal'
+      border: '1px solid black'
     }
     
   if (options.style) {
-    var opt_style = tools.get_options(def_style, options.style)
+    var opt_outter_style = tools.get_options(def_outter_style, options.style)
   } else {
-    var opt_style = def_style
+    var opt_outter_style = def_outter_style
+  }
+  
+  // INNER STYLE
+  var def_inner_style = {
+      backgroundColor: opt_outter_style.backgroundColor,
+      margin: 0,
+      shown: true,
+      position: 'top-center'
+    }
+    
+  if (options.inner_style) {
+    var opt_inner_style = tools.get_options(def_inner_style, options.inner_style)
+  } else {
+    var opt_inner_style = def_inner_style
   }
   
   var def = {
     widgets: [],
     layout: ui.Panel.Layout.flow('vertical'),
-    backgroundColor: 'white',
-    border: '1px solid black',
-    style: opt_style
   }
   
   this.opt = tools.get_options(def, options)
+  this.opt.style = opt_outter_style
+  this.opt.inner_style = opt_inner_style
   
-  this.inner_style = this.opt.style
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
-  this.backgroundColor = this.opt.backgroundColor
-  this.position = this.opt.style.position
-  this.border = this.opt.border
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
     layout: this.layout,
-    style: this.inner_style
+    style: this.opt.inner_style
   })
   
   this.closeButton = ui.Button({
@@ -53,13 +63,9 @@ var ClosePanel = function(options) {
     onClick: this.closeCallback()
   })
   
-  this.shell = ui.Panel({
+  this.outter = ui.Panel({
     widgets: [this.closeButton, this.inner],
-    style: {
-      border: this.border,
-      backgroundColor: this.backgroundColor,
-      position: this.position
-    }
+    style: this.opt.style
   })
   
   this.parent = null
@@ -79,7 +85,7 @@ ClosePanel.prototype.closeCallback = function() {
   var panel = this
   var wrap = function() {
     var wids = panel.parent.widgets()
-    wids.remove(panel.shell)
+    wids.remove(panel.outter)
     //return panel
   }
   return wrap
@@ -91,7 +97,7 @@ ClosePanel.prototype.close = function() {
 }
 
 ClosePanel.prototype.build = function() {
-  return this.shell
+  return this.outter
 }
 
 ClosePanel.prototype.addTo = function(widget) {
@@ -109,9 +115,11 @@ var test = function() {
     style: {
       height: '200px',
       backgroundColor: 'red',
-      position: 'top-left'
+      position: 'bottom-left'
     },
-    backgroundColor: 'blue'
+    inner_style: {
+      //backgroundColor: 'blue',
+    }
   })
   
   //closepanel.addTo(Map)
@@ -131,7 +139,11 @@ var test = function() {
 var test2 = function() {
   var panel = new ClosePanel({
     widgets:[ui.Label('Hello'), ui.Button('World')],
-    style: {position: 'top-left'}
+    style: {position: 'bottom-left'},
+    inner_style: {
+      border: '1px solid black'
+    },
+    layout: ui.Panel.Layout.flow('horizontal')
   })
   panel.addTo(Map)
 }
