@@ -24,14 +24,7 @@ var FeatureCollection = function(collection) {
   this.collection = collection
   
   this.set = function(feature, property, value) {
-    var fid = feature.id()
-    
-    /*print(tools.string.format(ee.String('setting {p} to {v} of {f}'), {
-      p: property,
-      v: value,
-      f: fid.getInfo()
-    }))*/
-    
+    var fid = feature.id() // string
     var newft = this.collection.map(function(feat) {
       feat = ee.Feature(feat)
       var featid = feat.id()
@@ -41,5 +34,12 @@ var FeatureCollection = function(collection) {
     })
     this.collection = newft
   }
+  
+  this.get = function(feature, property) {
+    var fid = feature.id() // string
+    var feat = ee.Feature(this.collection.filterMetadata('system:index', 'equals', fid).first())
+    return feat.get(property)
+  }
+  
 }
 exports.FeatureCollection = FeatureCollection
