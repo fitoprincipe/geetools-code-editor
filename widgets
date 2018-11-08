@@ -16,7 +16,6 @@ var ClosePanel = function(options) {
       margin: 0,
       shown: true,
       position: 'top-center',
-      border: '1px solid black'
     }
     
   if (options.style) {
@@ -29,6 +28,7 @@ var ClosePanel = function(options) {
     widgets: [],
     layout: ui.Panel.Layout.flow('vertical'),
     backgroundColor: 'white',
+    border: '1px solid black',
     style: opt_style
   }
   
@@ -39,7 +39,7 @@ var ClosePanel = function(options) {
   this.layout = this.opt.layout
   this.backgroundColor = this.opt.backgroundColor
   this.position = this.opt.style.position
-  this.border = this.opt.style.border
+  this.border = this.opt.border
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
