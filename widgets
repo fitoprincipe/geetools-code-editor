@@ -7,6 +7,7 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 
+// CLOSE PANEL
 var ClosePanel = function(options) {
   
   this.name = 'ClosePanel'
@@ -93,7 +94,6 @@ ClosePanel.prototype.closeCallback = function() {
 
 ClosePanel.prototype.close = function() {
   this.closeCallback()()
-  //return panel
 }
 
 ClosePanel.prototype.build = function() {
