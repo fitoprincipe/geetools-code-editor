@@ -362,6 +362,22 @@ featureCollection.propertyValues = function(collection, property) {
   return newlist
 }
 
+featureCollection.toDictionary = function(collection, options) {
+  var def = {
+    properties: null,
+    idfld: 'system:index'
+  }
+  var opt = tools.get_options(def, options)
+  
+  var newdict = collection.iterate(function(feat, ini){
+    ini = ee.Dictionary(ini)
+    var f = ee.Feature(feat)
+    var id = f.get(opt.idfld)
+    var props = f.toDictionary(opt.properties)
+    return ini.set(id, props)
+  }, ee.Dictionary({}))
+  return newdict
+}
 
 /** FEATURE */
 var feature = {};
