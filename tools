@@ -365,15 +365,21 @@ featureCollection.propertyValues = function(collection, property) {
 featureCollection.toDictionary = function(collection, options) {
   var def = {
     properties: null,
-    idField: 'system:index'
+    idField: null
   }
   var opt = get_options(def, options)
+  
+  var idField = opt.idField || 'system:index'
   
   var newdict = collection.iterate(function(feat, ini){
     ini = ee.Dictionary(ini)
     var f = ee.Feature(feat)
-    var id = f.get(opt.idField)
-    var props = f.toDictionary(opt.properties)
+    var id = f.get(idField)
+    if (opt.idField) {
+      var props = f.toDictionary(opt.properties).remove([opt.idField])
+    } else {
+      var props = f.toDictionary(opt.properties)
+    }
     return ini.set(id, props)
   }, ee.Dictionary({}))
   return newdict
