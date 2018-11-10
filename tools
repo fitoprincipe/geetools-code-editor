@@ -358,7 +358,7 @@ featureCollection.propertyValues = function(collection, property) {
   var collist = collection.toList(collection.size())
   var newlist = collist.map(function(feat){
     return ee.Feature(feat).get(property)
-  }).removeAll([null])
+  }).removeAll([null]).removeAll([""])
   return newlist
 }
 
