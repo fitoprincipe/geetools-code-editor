@@ -23,6 +23,12 @@ exports.Feature = Feature
 var FeatureCollection = function(collection) {
   this.collection = collection
   
+  this.setPosition = function(position, property, value) {
+    var featlist = this.collection.toList(this.collection.size())
+    var feat = ee.Feature(featlist.get(position))
+    this.set(feat, property, value)
+  }
+  
   this.set = function(feature, property, value) {
     var fid = feature.id() // string
     var newft = this.collection.map(function(feat) {
