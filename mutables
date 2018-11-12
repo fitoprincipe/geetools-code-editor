@@ -32,7 +32,7 @@ var FeatureCollection = function(collection) {
   this.getPosition = function(position, property) {
     var featlist = this.collection.toList(this.collection.size())
     var feat = ee.Feature(featlist.get(position))
-    return this.get(feat, property, value)
+    return this.get(feat, property)
   }
   
   this.set = function(feature, property, value) {
