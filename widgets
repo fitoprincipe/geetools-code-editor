@@ -163,4 +163,4 @@ var test2 = function() {
   })
   Map.add(button)
 }
-test2()
+//test2()
