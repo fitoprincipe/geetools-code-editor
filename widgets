@@ -85,9 +85,7 @@ var ClosePanel = function(options) {
 ClosePanel.prototype.closeCallback = function() {
   var panel = this
   var wrap = function() {
-    var wids = panel.parent.widgets()
-    wids.remove(panel.outter)
-    //return panel
+    panel.close()()
   }
   return wrap
 }
@@ -95,7 +93,9 @@ ClosePanel.prototype.closeCallback = function() {
 ClosePanel.prototype.close = function() {
   var panel = this
   var wrap = function() {
-    panel.closeCallback()()
+    print('click')
+    var wids = panel.parent.widgets()
+    wids.remove(panel.outter)
   }
   return wrap
 }
@@ -158,5 +158,10 @@ var test2 = function() {
     layout: ui.Panel.Layout.flow('horizontal')
   })
   panel.addTo(Map)
+  var button = ui.Button({
+    label: 'Close',
+    onClick: panel.close()
+  })
+  Map.add(button)
 }
-//test2()
+test2()
