@@ -93,7 +93,6 @@ ClosePanel.prototype.closeCallback = function() {
 ClosePanel.prototype.close = function() {
   var panel = this
   var wrap = function() {
-    print('click')
     var wids = panel.parent.widgets()
     wids.remove(panel.outter)
   }
@@ -164,4 +163,4 @@ var test2 = function() {
   })
   Map.add(button)
 }
-//test2()
+test2()
