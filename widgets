@@ -93,7 +93,11 @@ ClosePanel.prototype.closeCallback = function() {
 }
 
 ClosePanel.prototype.close = function() {
-  this.closeCallback()()
+  var panel = this
+  var wrap = function() {
+    panel.closeCallback()()
+  }
+  return wrap
 }
 
 ClosePanel.prototype.build = function() {
