@@ -38,8 +38,8 @@ exports.get_options = get_options
 /** COLLECTIONS **/
 var collection = {};
 
-collection.enumerate = function(collection) {
-  var collist = collection.toList(collection.size())
+collection.enumerate = function(col) {
+  var collist = col.toList(col.size())
   
   // first element
   var ini = ee.Number(0)
@@ -260,10 +260,10 @@ image.removeBands = function(image, bands) {
 //** IMAGE COLLECTIONS **//
 var imageCollection = {};
 
-imageCollection.enumerateProperty = function(collection, name) {
+imageCollection.enumerateProperty = function(col, name) {
   name = name || 'enumeration'
-  var collist = collection.toList(collection.size())
-  var enumerated = collection.enumerate(collection)
+  var collist = col.toList(col.size())
+  var enumerated = col.enumerate(col)
   
   var featlist = enumerated.map(function(l){
     l = ee.List(l)
@@ -433,15 +433,15 @@ number.trimDecimals = function(places) {
 var featureCollection = {};
 
 // GET UNIQUE PROPERTY VALUES
-featureCollection.propertyValues = function(collection, property) {
-  var collist = collection.toList(collection.size())
+featureCollection.propertyValues = function(col, property) {
+  var collist = col.toList(col.size())
   var newlist = collist.map(function(feat){
     return ee.Feature(feat).get(property)
   }).removeAll([null]).removeAll([""])
   return newlist
 }
 
-featureCollection.toDictionary = function(collection, options) {
+featureCollection.toDictionary = function(col, options) {
   var def = {
     properties: null,
     idField: null
@@ -450,7 +450,7 @@ featureCollection.toDictionary = function(collection, options) {
   
   var idField = opt.idField || 'system:index'
   
-  var newdict = collection.iterate(function(feat, ini){
+  var newdict = col.iterate(function(feat, ini){
     ini = ee.Dictionary(ini)
     var f = ee.Feature(feat)
     var id = f.get(idField)
@@ -464,10 +464,10 @@ featureCollection.toDictionary = function(collection, options) {
   return newdict
 }
 
-featureCollection.enumerateProperty = function(collection, name) {
+featureCollection.enumerateProperty = function(col, name) {
   name = name || 'enumeration'
-  var collist = collection.toList(collection.size())
-  var enumerated = collection.enumerate(collection)
+  var collist = col.toList(col.size())
+  var enumerated = col.enumerate(col)
   
   var featlist = enumerated.map(function(l){
     l = ee.List(l)
