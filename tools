@@ -554,8 +554,6 @@ list.removeIndex = function(list, index) {
   return ee.List(ee.Algorithms.If(condition, -1, allowed()))
 }
 
-var l = ee.List([0,1,2,3,4,5,6,7])
-
 /** DICTIONARIES */
 var dictionary = {};
 
@@ -570,6 +568,33 @@ dictionary.extractList = function(dict, list) {
     return ee.Algorithms.If(cond, f.add(dict.get(el)), f)
   }, empty))
   return values
+}
+
+
+/** COLLECTIONS **/
+var collection = {};
+
+collection.enumerate = function(collection) {
+  var collist = collection.toList(collection.size())
+  
+  // first element
+  var ini = ee.Number(0)
+  var first_image = ee.Image(collist.get(0))
+  var first = ee.List([ini, first_image])
+  
+  var start = ee.List([first])
+  var rest = collist.slice(1)
+  
+  var list = ee.List(rest.iterate(function(im, s){
+    im = ee.Image(im)
+    s = ee.List(s)
+    var last = ee.List(s.get(-1))
+    var last_index = ee.Number(last.get(0))
+    var index = last_index.add(1)
+    return s.add(ee.List([index, im]))
+  }, start))
+  
+  return list
 }
 
 /** MISC */
@@ -726,3 +751,4 @@ exports.feature = feature
 exports.list = list
 exports.dictionary = dictionary
 exports.featureCollection = featureCollection
+exports.collection = collection
