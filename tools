@@ -466,7 +466,6 @@ featureCollection.toDictionary = function(col, options) {
 
 featureCollection.enumerateProperty = function(col, name) {
   name = name || 'enumeration'
-  var collist = col.toList(col.size())
   var enumerated = collection.enumerate(col)
   
   var featlist = enumerated.map(function(l){
