@@ -231,6 +231,23 @@ image.removeBands = function(image, bands) {
   return image.select(diff)
 }
 
+//** IMAGE COLLECTIONS **//
+var imageCollection = {};
+
+imageCollection.enumerateProperty = function(collection, name) {
+  name = name || 'enumeration'
+  var collist = collection.toList(collection.size())
+  var enumerated = enumerate(collection)
+  
+  var featlist = enumerated.map(function(l){
+    l = ee.List(l)
+    var index = ee.Number(l.get(0))
+    var element = l.get(1)
+    return ee.Image(element).set(name, index)
+  })
+  return ee.ImageCollection.fromImages(featlist)
+}
+
 /** MAP */
 var map = {};
 
@@ -419,6 +436,20 @@ featureCollection.toDictionary = function(collection, options) {
     return ini.set(id, props)
   }, ee.Dictionary({}))
   return newdict
+}
+
+featureCollection.enumerateProperty = function(collection, name) {
+  name = name || 'enumeration'
+  var collist = collection.toList(collection.size())
+  var enumerated = collection.enumerate(collection)
+  
+  var featlist = enumerated.map(function(l){
+    l = ee.List(l)
+    var index = ee.Number(l.get(0))
+    var element = l.get(1)
+    return ee.Feature(element).set(name, index)
+  })
+  return ee.FeatureCollection(featlist)
 }
 
 /** FEATURE */
@@ -751,4 +782,5 @@ exports.feature = feature
 exports.list = list
 exports.dictionary = dictionary
 exports.featureCollection = featureCollection
+exports.imageCollection = imageCollection
 exports.collection = collection
