@@ -237,7 +237,7 @@ var imageCollection = {};
 imageCollection.enumerateProperty = function(collection, name) {
   name = name || 'enumeration'
   var collist = collection.toList(collection.size())
-  var enumerated = enumerate(collection)
+  var enumerated = collection.enumerate(collection)
   
   var featlist = enumerated.map(function(l){
     l = ee.List(l)
