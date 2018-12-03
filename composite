@@ -23,6 +23,8 @@ var sum_distance = function(i, rest) {
 
 var medoid = function(collection, bands) {
   
+  collection = collection.map(function(im){return im.unmask()})
+  
   var first_image = ee.Image(collection.first())
   var ibands = first_image.bandNames()
   
