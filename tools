@@ -517,6 +517,45 @@ list.filterRegex = function(list, regex, flags) {
   return ee.List(f)
 }
 
+// Remove an element by its index number
+list.removeIndex = function(list, index) {
+  list = ee.List(list)
+  index = ee.Number(index)
+  var size = list.size()
+  
+  var allowed = function() {
+    var zerof = function(list) {
+      return list.slice(1, list.size())
+    }
+    
+    var rest = function(list, index) {
+      list = ee.List(list)
+      index = ee.Number(index)
+      var last = index.eq(list.size())
+      
+      var lastf = function(list) {
+        return list.slice(0, list.size().subtract(1))
+      }
+      
+      var restf = function(list, index) {
+        list = ee.List(list)
+        index = ee.Number(index)
+        var first = list.slice(0, index)
+        return first.cat(list.slice(index.add(1), list.size()))
+      }
+      return ee.List(ee.Algorithms.If(last, lastf(list), restf(list, index)))
+    }
+    
+    return ee.List(ee.Algorithms.If(index, rest(list, index), zerof(list)))
+  }
+  
+  var condition = index.gte(size).or(index.lt(0))
+  
+  return ee.List(ee.Algorithms.If(condition, -1, allowed()))
+}
+
+var l = ee.List([0,1,2,3,4,5,6,7])
+
 /** DICTIONARIES */
 var dictionary = {};
 
