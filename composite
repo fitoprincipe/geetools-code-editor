@@ -1,0 +1,47 @@
+/*
+ * Author: Rodrigo E. Principe
+ * License: Apache 2.0
+ * email: fitoprincipe82@gmail.com
+
+Composite Methods
+*/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+
+var euclidean_distance = function(i, i2) {
+  return i.subtract(i2).pow(2).reduce('sum').rename('distance')
+}
+
+var sum_distance = function(i, rest) {
+  var accum = ee.Image(0).rename('sumdist')
+  return ee.Image(rest.iterate(function(im, ini) {
+    im = ee.Image(im)
+    var dist = ee.Image(euclidean_distance(i, im)).rename('sumdist')
+    return accum.add(dist)
+  }, accum))
+}
+
+var medoid = function(collection, bands) {
+  
+  var first_image = ee.Image(collection.first())
+  var ibands = first_image.bandNames()
+  
+  bands = bands || ibands
+  collection = collection.select(bands)
+  
+  var enumerated = tools.imageCollection.enumerateProperty(collection)
+  var collist = enumerated.toList(enumerated.size())
+  
+  var imlist = ee.List(collist.map(function(im){
+    im = ee.Image(im)
+    var n = ee.Number(im.get('enumeration'))
+    var filtered = tools.list.removeIndex(collist, n)
+    var dist = sum_distance(im, filtered).multiply(-1)
+    return im.addBands(dist)
+  }))
+  
+  var medcol = ee.ImageCollection.fromImages(imlist)
+  return medcol.qualityMosaic('sumdist')
+}
+
+exports.medoid = medoid
