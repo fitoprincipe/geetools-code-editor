@@ -14,18 +14,23 @@ var euclidean_distance = function(i, i2) {
   
   var proxy = tools.image.fromList(bandsi, 0)
   i = proxy.where(i.gt(0), i)
-  
   i2 = proxy.where(i2.gt(0), i2)
   
-  return i.subtract(i2).pow(2).reduce('sum').rename('distance')
+  var a = i1.subtract(i2)
+  var b = a.pow(2)
+  var c = b.reduce('sum')
+  var d = c.sqrt()
+  
+  return d.rename('distance')
 }
 
 var sum_distance = function(i, rest) {
   var accum = ee.Image(0).rename('sumdist')
   return ee.Image(rest.iterate(function(im, ini) {
+    ini = ee.Image(ini)
     im = ee.Image(im)
     var dist = ee.Image(euclidean_distance(i, im)).rename('sumdist')
-    return accum.add(dist)
+    return ini.add(dist)
   }, accum))
 }
 
