@@ -16,7 +16,7 @@ var euclidean_distance = function(i, i2) {
   i = proxy.where(i.gt(0), i)
   i2 = proxy.where(i2.gt(0), i2)
   
-  var a = i1.subtract(i2)
+  var a = i.subtract(i2)
   var b = a.pow(2)
   var c = b.reduce('sum')
   var d = c.sqrt()
