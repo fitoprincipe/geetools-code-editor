@@ -260,6 +260,7 @@ exports.help = help
 exports.sentinel2 = sentinel2
 exports.landsatSR = landsatSR
 exports.landsatTOA = landsatTOA
+exports.landsatTOA = landsatTOAmask
 exports.modisSR = modisSR
 exports.make = make
 exports.hollstein_S2 = hollstein_S2
