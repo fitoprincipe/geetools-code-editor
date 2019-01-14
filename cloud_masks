@@ -118,7 +118,7 @@ var landsatTOAmask = function(name) {
   
   var wrap = function(image) {
     var good_pix = compute(image, mask_band, bits, options)
-    return good_pix;
+    return good_pix.rename(name);
   }
   return wrap
 }
