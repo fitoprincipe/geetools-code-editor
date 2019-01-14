@@ -108,6 +108,21 @@ var landsatTOA = function(options) {
   return wrap
 }
 
+var landsatTOAmask = function(name) {
+  var bits = ee.Dictionary({'cloud': [4,4], 'shadow': [8,8], 'snow': [10,10]});
+  var mask_band = 'BQA';
+  
+  // Parameters
+  name = name || 'cloud_mask';
+  var options = bits.keys();
+  
+  var wrap = function(image) {
+    var good_pix = compute(image, mask_band, bits, options)
+    return good_pix;
+  }
+  return wrap
+}
+
 var modisSR = function(options) {
   var bits = ee.Dictionary({
     'cloud': [0, 0], 
