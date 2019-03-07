@@ -59,18 +59,16 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
     
   var colList = collection.toList(n);
   
-  var colID = opt.name || collection.getInfo()['id'] || "ImageCollection"
-  colID = colID.replace('/','_')
-  
   for (var i = 0; i < n; i++) {
     var img = ee.Image(colList.get(i));
     var id = img.id().getInfo() || 'image_'+i.toString();
     var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
+    var assetId = assetFolder+id
     
     Export.image.toAsset({
       image: img,
       description: id,
-      assetId: assetFolder+colID+'/'+id,
+      assetId: assetId,
       region: region,
       scale: opt.scale,
       maxPixels: opt.maxPixels})
