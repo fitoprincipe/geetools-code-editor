@@ -25,22 +25,22 @@ var PixelSize = function(number) {
   
   this.add = function(another) {
     var other = another.number || another
-    return new pixelSize(this.number + other)
+    return new PixelSize(this.number + other)
   }
   
   this.multiply = function(another) {
     var other = another.number || another
-    return new pixelSize(this.number * other)
+    return new PixelSize(this.number * other)
   }
   
   this.divide = function(another) {
     var other = another.number || another
-    return new pixelSize(this.number / other)
+    return new PixelSize(this.number / other)
   }
   
   this.subtract = function(another) {
     var other = another.number || another
-    return new pixelSize(this.number - other)
+    return new PixelSize(this.number - other)
   }
 }
 exports.PixelSize = PixelSize
