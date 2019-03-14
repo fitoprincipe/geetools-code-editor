@@ -63,12 +63,12 @@ var Polygon = function(options) {
   }
   
   this.stop = function() {
-    // unbound callback
+    // unbound drawing callback
     this.opt.map.unlisten(this.callback_ID)
     
     // bound callback again
     if (this.opt.map_callback && this.opt.map_callback_id) {
-      this.callback_ID = this.opt.map.onClick(this.opt.map_callback)
+      this.opt.map_callback_id = this.opt.map.onClick(this.opt.map_callback)
     }
     
     // remove temp layer
