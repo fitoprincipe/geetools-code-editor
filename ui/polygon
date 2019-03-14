@@ -21,6 +21,7 @@ var Polygon = function(options) {
   
   this.point_list = []
   this.callback_ID = null
+  this.drawing = null
   
   this.start = function() {
     
@@ -74,8 +75,13 @@ var Polygon = function(options) {
     tools.map.removeLayerByName(this.name, this.opt.map)
     
     var polygon = ee.Geometry.Polygon(this.point_list)
-    Map.addLayer(polygon, null, this.opt.name)
+    //Map.addLayer(polygon, null, this.opt.name)
+    this.drawing = polygon
     this.opt.map.style().set('cursor', 'hand')
+  }
+  
+  this.getDrawing = function() {
+    return this.drawing
   }
 }
 exports.Polygon = Polygon
