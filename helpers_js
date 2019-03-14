@@ -1,0 +1,46 @@
+/**
+ * JavaScript Helpers
+ * 
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+ 
+var is = function (obj, type) {
+    var clas = Object.prototype.toString.call(obj).slice(8, -1);
+    return obj !== undefined && obj !== null && clas === type;
+}
+exports.is = is
+
+var pixelSize = function(number) {
+  if (is(number, 'Number')) {
+    this.number = Number(number)
+  } else {
+    this.number = Number(number.replace('px', ''))
+  }
+  
+  this.value = function() {
+    return this.number.toString()+'px'
+  }
+  
+  this.add = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number + other)
+  }
+  
+  this.multiply = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number * other)
+  }
+  
+  this.divide = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number / other)
+  }
+  
+  this.subtract = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number - other)
+  }
+}
+exports.pixelSize = pixelSize
