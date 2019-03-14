@@ -12,7 +12,7 @@ var is = function (obj, type) {
 }
 exports.is = is
 
-var pixelSize = function(number) {
+var PixelSize = function(number) {
   if (is(number, 'Number')) {
     this.number = Number(number)
   } else {
@@ -43,7 +43,7 @@ var pixelSize = function(number) {
     return new pixelSize(this.number - other)
   }
 }
-exports.pixelSize = pixelSize
+exports.PixelSize = PixelSize
 
 // UUID4
 // from https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript#answer-21963136
