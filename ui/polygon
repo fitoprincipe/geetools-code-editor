@@ -15,7 +15,6 @@ var Polygon = function(options) {
     map: Map,
     map_callback: null,
     map_callback_id: null,
-    //name: 'geetools_polygon'
   }
   this.opt = tools.get_options(def, options)
   
