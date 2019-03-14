@@ -80,7 +80,7 @@ var Polygon = function(options) {
     // remove temp layer
     tools.map.removeLayerByName(this.name, this.opt.map)
     
-    if (this.point_list >= 3) {
+    if (this.point_list.length >= 3) {
       var polygon = ee.Geometry.Polygon(this.point_list)
       //Map.addLayer(polygon, null, this.opt.name)
       this.drawing = polygon
