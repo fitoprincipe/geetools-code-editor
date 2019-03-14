@@ -25,6 +25,7 @@ var DrawingPanel = function(options) {
     map: Map,
     map_callback: null,
     map_callback_id: null,
+    title: null,
   }
   this.opt = tools.get_options(def, options)
   
@@ -70,11 +71,18 @@ var DrawingPanel = function(options) {
     layout: ui.Panel.Layout.flow('horizontal')
   })
   
-  this.panel = ui.Panel({
-    widgets: [
+  var widgets = [
       this.type_drop,
       this.add_panel,
-    ],
+    ]
+    
+  if (this.opt.title) {
+    var title_text = ui.Label(this.opt.title)
+    widgets = helper.array.insert(widgets, 0, title_text)
+  }
+  
+  this.panel = ui.Panel({
+    widgets: widgets,
     style: {
       width: this.opt.width,
       height: this.opt.height,
@@ -157,7 +165,8 @@ var test = function() {
     map: Map,
     map_callback: call,
     map_callback_id: testID,
-    position: 'bottom-left'
+    position: 'bottom-left',
+    //title: 'TEST'
   })
   //d.insertTo(ui.root, 0)
   d.addTo(Map)
@@ -169,4 +178,4 @@ var test = function() {
   }
 }
 
-//test()
+test()
