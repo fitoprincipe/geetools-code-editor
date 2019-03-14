@@ -92,12 +92,17 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var colList = collection.toList(n);
     
-    var colID = opt.name || collection.getInfo()['id'] || ""
+    var colID = collection.getInfo()['id'] || ""
     colID = colID.replace('/','_')
     
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
-      var id = img.id().getInfo() || colID+'_image_'+i.toString();
+      if (opt.name) {
+        var id = opt.name+'_image_'+i.toString();
+      } else {
+        var id = img.id().getInfo() || colID+'_image_'+i.toString()
+      }
+      
       var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
       var imtype = IMAGE_TYPES(img, opt.type)
