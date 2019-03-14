@@ -32,11 +32,10 @@ var Polygon = function(options) {
     }
     
     this.point_list = []
-    var feat_list = []
     this.name = helper.uuid4()
     
-    var fc = ee.FeatureCollection(feat_list)
-    Map.addLayer(fc, {}, this.name)
+    var fc = ee.FeatureCollection([])
+    Map.addLayer(fc, null, this.name)
     
     var app = this
     
@@ -45,22 +44,17 @@ var Polygon = function(options) {
       var lat = coords.lat
       var p = [lon, lat]
       app.point_list.push(p)
-      if (app.point_list.length === 0) {
-        var newfc = ee.FeatureCollection([])
-      } else if (app.point_list.length === 1) {
+      if (app.point_list.length === 1) {
         var feat = ee.Feature(ee.Geometry.Point(p))
-        //feat_list.push(feat)
-        //var newfc = ee.FeatureCollection(feat_list)
-        var newfc = ee.FeatureCollection([feat])
-      } else if (app.point_list.length === 2) {
+      } 
+      else if (app.point_list.length === 2) {
         var feat = ee.Feature(ee.Geometry.LineString(app.point_list))
-        var newfc = ee.FeatureCollection([feat])
-      }
+      } 
       else {
         var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
-        var newfc = ee.FeatureCollection([feat])
       }
       
+      var newfc = ee.FeatureCollection([feat])
       var layer = tools.map.getLayer(app.name)
       var newlayer = ui.Map.Layer(newfc, null, app.name)
       tools.map.replaceLayer(layer, newlayer, app.opt.map)
