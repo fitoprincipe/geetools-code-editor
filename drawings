@@ -26,7 +26,7 @@ var Polygon = function(options) {
     
     // unbound callback if parsed
     if (this.opt.map_callback && this.opt.map_callback_id) {
-      opt.map.unlisten(this.opt.map_callback_id)
+      this.opt.map.unlisten(this.opt.map_callback_id)
     }
     
     this.point_list = []
@@ -89,11 +89,13 @@ var Drawings = function(options) {
     layout: ui.Panel.Layout.flow('vertical'),
     drawings: ['polygon'],
     map: Map,
+    map_callback: null,
+    map_callback_id: null,
   }
-  var opt = tools.get_options(def, options)
+  this.opt = tools.get_options(def, options)
   
-  var width = new helper.pixelSize(opt.width)
-  var height = new helper.pixelSize(opt.height)
+  var width = new helper.pixelSize(this.opt.width)
+  var height = new helper.pixelSize(this.opt.height)
   
   if (width.number < 150) {
     print('Width of the widget must be greater than 120')
@@ -102,8 +104,8 @@ var Drawings = function(options) {
   
   // Select drawing
   this.type_drop = ui.Select({
-    items: opt.drawings,
-    value: opt.drawings[0],
+    items: this.opt.drawings,
+    value: this.opt.drawings[0],
   })
   
   // Add a drawing
@@ -140,11 +142,11 @@ var Drawings = function(options) {
       this.add_panel,
     ],
     style: {
-      width: opt.width,
-      height: opt.height,
-      position: opt.position,
+      width: this.opt.width,
+      height: this.opt.height,
+      position: this.opt.position,
     },
-    layout: opt.layout
+    layout: this.opt.layout
   })
 }
 
@@ -155,7 +157,9 @@ Drawings.prototype.start = function() {
     if (toDraw === 'polygon') {
       app.drawing = new Polygon({
         map: app.map,
-        name: app.drawing_name.getValue() 
+        name: app.drawing_name.getValue(),
+        map_callback: app.opt.map_callback,
+        map_callback_id: app.opt.map_callback_id,
       })
       app.drawing.start()
     }
@@ -192,7 +196,14 @@ Drawings.prototype.insertTo = function(widget, position) {
 }
 
 var test = function() {
-  var d = new Drawings()
+  var call = function(coords) {print(coords)}
+  var testID = Map.onClick(call)
+  
+  var d = new Drawings({
+    map: Map,
+    map_callback: call,
+    map_callback_id: testID
+  })
   d.insertTo(ui.root, 0)
 }
 
