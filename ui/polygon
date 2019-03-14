@@ -68,7 +68,7 @@ var Polygon = function(options) {
     
     // bound callback again
     if (this.opt.map_callback && this.opt.map_callback_id) {
-      this.opt.map.onClick(this.opt.map_callback)
+      this.callback_ID = this.opt.map.onClick(this.opt.map_callback)
     }
     
     // remove temp layer
