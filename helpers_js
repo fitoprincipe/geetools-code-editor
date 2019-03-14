@@ -5,12 +5,6 @@
  * email: fitoprincipe82@gmail.com
  * license: MIT
  **/
- 
-var is = function (obj, type) {
-    var clas = Object.prototype.toString.call(obj).slice(8, -1);
-    return obj !== undefined && obj !== null && clas === type;
-}
-exports.is = is
 
 var PixelSize = function(number) {
   if (is(number, 'Number')) {
@@ -62,6 +56,11 @@ exports.uuid4 = uuid4
 
 // Objects
 var object = {}
+
+object.is = function (obj, type) {
+    var clas = Object.prototype.toString.call(obj).slice(8, -1);
+    return obj !== undefined && obj !== null && clas === type;
+}
 
 object.keys = function(obj) {
   var k = []
