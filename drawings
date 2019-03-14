@@ -70,7 +70,7 @@ var Drawings = function(options) {
     position: 'top-center',
     layout: ui.Panel.Layout.flow('vertical'),
     drawings: ['polygon'],
-    map: ui.Map(),
+    map: Map,
   }
   var opt = tools.get_options(def, options)
   
@@ -128,6 +128,20 @@ var Drawings = function(options) {
     },
     layout: opt.layout
   })
+}
+
+Drawings.prototype.start = function() {
+  var app = this
+  var toDraw = app.type_drop.getValue()
+  if (toDraw === 'polygon') {
+    this.drawing = new Polygon(app.map)
+    this.drawing.start()
+  }
+}
+
+Drawings.prototype.end = function() {
+  var app = this
+  app.drawing.stop()
 }
 
 Drawings.prototype.build = function() {
