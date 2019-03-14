@@ -1,0 +1,81 @@
+/***
+ * Polygon Widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * licence: MIT
+ ***/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+var helper = require('users/fitoprincipe/geetools:helpers_js')
+
+var Polygon = function(options) {
+  
+  // Arguments
+  var def = {
+    map: Map,
+    map_callback: null,
+    map_callback_id: null,
+    name: 'geetools_polygon'
+  }
+  this.opt = tools.get_options(def, options)
+  
+  this.point_list = []
+  this.callback_ID = null
+  
+  this.start = function() {
+    
+    // unbound callback if parsed
+    if (this.opt.map_callback && this.opt.map_callback_id) {
+      this.opt.map.unlisten(this.opt.map_callback_id)
+    }
+    
+    this.point_list = []
+    var feat_list = []
+    this.name = helper.uuid4()
+    
+    var fc = ee.FeatureCollection(feat_list)
+    Map.addLayer(fc, {}, this.name)
+    
+    var app = this
+    
+    var callback = function(coords) {
+      var lon = coords.lon
+      var lat = coords.lat
+      var p = [lon, lat]
+      app.point_list.push(p)
+      if (app.point_list.length < 3) {
+        var feat = ee.Feature(ee.Geometry.Point(p))
+        feat_list.push(feat)
+        var newfc = ee.FeatureCollection(feat_list)
+      } else {
+        var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
+        var newfc = ee.FeatureCollection([feat])
+      }
+      
+      var layer = tools.map.getLayer(app.name)
+      var newlayer = ui.Map.Layer(newfc, null, app.name)
+      tools.map.replaceLayer(layer, newlayer, app.opt.map)
+    }
+    
+    this.opt.map.style().set('cursor', 'crosshair')
+    this.callback_ID = this.opt.map.onClick(callback)
+  }
+  
+  this.stop = function() {
+    // unbound callback
+    this.opt.map.unlisten(this.callback_ID)
+    
+    // bound callback again
+    if (this.opt.map_callback && this.opt.map_callback_id) {
+      this.opt.map.onClick(this.opt.map_callback)
+    }
+    
+    // remove temp layer
+    tools.map.removeLayerByName(this.name, this.opt.map)
+    
+    var polygon = ee.Geometry.Polygon(this.point_list)
+    Map.addLayer(polygon, null, this.opt.name)
+    this.opt.map.style().set('cursor', 'hand')
+  }
+}
+exports.Polygon = Polygon
