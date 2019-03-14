@@ -1,5 +1,5 @@
 /***
- * Drawings Widget
+ * DrawingPanel Widget
  * Author: Rodrigo E. Principe
  * email: fitoprincipe82@gmail.com
  * licence: MIT
@@ -7,88 +7,18 @@
 
 var tools = require('users/fitoprincipe/geetools:tools')
 var helper = require('users/fitoprincipe/geetools:helpers_js')
-
-var Polygon = function(options) {
-  
-  // Arguments
-  var def = {
-    map: Map,
-    map_callback: null,
-    map_callback_id: null,
-    name: 'geetools_polygon'
-  }
-  this.opt = tools.get_options(def, options)
-  
-  this.point_list = []
-  this.callback_ID = null
-  
-  this.start = function() {
-    
-    // unbound callback if parsed
-    if (this.opt.map_callback && this.opt.map_callback_id) {
-      this.opt.map.unlisten(this.opt.map_callback_id)
-    }
-    
-    this.point_list = []
-    var feat_list = []
-    this.name = helper.uuid4()
-    
-    var fc = ee.FeatureCollection(feat_list)
-    Map.addLayer(fc, {}, this.name)
-    
-    var app = this
-    
-    var callback = function(coords) {
-      var lon = coords.lon
-      var lat = coords.lat
-      var p = [lon, lat]
-      app.point_list.push(p)
-      if (app.point_list.length < 3) {
-        var feat = ee.Feature(ee.Geometry.Point(p))
-        feat_list.push(feat)
-        var newfc = ee.FeatureCollection(feat_list)
-      } else {
-        var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
-        var newfc = ee.FeatureCollection([feat])
-      }
-      
-      var layer = tools.map.getLayer(app.name)
-      var newlayer = ui.Map.Layer(newfc, null, app.name)
-      tools.map.replaceLayer(layer, newlayer, app.opt.map)
-    }
-    
-    this.opt.map.style().set('cursor', 'crosshair')
-    this.callback_ID = this.opt.map.onClick(callback)
-  }
-  
-  this.stop = function() {
-    // unbound callback
-    this.opt.map.unlisten(this.callback_ID)
-    
-    // bound callback again
-    if (this.opt.map_callback && this.opt.map_callback_id) {
-      this.opt.map.onClick(this.opt.map_callback)
-    }
-    
-    // remove temp layer
-    tools.map.removeLayerByName(this.name, this.opt.map)
-    
-    var polygon = ee.Geometry.Polygon(this.point_list)
-    Map.addLayer(polygon, null, this.opt.name)
-    this.opt.map.style().set('cursor', 'hand')
-  }
-  
-}
+var Polygon = require('users/fitoprincipe/geetools:ui/polygon').Polygon
 
 var options = {
   'polygon': Polygon,
 }
 
-var Drawings = function(options) {
+var DrawingPanel = function(options) {
   
   var def = {
     width: 300,
     height: 100,
+    border: '1px solid black',
     position: 'top-center',
     layout: ui.Panel.Layout.flow('vertical'),
     drawings: ['polygon'],
@@ -98,11 +28,11 @@ var Drawings = function(options) {
   }
   this.opt = tools.get_options(def, options)
   
-  var width = new helper.pixelSize(this.opt.width)
-  var height = new helper.pixelSize(this.opt.height)
+  var width = new helper.PixelSize(this.opt.width)
+  var height = new helper.PixelSize(this.opt.height)
   
   if (width.number < 150) {
-    print('Width of the widget must be greater than 120')
+    print('Width of the widget must be greater than 150')
     return null
   }
   
@@ -149,55 +79,55 @@ var Drawings = function(options) {
       width: this.opt.width,
       height: this.opt.height,
       position: this.opt.position,
+      border: this.opt.border
     },
     layout: this.opt.layout
   })
+  
+  this.draw = null
+  this.drawing = null
+  this.onStopCallback = null
 }
 
-Drawings.prototype.start = function() {
+DrawingPanel.prototype.start = function() {
   var app = this
   var wrap = function() {
     var toDraw = app.type_drop.getValue()
     
     var Draw = options[toDraw]
     
-    app.drawing = new Draw({
+    if (app.draw) {
+      app.opt.map_callback_id = app.draw.opt.map_callback_id
+    }
+    
+    app.draw = new Draw({
       map: app.map,
       name: app.drawing_name.getValue(),
       map_callback: app.opt.map_callback,
       map_callback_id: app.opt.map_callback_id,
     })
-    app.drawing.start()
+    app.draw.start()
   }
   return wrap
 }
 
-Drawings.prototype.start2 = function() {
+DrawingPanel.prototype.stop = function() {
   var app = this
   var wrap = function() {
-    var toDraw = app.type_drop.getValue()
-    if (toDraw === 'polygon') {
-      app.drawing = new Polygon({
-        map: app.map,
-        name: app.drawing_name.getValue(),
-        map_callback: app.opt.map_callback,
-        map_callback_id: app.opt.map_callback_id,
-      })
-      app.drawing.start()
+    app.draw.stop()
+    var drawing = app.draw.getDrawing()
+    if (app.onStopCallback) {
+      app.onStopCallback(drawing)
     }
   }
   return wrap
 }
 
-Drawings.prototype.stop = function() {
-  var app = this
-  var wrap = function() {
-    app.drawing.stop()
-  }
-  return wrap
+DrawingPanel.prototype.onStop = function(callback) {
+  this.onStopCallback = callback || null
 }
 
-Drawings.prototype.build = function() {
+DrawingPanel.prototype.build = function() {
   // bind callbacks
   this.start_button.onClick(this.start()) 
   this.end_button.onClick(this.stop())
@@ -205,13 +135,13 @@ Drawings.prototype.build = function() {
   return this.panel
 }
 
-Drawings.prototype.addTo = function(widget) {
+DrawingPanel.prototype.addTo = function(widget) {
   widget.add(this.build())
   this.parent = widget
   return widget
 }
 
-Drawings.prototype.insertTo = function(widget, position) {
+DrawingPanel.prototype.insertTo = function(widget, position) {
   widget.insert(position, this.build())
   this.parent = widget
   return widget
@@ -221,12 +151,20 @@ var test = function() {
   var call = function(coords) {print(coords)}
   var testID = Map.onClick(call)
   
-  var d = new Drawings({
+  var d = new DrawingPanel({
     map: Map,
     map_callback: call,
-    map_callback_id: testID
+    map_callback_id: testID,
+    position: 'bottom-left'
   })
-  d.insertTo(ui.root, 0)
+  //d.insertTo(ui.root, 0)
+  d.addTo(Map)
+  d.onStop(function(drawing) {print(drawing)})
+  
+  var addGeoButton = ui.Button('add drawn geometry')
+  var addGeom = function() {
+    
+  }
 }
 
 test()
