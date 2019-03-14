@@ -5,6 +5,11 @@
  * email: fitoprincipe82@gmail.com
  * License: MIT
  */
+ 
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var is = helpers.is
+exports.is = is
 
 var help = {};
 
