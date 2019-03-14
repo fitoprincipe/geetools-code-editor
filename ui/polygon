@@ -26,8 +26,6 @@ var Polygon = function(options) {
   
   this.start = function() {
     
-    print(this.started)
-    
     if (this.started) {
       print('There is a drawing already started, please stop it before a new drawing')
       return null
