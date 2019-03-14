@@ -7,7 +7,7 @@
  **/
 
 var PixelSize = function(number) {
-  if (is(number, 'Number')) {
+  if (object.is(number, 'Number')) {
     this.number = Number(number)
   } else {
     this.number = Number(number.replace('px', ''))
