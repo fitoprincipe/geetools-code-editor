@@ -78,3 +78,24 @@ var objectValues = function(obj) {
   return v
 }
 exports.objectValues = objectValues
+
+var object = {}
+
+object.keys = function(obj) {
+  var k = []
+  for (var key in obj) {
+    k.push(key)
+  }
+  return k
+}
+
+object.values = function(obj) {
+  var v = []
+  for (var key in obj) {
+    var value = obj[key]
+    v.push(value)
+  }
+  return v
+}
+
+exports.object = object
