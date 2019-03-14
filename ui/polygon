@@ -80,9 +80,14 @@ var Polygon = function(options) {
     // remove temp layer
     tools.map.removeLayerByName(this.name, this.opt.map)
     
-    var polygon = ee.Geometry.Polygon(this.point_list)
-    //Map.addLayer(polygon, null, this.opt.name)
-    this.drawing = polygon
+    if (this.point_list >= 3) {
+      var polygon = ee.Geometry.Polygon(this.point_list)
+      //Map.addLayer(polygon, null, this.opt.name)
+      this.drawing = polygon
+    } else {
+      this.drawing = null
+      print('The Polygon must have a minimum of 3 points')
+    }
     this.opt.map.style().set('cursor', 'hand')
   }
   
