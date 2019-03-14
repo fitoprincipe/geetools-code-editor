@@ -60,14 +60,14 @@ var DrawingPanel = function(options) {
   
   var size_name = width.subtract(100).subtract(20)
   
-  this.drawing_name = ui.Textbox({
+  this.drawing_name_textbox = ui.Textbox({
     style: {
       width: size_name.value(),
     }
   })
   
   this.add_panel = ui.Panel({
-    widgets: [this.drawing_name, this.start_button, this.end_button],
+    widgets: [this.drawing_name_textbox, this.start_button, this.end_button],
     layout: ui.Panel.Layout.flow('horizontal')
   })
   
@@ -95,6 +95,7 @@ var DrawingPanel = function(options) {
   this.draw = null
   this.drawing = null
   this.onStopCallback = null
+  this.drawing_name = null
 }
 
 DrawingPanel.prototype.start = function() {
@@ -110,7 +111,7 @@ DrawingPanel.prototype.start = function() {
     
     app.draw = new Draw({
       map: app.map,
-      name: app.drawing_name.getValue(),
+      //name: app.drawing_name.getValue(),
       map_callback: app.opt.map_callback,
       map_callback_id: app.opt.map_callback_id,
     })
@@ -124,8 +125,9 @@ DrawingPanel.prototype.stop = function() {
   var wrap = function() {
     app.draw.stop()
     var drawing = app.draw.getDrawing()
+    app.drawing_name = app.drawing_name_textbox.getValue()
     if (app.onStopCallback) {
-      app.onStopCallback(drawing)
+      app.onStopCallback(app, drawing)
     }
   }
   return wrap
@@ -170,7 +172,7 @@ var test = function() {
   })
   //d.insertTo(ui.root, 0)
   d.addTo(Map)
-  d.onStop(function(drawing) {print(drawing)})
+  d.onStop(function(wid, drawing) {print(wid.drawing_name, drawing)})
   
   var addGeoButton = ui.Button('add drawn geometry')
   var addGeom = function() {
