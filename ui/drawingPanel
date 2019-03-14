@@ -96,6 +96,7 @@ var DrawingPanel = function(options) {
   this.drawing = null
   this.onStopCallback = null
   this.drawing_name = null
+  this.started = false
 }
 
 DrawingPanel.prototype.start = function() {
@@ -109,13 +110,20 @@ DrawingPanel.prototype.start = function() {
       app.opt.map_callback_id = app.draw.opt.map_callback_id
     }
     
-    app.draw = new Draw({
-      map: app.map,
-      //name: app.drawing_name.getValue(),
-      map_callback: app.opt.map_callback,
-      map_callback_id: app.opt.map_callback_id,
-    })
-    app.draw.start()
+    if (!app.started) {
+      app.draw = new Draw({
+        map: app.map,
+        //name: app.drawing_name.getValue(),
+        map_callback: app.opt.map_callback,
+        map_callback_id: app.opt.map_callback_id,
+      })
+      app.draw.start()
+      app.started = true
+    }
+    else {
+      print('There is a drawing already started, please stop it before a new drawing')
+      return null
+    }
   }
   return wrap
 }
@@ -123,11 +131,17 @@ DrawingPanel.prototype.start = function() {
 DrawingPanel.prototype.stop = function() {
   var app = this
   var wrap = function() {
-    app.draw.stop()
-    var drawing = app.draw.getDrawing()
-    app.drawing_name = app.drawing_name_textbox.getValue()
-    if (app.onStopCallback) {
-      app.onStopCallback(app, drawing)
+    if (app.started) {
+      app.draw.stop()
+      var drawing = app.draw.getDrawing()
+      app.drawing_name = app.drawing_name_textbox.getValue()
+      if (app.onStopCallback) {
+        app.onStopCallback(app, drawing)
+      }
+      app.started = false
+    }
+    else {
+      return null
     }
   }
   return wrap
