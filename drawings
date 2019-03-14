@@ -1,0 +1,135 @@
+/***
+ * Drawings Widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * licence: MIT
+ ***/
+
+var tools = require('users/fitoprincipe/geetools:tools')
+
+// HELPERS
+
+var pixelSize = function(number) {
+  this.number = number
+  
+  this.value = function() {
+    return this.number.toString()+'px'
+  }
+  
+  this.add = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number + other)
+  }
+  
+  this.multiply = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number * other)
+  }
+  
+  this.divide = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number / other)
+  }
+  
+  this.subtract = function(another) {
+    var other = another.number || another
+    return new pixelSize(this.number - other)
+  }
+}
+
+
+var Polygon = function(options) {
+  
+  // Arguments
+  var def = {
+    map: ui.Map(),
+  }
+  this.opt = tools.get_options(def, options)
+  
+  this.start = function() {
+    
+  }
+  
+}
+
+var Drawings = function(options) {
+  
+  var def = {
+    width: 300,
+    height: 100,
+    position: 'top-center',
+    layout: ui.Panel.Layout.flow('vertical'),
+    drawings: ['polygon'],
+    map: ui.Map(),
+  }
+  var opt = tools.get_options(def, options)
+  
+  var width = new pixelSize(opt.width)
+  var height = new pixelSize(opt.height)
+  
+  // Select drawing
+  this.type_drop = ui.Select({
+    items: opt.drawings,
+    value: opt.drawings[0],
+  })
+  
+  // Add a drawing
+  this.add_button = ui.Button({
+    label: '+',
+    style: {
+      //fontWeight: 'bold',
+      width: 20,
+      //fontSize: '5px',
+    }
+  })
+  
+  var size_name = width.subtract(100).subtract(20)
+  
+  print(size_name.number)
+  
+  this.drawing_name = ui.Textbox({
+    style: {
+      width: size_name.value(),
+    }
+  })
+  this.add_panel = ui.Panel({
+    widgets: [this.add_button, this.drawing_name],
+    layout: ui.Panel.Layout.flow('horizontal')
+  })
+  
+  this.panel = ui.Panel({
+    widgets: [
+      this.type_drop,
+      this.add_panel,
+    ],
+    style: {
+      width: opt.width,
+      height: opt.height,
+      position: opt.position,
+    },
+    layout: opt.layout
+  })
+}
+
+Drawings.prototype.build = function() {
+  return this.panel
+}
+
+Drawings.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+  return widget
+}
+
+Drawings.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
+
+var test = function() {
+  var d = new Drawings({width: '400px', position:'top-left'})
+  d.addTo(Map)
+}
+
+test()
