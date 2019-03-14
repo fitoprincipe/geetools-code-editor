@@ -60,25 +60,7 @@ var uuid4 = function() {
   }
 exports.uuid4 = uuid4
 
-var objectKeys = function(obj) {
-  var k = []
-  for (var key in obj) {
-    k.push(key)
-  }
-  return k
-}
-exports.objectKeys = objectKeys
-
-var objectValues = function(obj) {
-  var v = []
-  for (var key in obj) {
-    var value = obj[key]
-    v.push(value)
-  }
-  return v
-}
-exports.objectValues = objectValues
-
+// Objects
 var object = {}
 
 object.keys = function(obj) {
@@ -99,3 +81,20 @@ object.values = function(obj) {
 }
 
 exports.object = object
+
+// Arrays
+var array = {}
+
+array.insert = function(array, index, element) {
+  var firstPart = array.slice(0, index)
+  var lastPart = array.slice(index, array.length)
+  
+  firstPart.push(element)
+  for (var i in lastPart) {
+    var rest = lastPart[i]
+    firstPart.push(rest)
+  }
+  return firstPart
+}
+
+exports.array = array
