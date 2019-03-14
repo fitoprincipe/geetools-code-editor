@@ -6,48 +6,58 @@
  ***/
 
 var tools = require('users/fitoprincipe/geetools:tools')
-
-// HELPERS
-
-var pixelSize = function(number) {
-  this.number = number
-  
-  this.value = function() {
-    return this.number.toString()+'px'
-  }
-  
-  this.add = function(another) {
-    var other = another.number || another
-    return new pixelSize(this.number + other)
-  }
-  
-  this.multiply = function(another) {
-    var other = another.number || another
-    return new pixelSize(this.number * other)
-  }
-  
-  this.divide = function(another) {
-    var other = another.number || another
-    return new pixelSize(this.number / other)
-  }
-  
-  this.subtract = function(another) {
-    var other = another.number || another
-    return new pixelSize(this.number - other)
-  }
-}
-
+var helper = require('users/fitoprincipe/geetools:helpers_js')
 
 var Polygon = function(options) {
   
   // Arguments
   var def = {
-    map: ui.Map(),
+    map: Map,
+    map_callback: null,
+    map_callback_id: null,
+    name: 'geetools_polygon'
   }
   this.opt = tools.get_options(def, options)
   
+  this.point_list = []
+  this.callback_ID = null
+  
   this.start = function() {
+    // unbound callback if parsed
+    if (this.opt.map_callback && this.opt.map_callback_id) {
+      opt.map.unlisten(opt.map_callback_id)
+    }
     
+    this.point_list = []
+    var feat_list = []
+    var name = helpers.uuid4()
+    
+    var fc = ee.FeatureCollection(feat_list)
+    Map.addLayer(fc, {}, name)
+    
+    var callback = function(coords) {
+      this.point_list.push(coords)
+      var feat = ee.Feature(ee.Geometry.Point(coords))
+      feat_list.push(feat)
+      var newfc = ee.FeatureCollection(feat_list)
+      var layer = tools.map.getLayer(name)
+      tools.map.replaceLayer(layer, newfc, opt.map)
+    }
+    
+    this.callback_ID = opt.map.onClick(callback)
+  }
+  
+  this.end = function() {
+    // unbound callback
+    opt.map.unlisten(this.callback_ID)
+    
+    // bound callback again
+    if (this.opt.map_callback && this.opt.map_callback_id) {
+      opt.map.onClick(opt.map_callback)
+    }
+    
+    var polygon = ee.Geometry.Polygon(this.point_list)
+    Map.addLayer(polygon, null, opt.name)
   }
   
 }
@@ -64,8 +74,13 @@ var Drawings = function(options) {
   }
   var opt = tools.get_options(def, options)
   
-  var width = new pixelSize(opt.width)
-  var height = new pixelSize(opt.height)
+  var width = new helper.pixelSize(opt.width)
+  var height = new helper.pixelSize(opt.height)
+  
+  if (width.number < 150) {
+    print('Width of the widget must be greater than 120')
+    return null
+  }
   
   // Select drawing
   this.type_drop = ui.Select({
@@ -74,26 +89,30 @@ var Drawings = function(options) {
   })
   
   // Add a drawing
-  this.add_button = ui.Button({
-    label: '+',
+  this.start_button = ui.Button({
+    label: 'start',
     style: {
-      //fontWeight: 'bold',
       width: 20,
-      //fontSize: '5px',
+    }
+  })
+  
+  this.end_button = ui.Button({
+    label: 'end',
+    style: {
+      width: 20,
     }
   })
   
   var size_name = width.subtract(100).subtract(20)
-  
-  print(size_name.number)
   
   this.drawing_name = ui.Textbox({
     style: {
       width: size_name.value(),
     }
   })
+  
   this.add_panel = ui.Panel({
-    widgets: [this.add_button, this.drawing_name],
+    widgets: [this.drawing_name, this.start_button, this.end_button],
     layout: ui.Panel.Layout.flow('horizontal')
   })
   
@@ -128,8 +147,8 @@ Drawings.prototype.insertTo = function(widget, position) {
 }
 
 var test = function() {
-  var d = new Drawings({width: '400px', position:'top-left'})
-  d.addTo(Map)
+  var d = new Drawings()
+  d.insertTo(ui.root, 0)
 }
 
 test()
