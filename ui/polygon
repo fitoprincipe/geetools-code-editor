@@ -22,7 +22,16 @@ var Polygon = function(options) {
   this.callback_ID = null
   this.drawing = null
   
+  this.started = false
+  
   this.start = function() {
+    
+    if (this.started) {
+      print('There is a drawing already started, please stop it before a new drawing')
+      return null
+    }
+    
+    this.started = true
     
     // unbound callback if parsed
     if (this.opt.map_callback && this.opt.map_callback_id) {
@@ -64,6 +73,7 @@ var Polygon = function(options) {
   }
   
   this.stop = function() {
+    
     // unbound drawing callback
     this.opt.map.unlisten(this.callback_ID)
     
@@ -85,6 +95,7 @@ var Polygon = function(options) {
       print('The Polygon must have a minimum of 3 points')
     }
     this.opt.map.style().set('cursor', 'hand')
+    this.started = false
   }
   
   this.getDrawing = function() {
