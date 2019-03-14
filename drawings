@@ -80,6 +80,10 @@ var Polygon = function(options) {
   
 }
 
+var options = {
+  'polygon': Polygon,
+}
+
 var Drawings = function(options) {
   
   var def = {
@@ -151,6 +155,24 @@ var Drawings = function(options) {
 }
 
 Drawings.prototype.start = function() {
+  var app = this
+  var wrap = function() {
+    var toDraw = app.type_drop.getValue()
+    
+    var Draw = options[toDraw]
+    
+    app.drawing = new Draw({
+      map: app.map,
+      name: app.drawing_name.getValue(),
+      map_callback: app.opt.map_callback,
+      map_callback_id: app.opt.map_callback_id,
+    })
+    app.drawing.start()
+  }
+  return wrap
+}
+
+Drawings.prototype.start2 = function() {
   var app = this
   var wrap = function() {
     var toDraw = app.type_drop.getValue()
