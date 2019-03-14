@@ -27,6 +27,7 @@ var Polygon = function(options) {
     
     // unbound callback if parsed
     if (this.opt.map_callback && this.opt.map_callback_id) {
+      print('on start', this.opt.map_callback_id)
       this.opt.map.unlisten(this.opt.map_callback_id)
     }
     
@@ -69,6 +70,7 @@ var Polygon = function(options) {
     // bound callback again
     if (this.opt.map_callback && this.opt.map_callback_id) {
       this.opt.map_callback_id = this.opt.map.onClick(this.opt.map_callback)
+      print('on stop', this.opt.map_callback_id)
     }
     
     // remove temp layer
