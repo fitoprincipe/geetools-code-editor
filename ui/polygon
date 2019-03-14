@@ -45,11 +45,18 @@ var Polygon = function(options) {
       var lat = coords.lat
       var p = [lon, lat]
       app.point_list.push(p)
-      if (app.point_list.length < 3) {
+      if (app.point_list.length === 0) {
+        var newfc = ee.FeatureCollection([])
+      } else if (app.point_list.length === 1) {
         var feat = ee.Feature(ee.Geometry.Point(p))
-        feat_list.push(feat)
-        var newfc = ee.FeatureCollection(feat_list)
-      } else {
+        //feat_list.push(feat)
+        //var newfc = ee.FeatureCollection(feat_list)
+        var newfc = ee.FeatureCollection([feat])
+      } else if (app.point_list.length === 2) {
+        var feat = ee.Feature(ee.Geometry.LineString(app.point_list))
+        var newfc = ee.FeatureCollection([feat])
+      }
+      else {
         var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
         var newfc = ee.FeatureCollection([feat])
       }
