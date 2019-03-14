@@ -59,3 +59,22 @@ var uuid4 = function() {
       lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
   }
 exports.uuid4 = uuid4
+
+var objectKeys = function(obj) {
+  var k = []
+  for (var key in obj) {
+    k.push(key)
+  }
+  return k
+}
+exports.objectKeys = objectKeys
+
+var objectValues = function(obj) {
+  var v = []
+  for (var key in obj) {
+    var value = obj[key]
+    v.push(value)
+  }
+  return v
+}
+exports.objectValues = objectValues
