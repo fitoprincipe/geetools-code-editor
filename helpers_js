@@ -79,6 +79,15 @@ object.values = function(obj) {
   return v
 }
 
+object.insert = function(obj, key, value) {
+  var newobj = {}
+  for (var k in obj) {
+    newobj[k] = obj[k]
+  }
+  newobj[key] = val
+  return newobj
+}
+
 exports.object = object
 
 // Arrays
