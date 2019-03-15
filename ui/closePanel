@@ -99,7 +99,7 @@ ClosePanel.prototype.close = function() {
     var wids = panel.parent.widgets()
     wids.remove(panel.outter)
     if (panel.onCloseCallback) {
-      panel.onCloseCallback(panel.inner)
+      panel.onCloseCallback(panel.outter, panel.inner)
     }
   }
   return wrap
