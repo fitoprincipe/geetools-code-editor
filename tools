@@ -99,7 +99,7 @@ geometry.paint = function(geometry, options) {
     idFld: null
   }
   
-  var opt = get_options(def, options)
+  var opt = helpersJS.get_options(def, options)
   
   var type = geometry.name()
   
@@ -283,7 +283,7 @@ map.addImageCollection = function(col, options) {
     label: 'system_id'
   }
   
-  var opt = get_options(def, options)
+  var opt = helpersJS.get_options(def, options)
   
   // var label = label;
   var n = col.size().getInfo();
@@ -439,7 +439,7 @@ featureCollection.toDictionary = function(col, options) {
     properties: null,
     idField: null
   }
-  var opt = get_options(def, options)
+  var opt = helpersJS.get_options(def, options)
   
   var idField = opt.idField || 'system:index'
   
