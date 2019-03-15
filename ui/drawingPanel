@@ -15,6 +15,7 @@ var options = {
 
 var DrawingPanel = function(options) {
   
+  // Parsed arguments
   var def = {
     width: 300,
     height: 100,
@@ -29,6 +30,7 @@ var DrawingPanel = function(options) {
   }
   this.opt = tools.get_options(def, options)
   
+  // Width and Height PixelSize
   var width = new helper.PixelSize(this.opt.width)
   var height = new helper.PixelSize(this.opt.height)
   
@@ -37,13 +39,13 @@ var DrawingPanel = function(options) {
     return null
   }
   
-  // Select drawing
+  // Select drawing Dropdown
   this.type_drop = ui.Select({
     items: this.opt.drawings,
     value: this.opt.drawings[0],
   })
   
-  // Add a drawing
+  // Start drawing Button
   this.start_button = ui.Button({
     label: 'start',
     style: {
@@ -51,36 +53,43 @@ var DrawingPanel = function(options) {
     }
   })
   
-  this.end_button = ui.Button({
+  // Stop drawing Button
+  this.stop_button = ui.Button({
     label: 'stop',
     style: {
       width: 20,
     }
   })
   
+  // Compute pixel size for name textbox
   var size_name = width.subtract(100).subtract(20)
   
+  // Name Textbox
   this.drawing_name_textbox = ui.Textbox({
     style: {
       width: size_name.value(),
     }
   })
   
+  // Panel for: name, start, stop
   this.add_panel = ui.Panel({
-    widgets: [this.drawing_name_textbox, this.start_button, this.end_button],
+    widgets: [this.drawing_name_textbox, this.start_button, this.stop_button],
     layout: ui.Panel.Layout.flow('horizontal')
   })
   
+  // List of widgets
   var widgets = [
       this.type_drop,
       this.add_panel,
     ]
     
+  // Add Title if parsed
   if (this.opt.title) {
     var title_text = ui.Label(this.opt.title)
     widgets = helper.array.insert(widgets, 0, title_text)
   }
   
+  // Main Panel
   this.panel = ui.Panel({
     widgets: widgets,
     style: {
@@ -92,9 +101,11 @@ var DrawingPanel = function(options) {
     layout: this.opt.layout
   })
   
+  // Scope variables
   this.draw = null
   this.drawing = null
   this.onStopCallback = null
+  this.onStartCallback = null
   this.drawing_name = null
   this.started = false
 }
@@ -102,15 +113,20 @@ var DrawingPanel = function(options) {
 DrawingPanel.prototype.start = function() {
   var app = this
   var wrap = function() {
+    // Bound user onStart callback
+    if (app.onStartCallback) {
+      app.onStartCallback(app)
+    }
+    // Get type of drawing
     var toDraw = app.type_drop.getValue()
-    
     var Draw = options[toDraw]
-    
+    // Before starting a new Drawing, if there is a previous one, get the callback ID
+    // of the latter
     if (app.draw) {
       app.opt.map_callback_id = app.draw.opt.map_callback_id
     }
-    
-    if (!app.started) {
+    if (!app.started) { // If the drawing hasn't started yet..
+      // make a new Drawing
       app.draw = new Draw({
         map: app.map,
         //name: app.drawing_name.getValue(),
@@ -131,10 +147,14 @@ DrawingPanel.prototype.start = function() {
 DrawingPanel.prototype.stop = function() {
   var app = this
   var wrap = function() {
-    if (app.started) {
+    if (app.started) { // If the drawing has started
+      // Stop drawing
       app.draw.stop()
+      // Get drawing geometry
       var drawing = app.draw.getDrawing()
+      // Set drawing name
       app.drawing_name = app.drawing_name_textbox.getValue()
+      // call user onStop callback
       if (app.onStopCallback) {
         app.onStopCallback(app, drawing)
       }
@@ -151,10 +171,14 @@ DrawingPanel.prototype.onStop = function(callback) {
   this.onStopCallback = callback || null
 }
 
+DrawingPanel.prototype.onStart = function(callback) {
+  this.onStartCallback = callback || null
+}
+
 DrawingPanel.prototype.build = function() {
   // bind callbacks
   this.start_button.onClick(this.start()) 
-  this.end_button.onClick(this.stop())
+  this.stop_button.onClick(this.stop())
   
   return this.panel
 }
