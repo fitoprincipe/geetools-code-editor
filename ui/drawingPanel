@@ -163,10 +163,8 @@ DrawingPanel.prototype.stop = function() {
       // Get drawing name
       var drawing_name = app.drawing_name_textbox.getValue()
       // Store drawing
-      print(drawing_name, drawing)
-      //app.drawings[drawing_name] = drawing
+      //app.drawings[drawing_name] = drawing  // I don't know why this is not working...
       app.drawings = helper.object.insert(app.drawings, drawing_name, drawing)
-      print(app.drawings)
       // call user onStop callback
       if (app.onStopCallback) {
         app.onStopCallback(app, drawing)
