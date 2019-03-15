@@ -103,10 +103,9 @@ var DrawingPanel = function(options) {
   
   // Scope variables
   this.draw = null
-  this.drawing = null
+  this.drawings = {}  // Object to store drawings with their names
   this.onStopCallback = null
   this.onStartCallback = null
-  this.drawing_name = null
   this.started = false
 }
 
@@ -152,8 +151,10 @@ DrawingPanel.prototype.stop = function() {
       app.draw.stop()
       // Get drawing geometry
       var drawing = app.draw.getDrawing()
-      // Set drawing name
-      app.drawing_name = app.drawing_name_textbox.getValue()
+      // Get drawing name
+      var drawing_name = app.drawing_name_textbox.getValue()
+      // Store drawing
+      app.drawings[drawing_name] = drawing
       // call user onStop callback
       if (app.onStopCallback) {
         app.onStopCallback(app, drawing)
