@@ -1,10 +1,10 @@
-/*
+/*********************************
+ * Some tools
  * Author: Rodrigo E. Principe
  * License: Apache 2.0
  * email: fitoprincipe82@gmail.com
-
-Some tools
-*/
+ * page: https://github.com/fitoprincipe/geetools-code-editor/wiki
+ **********************************/
 
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
 
