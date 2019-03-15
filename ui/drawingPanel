@@ -163,12 +163,13 @@ DrawingPanel.prototype.stop = function() {
       // Get drawing name
       var drawing_name = app.drawing_name_textbox.getValue()
       // Store drawing
+      print(drawing_name)
       app.drawings[drawing_name] = drawing
-      app.started = false
       // call user onStop callback
       if (app.onStopCallback) {
         app.onStopCallback(app, drawing)
       }
+      app.started = false
     }
     else {
       return null
