@@ -211,25 +211,4 @@ DrawingPanel.prototype.insertTo = function(widget, position) {
 
 exports.DrawingPanel = DrawingPanel
 
-var test = function() {
-  var call = function(coords) {print(coords)}
-  var testID = Map.onClick(call)
-  
-  var d = new DrawingPanel({
-    map: Map,
-    map_callback: call,
-    map_callback_id: testID,
-    position: 'bottom-left',
-    //title: 'TEST'
-  })
-  //d.insertTo(ui.root, 0)
-  d.addTo(Map)
-  d.onStop(function(wid, drawing) {print(wid.drawing_name, drawing)})
-  
-  var addGeoButton = ui.Button('add drawn geometry')
-  var addGeom = function() {
-    
-  }
-}
-
-//test()
+// Example in https://github.com/fitoprincipe/geetools-code-editor/wiki/Widgets#drawingpaneloptions
