@@ -103,6 +103,7 @@ var DrawingPanel = function(options) {
   
   // Scope variables
   this.draw = null
+  this.drawing_name = null // actual drawing name
   this.drawings = {}  // Object to store drawings with their names
   this.onStopCallback = null
   this.onStartCallback = null
@@ -112,6 +113,19 @@ var DrawingPanel = function(options) {
 DrawingPanel.prototype.start = function() {
   var app = this
   var wrap = function() {
+    // Check if already started
+    if (app.started) {
+      print('There is a drawing already started, please stop it before a new drawing')
+      return null
+    }
+    // Check if there is a name
+    var name = app.drawing_name_textbox.getValue()
+    if (!name) {
+      print('You must provide a name')
+      return null
+    }
+    // set drawing name
+    app.drawing_name = name
     // Bound user onStart callback
     if (app.onStartCallback) {
       app.onStartCallback(app)
@@ -124,21 +138,16 @@ DrawingPanel.prototype.start = function() {
     if (app.draw) {
       app.opt.map_callback_id = app.draw.opt.map_callback_id
     }
-    if (!app.started) { // If the drawing hasn't started yet..
-      // make a new Drawing
-      app.draw = new Draw({
-        map: app.map,
-        //name: app.drawing_name.getValue(),
-        map_callback: app.opt.map_callback,
-        map_callback_id: app.opt.map_callback_id,
-      })
-      app.draw.start()
-      app.started = true
-    }
-    else {
-      print('There is a drawing already started, please stop it before a new drawing')
-      return null
-    }
+    // make a new Drawing
+    app.draw = new Draw({
+      map: app.map,
+      //name: app.drawing_name.getValue(),
+      map_callback: app.opt.map_callback,
+      map_callback_id: app.opt.map_callback_id,
+    })
+    app.draw.start()
+    app.started = true
+    
   }
   return wrap
 }
