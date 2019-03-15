@@ -163,6 +163,7 @@ DrawingPanel.prototype.stop = function() {
       // Get drawing name
       var drawing_name = app.drawing_name_textbox.getValue()
       // Store drawing
+      print(drawing_name, drawing)
       app.drawings[drawing_name] = drawing
       print(app.drawings)
       // call user onStop callback
