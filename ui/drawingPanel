@@ -102,6 +102,7 @@ var DrawingPanel = function(options) {
   })
   
   // Scope variables
+  this.parent = null
   this.draw = null
   this.drawing_name = null // actual drawing name
   this.drawings = {}  // Object to store drawings with their names
