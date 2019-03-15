@@ -22,20 +22,7 @@ exports.version = version
 var help = {};
 
 // INTERNAL
-var get_options = function(def, options) {
-  // fill options dict with default values if not present
-  
-  if (options !== undefined) {
-    var opt = options
-    
-    for (var key in def) {
-      var value = def[key]
-      if (opt[key] === undefined) {opt[key] = value}
-    }
-  } else {var opt = def}
-  return opt
-}
-exports.get_options = get_options
+exports.get_options = helpersJS.get_options
 
 /** COLLECTIONS **/
 var collection = {};
