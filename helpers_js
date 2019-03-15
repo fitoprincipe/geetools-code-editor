@@ -84,7 +84,7 @@ object.insert = function(obj, key, value) {
   for (var k in obj) {
     newobj[k] = obj[k]
   }
-  newobj[key] = val
+  newobj[key] = value
   return newobj
 }
 
