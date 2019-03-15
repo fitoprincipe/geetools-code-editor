@@ -80,6 +80,9 @@ var ClosePanel = function(options) {
   this.setLayout = function(layout) {this.inner.setLayout(layout)}
   this.style = function() {return this.inner.style()}
   this.widgets = function() {return this.inner.widgets()}
+  
+  // Scope
+  this.onCloseCallback = null
 }
 
 ClosePanel.prototype.closeCallback = function() {
@@ -95,6 +98,9 @@ ClosePanel.prototype.close = function() {
   var wrap = function() {
     var wids = panel.parent.widgets()
     wids.remove(panel.outter)
+    if (panel.onCloseCallback) {
+      onCloseCallback(panel.inner)
+    }
   }
   return wrap
 }
@@ -115,52 +121,10 @@ ClosePanel.prototype.insertTo = function(widget, position) {
   return widget
 }
 
+ClosePanel.prototype.onClose = function(callback) {
+  this.onCloseCallback = callback || null
+}
+
 exports.ClosePanel = ClosePanel
 
-var test = function() {
-  var closepanel = new ClosePanel({
-    widgets: [ui.Label('Hello'), ui.Button('Click'), ui.Select()],
-    layout: ui.Panel.Layout.flow('horizontal'),
-    style: {
-      height: '200px',
-      backgroundColor: 'red',
-      position: 'bottom-left'
-    },
-    inner_style: {
-      //backgroundColor: 'blue',
-    }
-  })
-  
-  //closepanel.addTo(Map)
-  
-  var testPanel = ui.Panel({
-    widgets: [ui.Label('in Parent label'), ui.Button('in parent button')],
-    style: {
-      width: '500px',
-      height: '500px'
-    }
-  })
-  
-  //closepanel.addTo(testPanel)
-  closepanel.insertTo(testPanel, 1)
-  Map.add(testPanel)
-}
-//test()
-
-var test2 = function() {
-  var panel = new ClosePanel({
-    widgets:[ui.Label('Hello'), ui.Button('World')],
-    style: {position: 'bottom-left'},
-    inner_style: {
-      border: '1px solid black'
-    },
-    layout: ui.Panel.Layout.flow('horizontal')
-  })
-  panel.addTo(Map)
-  var button = ui.Button({
-    label: 'Close',
-    onClick: panel.close()
-  })
-  Map.add(button)
-}
-//test2()
+// Tests in https://github.com/fitoprincipe/geetools-code-editor/wiki/Widgets
