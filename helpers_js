@@ -54,6 +54,22 @@ var uuid4 = function() {
   }
 exports.uuid4 = uuid4
 
+// Get Options
+var get_options = function(def, options) {
+  // fill options dict with default values if not present
+  
+  if (options !== undefined) {
+    var opt = options
+    
+    for (var key in def) {
+      var value = def[key]
+      if (opt[key] === undefined) {opt[key] = value}
+    }
+  } else {var opt = def}
+  return opt
+}
+exports.get_options = get_options
+
 // Objects
 var object = {}
 
