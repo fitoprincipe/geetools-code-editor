@@ -73,6 +73,10 @@ exports.get_options = get_options
 // Objects
 var object = {}
 
+object.getType = function(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1);
+}
+
 object.is = function (obj, type) {
     var clas = Object.prototype.toString.call(obj).slice(8, -1);
     return obj !== undefined && obj !== null && clas === type;
