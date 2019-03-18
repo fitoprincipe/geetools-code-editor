@@ -86,7 +86,7 @@ var get_options = function(defaults, options) {
       
       
       if (def_type === 'Object' && opt_type === 'Object') {
-        def_value = get_options2(def_value, opt_value)
+        def_value = get_options(def_value, opt_value)
       }
       
       if (opt[key] === undefined || def_type === 'Object') {
