@@ -41,7 +41,7 @@ var ClosePanel = function(options) {
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
-    layout: this.layout,
+    layout: this.opt.layout,
     style: this.opt.inner_style
   })
   
