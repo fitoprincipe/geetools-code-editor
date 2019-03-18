@@ -27,7 +27,8 @@ var ClosePanel = function(options) {
       backgroundColor: 'white',
       margin: 0,
       shown: true,
-      position: 'top-center'
+      position: 'top-center',
+      border: null
     }
   }
   
