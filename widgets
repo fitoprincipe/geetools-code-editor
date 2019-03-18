@@ -11,5 +11,5 @@ exports.ClosePanel = ClosePanel
 var DrawingPanel = require('users/fitoprincipe/geetools:ui/drawingPanel').DrawingPanel
 exports.DrawingPanel = DrawingPanel
 
-var ClosePanelDev = require('users/fitoprincipe/geetools:ui/closePanel').ClosePanelDev
+var ClosePanelDev = require('users/fitoprincipe/geetools:ui/closePanelDev').ClosePanel
 exports.ClosePanelDev = ClosePanelDev
