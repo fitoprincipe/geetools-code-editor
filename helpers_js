@@ -78,7 +78,7 @@ object.getType = function(obj) {
 }
 
 object.is = function (obj, type) {
-    var clas = Object.prototype.toString.call(obj).slice(8, -1);
+    var clas = object.getType(obj)
     return obj !== undefined && obj !== null && clas === type;
 }
 
