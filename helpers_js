@@ -54,8 +54,8 @@ var uuid4 = function() {
   }
 exports.uuid4 = uuid4
 
-// Get Options
-var get_options = function(def, options) {
+// KEEP IN CASE BROKEN APPS
+var get_options_old = function(def, options) {
   // fill options dict with default values if not present
   
   if (options !== undefined) {
@@ -67,6 +67,36 @@ var get_options = function(def, options) {
     }
   } else {var opt = def}
   return opt
+}
+
+// Get Options
+var get_options = function(defaults, options) {
+  // fill options dict with default values if not present
+  var new_opt = {}
+  
+  if (options !== undefined) {
+    var opt = options
+    
+    for (var key in defaults) {
+      var def_value = defaults[key]
+      var opt_value = opt[key]
+      
+      var def_type = helper.object.getType(def_value)
+      var opt_type = helper.object.getType(opt_value)
+      
+      
+      if (def_type === 'Object' && opt_type === 'Object') {
+        def_value = get_options2(def_value, opt_value)
+      }
+      
+      if (opt[key] === undefined || def_type === 'Object') {
+        new_opt[key] = def_value
+      }
+      else {new_opt[key] = opt_value}
+      
+    }
+  } else {var new_opt = defaults}
+  return new_opt
 }
 exports.get_options = get_options
 
