@@ -6,52 +6,32 @@
  ***/
 
 var tools = require('users/fitoprincipe/geetools:tools')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
 // CLOSE PANEL
 var ClosePanel = function(options) {
   
   this.name = function() {return 'ClosePanel'}
   
-  var def 
-  
-  
-  // OUTTER STYLE
-  var def_outter_style = {
+  var def = {
+    widgets: [],
+    layout: ui.Panel.Layout.flow('vertical'),
+    style: {
       backgroundColor: 'white',
       margin: 0,
       shown: true,
       position: 'top-center',
       border: '1px solid black'
-    }
-    
-  if (options.style) {
-    var opt_outter_style = tools.get_options(def_outter_style, options.style)
-  } else {
-    var opt_outter_style = def_outter_style
-  }
-  
-  // INNER STYLE
-  var def_inner_style = {
-      backgroundColor: opt_outter_style.backgroundColor,
+    },
+    inner_style: {
+      backgroundColor: 'white',
       margin: 0,
       shown: true,
       position: 'top-center'
     }
-    
-  if (options.inner_style) {
-    var opt_inner_style = tools.get_options(def_inner_style, options.inner_style)
-  } else {
-    var opt_inner_style = def_inner_style
   }
   
-  var def = {
-    widgets: [],
-    layout: ui.Panel.Layout.flow('vertical'),
-  }
-  
-  this.opt = tools.get_options(def, options)
-  this.opt.style = opt_outter_style
-  this.opt.inner_style = opt_inner_style
+  this.opt = helpers.get_options_dev(def, options)
   
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
