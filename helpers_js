@@ -81,8 +81,8 @@ var get_options = function(defaults, options) {
       var def_value = defaults[key]
       var opt_value = opt[key]
       
-      var def_type = helper.object.getType(def_value)
-      var opt_type = helper.object.getType(opt_value)
+      var def_type = object.getType(def_value)
+      var opt_type = object.getType(opt_value)
       
       
       if (def_type === 'Object' && opt_type === 'Object') {
