@@ -98,7 +98,7 @@ var get_options = function(defaults, options) {
   } else {var new_opt = defaults}
   return new_opt
 }
-exports.get_options = get_options
+exports.get_options = get_options_old
 
 // Objects
 var object = {}
