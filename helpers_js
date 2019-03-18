@@ -99,6 +99,7 @@ var get_options = function(defaults, options) {
   return new_opt
 }
 exports.get_options = get_options_old
+exports.get_options_dev = get_options
 
 // Objects
 var object = {}
