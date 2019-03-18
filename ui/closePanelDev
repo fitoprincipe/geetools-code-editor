@@ -33,6 +33,8 @@ var ClosePanel = function(options) {
   
   this.opt = helpers.get_options_dev(def, options)
   
+  print(this.opt)
+  
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
   
