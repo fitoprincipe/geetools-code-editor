@@ -84,7 +84,8 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       type: 'float',
       region: null,
       name: null,
-      crs: null
+      crs: null,
+      dateFormat: 'yyyy-MM-dd'
     }
     
     var opt = tools.get_options(defaults, options)
@@ -103,7 +104,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
           var iid = img.id().getInfo()
         }
         if (opt.name.indexOf('{date}') !== -1) {
-          var idate = img.date().format('yyyy-MM-dd').getInfo()
+          var idate = img.date().format(opt.dateFormat).getInfo()
         }
         var id = helpers.string.format(opt.name, {id:iid, date:idate, position:i.toString()})
         
