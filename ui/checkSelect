@@ -1,0 +1,51 @@
+/**
+ * CheckSelect Widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+ 
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var CheckSelect = function(options) {
+  var def = {
+    checkbox: {
+      style: {
+        padding: '8px 0px 8px 0px'
+      }
+    },
+    select: {
+      style: {
+      }
+    },
+    panel: {
+      style: {
+      },
+      layout: ui.Panel.Layout.flow('horizontal')
+    }
+  }
+  this.options = helpers.get_options(def, options)
+  
+  this.checkbox = ui.Checkbox(this.options.checkbox)
+  this.select = ui.Select(this.options.select)
+  
+  this.options.panel.widgets = [this.checkbox, this.select]
+  
+  this.panel = ui.Panel(this.options.panel)
+}
+
+CheckSelect.prototype.build = function() {
+  return this.panel
+}
+
+CheckSelect.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+  return widget
+}
+
+CheckSelect.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
