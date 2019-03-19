@@ -49,3 +49,5 @@ CheckSelect.prototype.insertTo = function(widget, position) {
   this.parent = widget
   return widget
 }
+
+exports.CheckSelect = CheckSelect
