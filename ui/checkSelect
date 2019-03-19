@@ -9,6 +9,7 @@ var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
 var CheckSelect = function(options) {
   var def = {
+    items: [],
     checkbox: {
       style: {
         padding: '8px 0px 8px 0px'
@@ -20,11 +21,14 @@ var CheckSelect = function(options) {
     },
     panel: {
       style: {
+        padding: '0px 0px 0px 0px'
       },
       layout: ui.Panel.Layout.flow('horizontal')
     }
   }
   this.options = helpers.get_options(def, options)
+  
+  this.options.select.items = this.options.items
   
   this.checkbox = ui.Checkbox(this.options.checkbox)
   this.select = ui.Select(this.options.select)
@@ -32,6 +36,13 @@ var CheckSelect = function(options) {
   this.options.panel.widgets = [this.checkbox, this.select]
   
   this.panel = ui.Panel(this.options.panel)
+  
+  // Inherit
+  this.items = this.select.items()
+}
+
+CheckSelect.prototype.onSelect = function(callback) {
+  return null
 }
 
 CheckSelect.prototype.build = function() {
@@ -51,3 +62,9 @@ CheckSelect.prototype.insertTo = function(widget, position) {
 }
 
 exports.CheckSelect = CheckSelect
+
+var test = new CheckSelect({
+  items: [{label:'a',value:1}, {label:'b', value:2}]
+  //items: ['a', 'b']
+})
+test.addTo(Map)
