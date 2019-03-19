@@ -7,6 +7,7 @@ Some batch useful tools
 */
 
 var tools = require('users/fitoprincipe/geetools:tools')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
 // TASK CLASS
 var Task = function(taskId, config) {
@@ -98,7 +99,15 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
       if (opt.name) {
-        var id = opt.name+'_image_'+i.toString();
+        if (opt.name.indexOf('{id}') !== -1) {
+          var iid = img.id().getInfo()
+        }
+        if (opt.name.indexOf('{date}') !== -1) {
+          var idate = img.date().format('yyyy-MM-dd').getInfo()
+        }
+        var id = helper.string.format(opt.name, {id:iid, date:idate})
+        
+        id = helper._str(id)
       } else {
         var id = img.id().getInfo() || colID+'_image_'+i.toString()
       }
