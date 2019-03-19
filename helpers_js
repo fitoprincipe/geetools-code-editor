@@ -169,3 +169,13 @@ array.insert = function(array, index, element) {
 }
 
 exports.array = array
+
+// Strings
+var string = {}
+
+string.format = function(str, arr) {
+  return str.replace(/{(\d+)}/g, function (match, number) {
+    return typeof arr[number] != 'undefined' ? arr[number] : match;
+  })}
+  
+exports.string = string
