@@ -117,6 +117,8 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       
       var imtype = IMAGE_TYPES(img, opt.type)
       
+      id = helpers.string.formatTask(id)
+      
       var params = {
         image: imtype,
         description: id,
