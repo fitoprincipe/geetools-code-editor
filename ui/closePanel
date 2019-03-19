@@ -32,7 +32,7 @@ var ClosePanel = function(options) {
     }
   }
   
-  this.opt = helpers.get_options_dev(def, options)
+  this.opt = helpers.get_options(def, options)
   
   this.inner_widgets = this.opt.widgets
   this.layout = this.opt.layout
