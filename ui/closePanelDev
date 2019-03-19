@@ -37,11 +37,11 @@ var ClosePanel = function(options) {
   print(this.opt)
   
   this.inner_widgets = this.opt.widgets
-  //this.layout = this.opt.layout
+  this.layout = this.opt.layout
   
   this.inner = ui.Panel({
     widgets: this.inner_widgets,
-    layout: this.opt.layout,
+    layout: this.layout,
     style: this.opt.inner_style
   })
   
