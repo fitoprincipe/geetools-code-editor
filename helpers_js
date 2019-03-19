@@ -69,6 +69,7 @@ var isWidget = function(obj) {
   }
   return n
 }
+exports.isWidget = isWidget
 
 // KEEP IN CASE BROKEN APPS
 var get_options_old = function(def, options) {
