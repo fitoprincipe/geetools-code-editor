@@ -105,7 +105,7 @@ var get_options = function(defaults, options) {
         def_value = get_options(def_value, opt_value)
       }
       
-      if (opt[key] === undefined || def_type === 'Object') {
+      if (opt[key] === undefined) {
         opt[key] = def_value
       }
     }
