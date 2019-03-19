@@ -42,7 +42,11 @@ var CheckSelect = function(options) {
 }
 
 CheckSelect.prototype.onSelect = function(callback) {
-  return null
+  var self = this
+  var wrap = function(value, select) {
+    callback(value, select, self.checkbox.getValue(), self.checkbox)
+  }
+  return wrap
 }
 
 CheckSelect.prototype.build = function() {
@@ -67,4 +71,5 @@ var test = new CheckSelect({
   items: [{label:'a',value:1}, {label:'b', value:2}]
   //items: ['a', 'b']
 })
+test.onSelect(function(value, wid){print(value, wid.getPlaceholder())})
 test.addTo(Map)
