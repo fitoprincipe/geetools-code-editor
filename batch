@@ -94,14 +94,17 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var colList = collection.toList(n);
     
-    var colID = collection.getInfo()['id'] || ""
-    colID = colID.replace('/','_')
+    if (!opt.name) {
+      var colID = collection.getInfo()['id'] || ""
+      //colID = colID.replace('/','_')
+      colID = helpers.string.formatTask(colID)
+    }
     
     for (var i = 0; i < n; i++) {
       var img = ee.Image(colList.get(i));
       if (opt.name) {
         if (opt.name.indexOf('{id}') !== -1) {
-          var iid = img.id().getInfo()
+          var iid = img.id().getInfo() || i.toString()
         }
         if (opt.name.indexOf('{date}') !== -1) {
           var idate = img.date().format(opt.dateFormat).getInfo()
