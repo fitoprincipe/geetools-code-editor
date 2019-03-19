@@ -174,8 +174,15 @@ exports.array = array
 var string = {}
 
 string.format = function(str, arr) {
-  return str.replace(/{(\d+)}/g, function (match, number) {
-    return typeof arr[number] != 'undefined' ? arr[number] : match;
-  })}
+  if (typeof(arr) === 'array') {
+    return str.replace(/{(\d+)}/g, function (match, number) {
+      return typeof arr[number] != 'undefined' ? arr[number] : match;
+    })}
+  else if (typeof(arr) === 'object') {
+    return str.replace(/{(\w+)}/g, function (match, str) {
+      return typeof arr[str] != 'undefined' ? arr[str] : match;
+    });
+  };
+}
   
 exports.string = string
