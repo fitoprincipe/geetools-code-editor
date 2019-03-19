@@ -85,6 +85,8 @@ var get_options_old = function(def, options) {
   } else {var opt = def}
   return opt
 }
+exports.get_options_simple = get_options_old
+
 
 // Get Options
 var get_options = function(defaults, options) {
@@ -111,7 +113,7 @@ var get_options = function(defaults, options) {
   return opt
 }
 exports.get_options = get_options
-//exports.get_options_dev = get_options
+//
 
 // Objects
 var object = {}
