@@ -54,6 +54,22 @@ var uuid4 = function() {
   }
 exports.uuid4 = uuid4
 
+// Catch Widget Object Type
+var isWidget = function(obj) {
+  try {
+    var o = obj.Ab().split('.')[0]
+    if (o === 'ui') {
+      n = true
+    }
+    else {
+      n = false
+    }
+  } catch(err) {
+    var n = false
+  }
+  return n
+}
+
 // KEEP IN CASE BROKEN APPS
 var get_options_old = function(def, options) {
   // fill options dict with default values if not present
@@ -85,7 +101,7 @@ var get_options = function(defaults, options) {
       var opt_type = object.getType(opt_value)
       
       
-      if (def_type === 'Object' && opt_type === 'Object') {
+      if (def_type === 'Object' && opt_type === 'Object' && !isWidget(def_value)) {
         def_value = get_options(def_value, opt_value)
       }
       
