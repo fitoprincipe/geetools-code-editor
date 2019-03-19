@@ -105,7 +105,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         if (opt.name.indexOf('{date}') !== -1) {
           var idate = img.date().format('yyyy-MM-dd').getInfo()
         }
-        var id = helper.string.format(opt.name, {id:iid, date:idate})
+        var id = helpers.string.format(opt.name, {id:iid, date:idate})
         
         id = helper._str(id)
       } else {
