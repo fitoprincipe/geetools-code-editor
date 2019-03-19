@@ -190,5 +190,11 @@ string._str = function(str) {
     return '_'
   })
 }
+
+string.formatTask = function(str) {
+  return str.replace(/(\/)/g, function(match, result) {
+    return '_'
+  })
+}
   
 exports.string = string
