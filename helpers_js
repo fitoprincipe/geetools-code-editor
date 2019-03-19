@@ -184,5 +184,11 @@ string.format = function(str, arr) {
     });
   };
 }
+
+string._str = function(str) {
+  return str.replace(/(\s)/g, function(match, result) {
+    return '_'
+  })
+}
   
 exports.string = string
