@@ -107,7 +107,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         }
         var id = helpers.string.format(opt.name, {id:iid, date:idate})
         
-        id = helpers._str(id)
+        id = helpers.string._str(id)
       } else {
         var id = img.id().getInfo() || colID+'_image_'+i.toString()
       }
