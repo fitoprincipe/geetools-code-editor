@@ -89,8 +89,6 @@ var get_options_old = function(def, options) {
 // Get Options
 var get_options = function(defaults, options) {
   // fill options dict with default values if not present
-  var new_opt = {}
-  
   if (options !== undefined) {
     var opt = options
     
@@ -101,19 +99,16 @@ var get_options = function(defaults, options) {
       var def_type = object.getType(def_value)
       var opt_type = object.getType(opt_value)
       
-      
       if (def_type === 'Object' && opt_type === 'Object' && !isWidget(def_value)) {
         def_value = get_options(def_value, opt_value)
       }
       
       if (opt[key] === undefined || def_type === 'Object') {
-        new_opt[key] = def_value
+        opt[key] = def_value
       }
-      else {new_opt[key] = opt_value}
-      
     }
-  } else {var new_opt = defaults}
-  return new_opt
+  } else {var opt = defaults}
+  return opt
 }
 exports.get_options = get_options
 //exports.get_options_dev = get_options
