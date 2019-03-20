@@ -39,11 +39,10 @@ var CheckSelect = function(options) {
   
   // Inherit
   this.items = this.select.items()
-  
-  this.select.onChange(this.callback())
 }
 
-CheckSelect.prototype.callback = function() {
+// onSelect
+CheckSelect.prototype.selectCallback = function() {
   var self = this
   var wrap = function(value, widget) {
     if (self.onSelectCallback) {
@@ -52,12 +51,29 @@ CheckSelect.prototype.callback = function() {
   }
   return wrap
 }
-
 CheckSelect.prototype.onSelect = function(callback) {
   this.onSelectCallback = callback
 }
 
+// onCheck
+CheckSelect.prototype.checkCallback = function() {
+  var self = this
+  var wrap = function(value, widget) {
+    if (self.onCheckCallback) {
+      self.onCheckCallback(value, self.select.getValue(), widget, self.select)
+    }
+  }
+  return wrap
+}
+CheckSelect.prototype.onCheck = function(callback) {
+  this.onCheckCallback = callback
+}
+
 CheckSelect.prototype.build = function() {
+  // Bindings
+  this.select.onChange(this.selectCallback())
+  this.checkbox.onChange(this.checkCallback())
+  
   return this.panel
 }
 
