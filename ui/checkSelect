@@ -74,12 +74,3 @@ CheckSelect.prototype.insertTo = function(widget, position) {
 }
 
 exports.CheckSelect = CheckSelect
-
-var test = new CheckSelect({
-  //items: [{label:'a',value:1}, {label:'b', value:2}]
-  items: ['a', 'b']
-})
-test.onSelect(function(value, wid, check, widch){
-  print(value, wid.getPlaceholder(), check, widch.style())
-})
-test.addTo(Map)
