@@ -47,7 +47,7 @@ CheckSelect.prototype.callback = function() {
   var self = this
   var wrap = function(value, widget) {
     if (self.onSelectCallback) {
-      self.onSelectCallback(value, widget, self.checkbox.getValue(), self.checkbox)
+      self.onSelectCallback(value, self.checkbox.getValue(), widget, self.checkbox)
     }
   }
   return wrap
