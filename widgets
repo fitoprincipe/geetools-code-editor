@@ -11,5 +11,5 @@ exports.ClosePanel = ClosePanel
 var DrawingPanel = require('users/fitoprincipe/geetools:ui/drawingPanel').DrawingPanel
 exports.DrawingPanel = DrawingPanel
 
-var checkSelect = require('users/fitoprincipe/geetools:ui/checkSelect').CheckSelect
+var CheckSelect = require('users/fitoprincipe/geetools:ui/checkSelect').CheckSelect
 exports.CheckSelect = CheckSelect
