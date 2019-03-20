@@ -39,14 +39,22 @@ var CheckSelect = function(options) {
   
   // Inherit
   this.items = this.select.items()
+  
+  this.select.onChange(this.callback())
+}
+
+CheckSelect.prototype.callback = function() {
+  var self = this
+  var wrap = function(value, widget) {
+    if (self.onSelectCallback) {
+      self.onSelectCallback(value, widget, self.checkbox.getValue(), self.checkbox)
+    }
+  }
+  return wrap
 }
 
 CheckSelect.prototype.onSelect = function(callback) {
-  var self = this
-  var wrap = function(value, select) {
-    callback(value, select, self.checkbox.getValue(), self.checkbox)
-  }
-  return wrap
+  this.onSelectCallback = callback
 }
 
 CheckSelect.prototype.build = function() {
@@ -68,8 +76,10 @@ CheckSelect.prototype.insertTo = function(widget, position) {
 exports.CheckSelect = CheckSelect
 
 var test = new CheckSelect({
-  items: [{label:'a',value:1}, {label:'b', value:2}]
-  //items: ['a', 'b']
+  //items: [{label:'a',value:1}, {label:'b', value:2}]
+  items: ['a', 'b']
 })
-test.onSelect(function(value, wid){print(value, wid.getPlaceholder())})
+test.onSelect(function(value, wid, check, widch){
+  print(value, wid.getPlaceholder(), check, widch.style())
+})
 test.addTo(Map)
