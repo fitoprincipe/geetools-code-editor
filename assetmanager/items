@@ -19,3 +19,15 @@ var AssetItem = function(id, type, parent) {
   }
 }
 exports.AssetItem = AssetItem
+
+var getItems = function(id) {
+  var data = ee.data.getList({'id':id})
+  var result = []
+  for (var i in data) {
+    var value = data[i]
+    var item = new AssetItem(value.id, value.type)
+    result.push({label:item.label(), value:value.id})
+  }
+  return result
+}
+exports.getItems = getItems
