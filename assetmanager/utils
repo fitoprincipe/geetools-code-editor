@@ -40,10 +40,10 @@ var recrusiveDeleteAsset = function(assetId) {
             // delete empty colletion and/or folder
             ee.data.deleteAsset(assetId)
         } else {
-            for (i in content) {
+            for (var i in content) {
               var asset = content[i]
-              path = asset['id']
-              ty = asset['type']
+              var path = asset['id']
+              var ty = asset['type']
               if (ty === 'Image') {
                   // print('deleting {}'.format(path))
                   ee.data.deleteAsset(path)
@@ -59,3 +59,5 @@ var recrusiveDeleteAsset = function(assetId) {
     }
 }
 exports.recrusiveDeleteAsset = recrusiveDeleteAsset
+
+//recrusiveDeleteAsset('users/fitoprincipe/TEST/Folder/Collection')
