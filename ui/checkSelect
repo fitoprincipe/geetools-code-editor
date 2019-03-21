@@ -41,6 +41,10 @@ var CheckSelect = function(options) {
   
   // Inherit
   this.items = this.select.items()
+  
+  // Bindings
+  this.select.onChange(this.selectCallback())
+  this.checkbox.onChange(this.checkCallback())
 }
 
 // Getters
@@ -92,10 +96,6 @@ CheckSelect.prototype.onCheck = function(callback) {
 }
 
 CheckSelect.prototype.build = function() {
-  // Bindings
-  this.select.onChange(this.selectCallback())
-  this.checkbox.onChange(this.checkCallback())
-  
   return this.panel
 }
 
