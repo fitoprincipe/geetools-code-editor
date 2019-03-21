@@ -37,6 +37,8 @@ var CheckSelect = function(options) {
   
   this.panel = ui.Panel(this.options.panel)
   
+  this.name = 'CheckSelect'
+  
   // Inherit
   this.items = this.select.items()
 }
