@@ -3,6 +3,7 @@
  * Author: Rodrigo E. Principe
  * email: fitoprincipe82@gmail.com
  * licence: MIT
+ * web: https://github.com/fitoprincipe/geetools-code-editor/wiki/DrawingPanel
  ***/
 
 var tools = require('users/fitoprincipe/geetools:tools')
@@ -210,5 +211,3 @@ DrawingPanel.prototype.insertTo = function(widget, position) {
 }
 
 exports.DrawingPanel = DrawingPanel
-
-// Example in https://github.com/fitoprincipe/geetools-code-editor/wiki/Widgets#drawingpaneloptions
