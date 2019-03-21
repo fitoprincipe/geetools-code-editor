@@ -1,0 +1,130 @@
+/**
+ * Asset selector widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+ 
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+var widgets = require('users/fitoprincipe/geetools:widgets')
+var utils = require('users/fitoprincipe/geetools:assetmanager/utils')
+var item = require('users/fitoprincipe/geetools:assetmanager/items')
+var CS = widgets.CheckSelect
+
+var AssetSelector = function(options) {
+  
+  var def = {
+    root: null,
+  }
+  this.options = helpers.get_options(def, options)
+  this.root = this.options.root || utils.getRoot()
+  
+  // First (root) selector
+  this.root_selector = new CS({
+    items: item.getItems(this.root)
+  })
+  this.root_selector.onSelect(this.callback())
+  
+  // set position & parent
+  this.root_selector.position = 0
+  this.root_selector.container = null
+  
+  // global Panel
+  this.panel = ui.Panel()
+  
+  // make a list of selectors
+  this.selectors = [this.root_selector]
+  
+  // add selectors
+  this.update()
+}
+
+AssetSelector.prototype.build = function() {
+  return this.panel
+}
+
+AssetSelector.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+  return widget
+}
+
+AssetSelector.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
+
+AssetSelector.prototype.getSelected = function() {
+  // get a list of the selected (checked) assets
+  var selected = []
+  for (var i in this.selectors) {
+    var object = {}
+    var select = this.selectors[i]
+    if (select.checkbox.getValue()) {
+      var label = select.getLabel()
+      if (label) {
+        var id = select.select.getValue()
+        var type = label.split(' ')[0].slice(1,-1)
+        object.id = id
+        object.type = type
+        selected.push(object)
+      }
+    }
+  }
+  return selected
+}
+
+AssetSelector.prototype.update = function() {
+  // Update the list of selectors using the list of selectors
+  this.panel.clear()
+  // panel title (user)
+  this.title = ui.Label({value:this.user})
+  this.panel.add(this.title)
+  for (var i in this.selectors) {
+    var selector = this.selectors[i]
+    selector.addTo(this.panel)
+  }
+}
+
+AssetSelector.prototype.callback = function() {
+  var self = this
+  var wrap = function(value, check, select, checkbox, cs) {
+    
+    // Remake id and get type
+    var label = cs.getLabel()
+    var splitted = label.split(' ')
+    var type = splitted[0]
+    type = type.slice(1, type.length-1)
+    
+    var id = value
+    
+    if (type === 'IMAGE' || type === 'TABLE') {
+      // clear old selectors
+      self.selectors = self.selectors.slice(0, cs.position+1)
+      // add selectors to panel
+      self.update()
+    } else {
+    
+      // Make new selector
+      var items = item.getItems(id)
+      var selector = new CS({
+        items:items,
+      })
+      // set properties to selector
+      selector.position = cs.position + 1 
+      selector.container = cs
+      // set callback
+      selector.onSelect(self.callback())
+      // add selector to global list
+      self.selectors[selector.position] = selector
+      // clear old selectors
+      self.selectors = self.selectors.slice(0, selector.position+1)
+      // add selectors to panel
+      self.update()
+    }
+  }
+  return wrap
+}
+
+exports.AssetSelector = AssetSelector
