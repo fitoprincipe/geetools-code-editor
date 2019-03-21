@@ -79,7 +79,7 @@ AssetSelector.prototype.update = function() {
   // Update the list of selectors using the list of selectors
   this.panel.clear()
   // panel title (user)
-  this.title = ui.Label({value:this.user})
+  this.title = ui.Label({value:this.root})
   this.panel.add(this.title)
   for (var i in this.selectors) {
     var selector = this.selectors[i]
