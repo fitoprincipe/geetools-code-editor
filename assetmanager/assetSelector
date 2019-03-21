@@ -17,7 +17,9 @@ var AssetSelector = function(options) {
     root: null,
     title: true,
     panel: {
-      style: {},
+      style: {
+        padding: '0px',
+      },
     }
   }
   this.options = helpers.get_options(def, options)
