@@ -1,0 +1,18 @@
+/**
+ * Util functions for handling assets
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+ 
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var getRoot = function(id) {
+  if (id) {
+    var splitted = id.split('/')
+    return splitted[0]+'/'+splitted[1]
+  } else {
+    return ee.data.getAssetRoots()[0]['id']
+  }
+}
+exports.getRoot = getRoot
