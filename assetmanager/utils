@@ -16,3 +16,45 @@ var getRoot = function(id) {
   }
 }
 exports.getRoot = getRoot
+
+var recrusiveDeleteAsset = function(assetId) {
+    var info = ee.data.getInfo(assetId)
+    if (info) {
+        var ty = info['type']
+        if (ty === 'Image' || ty === 'FeatureCollection') {
+            // setting content to 0 will delete the assetId
+            var content = 0
+        } else if (ty === 'Folder' || ty === 'ImageCollection') {
+            try {
+                var content = ee.data.getList({'id':assetId})
+            } catch(e) {
+                print(e)
+                return null
+            }
+        } else {
+            print("Can't handle "+ty+" type yet")
+            return null
+        }
+
+        if (content === 0) {
+            // delete empty colletion and/or folder
+            ee.data.deleteAsset(assetId)
+        } else {
+            for (i in content) {
+              var asset = content[i]
+              path = asset['id']
+              ty = asset['type']
+              if (ty === 'Image') {
+                  // print('deleting {}'.format(path))
+                  ee.data.deleteAsset(path)
+              } else {
+                  recrusiveDeleteAsset(path)
+              }
+            }
+            // delete empty collection and/or folder
+            ee.data.deleteAsset(assetId)
+        }
+    } else {
+        print(assetId+' does not exists or there is another problem')
+    }
+}
