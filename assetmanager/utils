@@ -58,3 +58,4 @@ var recrusiveDeleteAsset = function(assetId) {
         print(assetId+' does not exists or there is another problem')
     }
 }
+exports.recrusiveDeleteAsset = recrusiveDeleteAsset
