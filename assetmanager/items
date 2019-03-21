@@ -1,0 +1,21 @@
+/**
+ * Asset Items
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+var utils = require('users/fitoprincipe/geetools:assetmanager/utils')
+
+var AssetItem = function(id, type, parent) {
+  this.id = id
+  this.type = type
+  this.parent = parent
+  
+  this.user = utils.getRoot(this.id)
+  this.folder = this.id.replace(this.user+'/', '')
+  
+  this.label = function() {
+    return '('+type.toUpperCase()+') '+this.folder
+  }
+}
+exports.AssetItem = AssetItem
