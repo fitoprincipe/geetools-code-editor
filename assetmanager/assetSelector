@@ -82,8 +82,8 @@ AssetSelector.prototype.update = function() {
   // panel title (user)
   if (this.options.title) {
     this.title = ui.Label({value:this.root})
+    this.panel.add(this.title)
   }
-  this.panel.add(this.title)
   // iterate over selectors
   for (var i in this.selectors) {
     var selector = this.selectors[i]
