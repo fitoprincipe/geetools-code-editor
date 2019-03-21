@@ -8,7 +8,7 @@
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 var widgets = require('users/fitoprincipe/geetools:widgets')
 var utils = require('users/fitoprincipe/geetools:assetmanager/utils')
-var item = require('users/fitoprincipe/geetools:assetmanager/items')
+var assetItems = require('users/fitoprincipe/geetools:assetmanager/assetItems')
 var CS = widgets.CheckSelect
 
 var AssetSelector = function(options) {
@@ -21,7 +21,7 @@ var AssetSelector = function(options) {
   
   // First (root) selector
   this.root_selector = new CS({
-    items: item.getItems(this.root)
+    items: assetItems.getItems(this.root)
   })
   this.root_selector.onSelect(this.callback())
   
@@ -107,7 +107,7 @@ AssetSelector.prototype.callback = function() {
     } else {
     
       // Make new selector
-      var items = item.getItems(id)
+      var items = assetItems.getItems(id)
       var selector = new CS({
         items:items,
       })
