@@ -110,6 +110,7 @@ var DrawingPanel = function(options) {
   this.onStopCallback = null
   this.onStartCallback = null
   this.started = false
+  this.errors = []
 }
 
 DrawingPanel.prototype.start = function() {
@@ -117,13 +118,17 @@ DrawingPanel.prototype.start = function() {
   var wrap = function() {
     // Check if already started
     if (app.started) {
-      print('There is a drawing already started, please stop it before a new drawing')
+      var error = 'There is a drawing already started, please stop it before a new drawing' 
+      app.errors.push(error)
+      print(error)
       return null
     }
     // Check if there is a name
     var name = app.drawing_name_textbox.getValue()
     if (!name) {
-      print('You must provide a name')
+      var error = 'You must provide a name'
+      app.errors.push(error)
+      print(error)
       return null
     }
     // set drawing name
