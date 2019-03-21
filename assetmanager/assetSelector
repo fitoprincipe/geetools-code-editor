@@ -15,6 +15,7 @@ var AssetSelector = function(options) {
   
   var def = {
     root: null,
+    title: true,
   }
   this.options = helpers.get_options(def, options)
   this.root = this.options.root || utils.getRoot()
@@ -79,8 +80,11 @@ AssetSelector.prototype.update = function() {
   // Update the list of selectors using the list of selectors
   this.panel.clear()
   // panel title (user)
-  this.title = ui.Label({value:this.root})
+  if (this.options.title) {
+    this.title = ui.Label({value:this.root})
+  }
   this.panel.add(this.title)
+  // iterate over selectors
   for (var i in this.selectors) {
     var selector = this.selectors[i]
     selector.addTo(this.panel)
