@@ -16,6 +16,9 @@ var AssetSelector = function(options) {
   var def = {
     root: null,
     title: true,
+    panel: {
+      style: {},
+    }
   }
   this.options = helpers.get_options(def, options)
   this.root = this.options.root || utils.getRoot()
@@ -31,7 +34,7 @@ var AssetSelector = function(options) {
   this.root_selector.container = null
   
   // global Panel
-  this.panel = ui.Panel()
+  this.panel = ui.Panel(this.options.panel)
   
   // make a list of selectors
   this.selectors = [this.root_selector]
