@@ -333,13 +333,16 @@ map.removeLayerByName = function(name, map) {
 map.removeAllLayersByName = function(name, map) {
   var m = map || Map
   var layers = m.layers().getJsArray()
+  var removedIndexes = []
   for (var i in layers) {
     var lay = layers[i]
     var lay_name = lay.getName()
     if (lay_name === name) {
       m.remove(lay)
+      removedIndexes.push(Number(i))
     }
   }
+  return removedIndexes
 }
 
 map.removeLayer = function(layer, map) {
@@ -374,7 +377,6 @@ map.removeObject = function(eeobject, map) {
   var layers = m.layers()
   var layersJS = layers.getJsArray()
   var removedIndexes = []
-  var keepLayers = []
   
   for (var i in layersJS) {
     var layer = layersJS[i]
@@ -384,19 +386,6 @@ map.removeObject = function(eeobject, map) {
       removedIndexes.push(Number(i))
     }
   }
-  
-  /*
-  layers.forEach(function(layer, i) {
-    var object = layer.getEeObject()
-    if (object === eeobject) {
-      removedIndexes.push(i)
-    } else {
-      keepLayers.push(layer)
-    }
-  })
-  layers.reset(keepLayers)
-  */
-  
   return removedIndexes
 }
 
