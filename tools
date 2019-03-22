@@ -430,7 +430,7 @@ map.moveLayer = function(layer, index, m) {
   m = m || Map
   map.removeLayer(layer, m)
   var map_layers = m.layers()
-  m.layers.insert(index, layer)
+  map_layers.insert(index, layer)
 }
 
 /** NUMBER */
