@@ -33,7 +33,6 @@ var AssetSelector = function(options) {
   
   // make proxy callback
   this.onCheckCallback = function() {}
-  this.root_selector.onCheck(this.onCheckCallback)
   
   // set position & parent
   this.root_selector.position = 0
@@ -50,6 +49,9 @@ var AssetSelector = function(options) {
 }
 
 AssetSelector.prototype.build = function() {
+  // bind callback
+  this.root_selector.onCheck(this.onCheckCallback)
+  
   return this.panel
 }
 
