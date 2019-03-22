@@ -367,6 +367,21 @@ map.replaceLayer = function(layer, newlayer, map) {
   }
 }
 
+map.removeObject = function(eeobject, map) {
+  // remove every added object in the map
+  var m = map || Map
+  var layers = m.layers()
+  var removedIndexes = []
+  layers.forEach(function(layer, i) {
+    var object = layer.getEeObject()
+    if (object === eeobject) {
+      layers.remove(layer)
+      removedIndexes.push(i)
+    }
+  })
+  return removedIndexes
+}
+
 map.getLayer = function(name, map) {
   var m = map || Map
   var layers = m.layers()
