@@ -411,6 +411,21 @@ map.getLayer = function(name, map) {
   return lay
 }
 
+map.getLayers = function(name, map) {
+  var m = map || Map
+  var layers = m.layers()
+  var l = layers.length()
+  var result = []
+  for (var i=0; i<l; i++) {
+    var lay = layers.get(i)
+    var n = lay.getName()
+    if (n === name) {
+      results.push(lay)
+    }
+  }
+  return results
+}
+
 /** NUMBER */
 var number = {};
 
