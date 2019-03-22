@@ -377,7 +377,7 @@ map.removeObject = function(eeobject, map) {
     var object = layer.getEeObject()
     if (object === eeobject) {
       print('equal')
-      //layers.remove(layer)
+      layers.remove(layer)
       removedIndexes.push(i)
     }
   }
