@@ -426,6 +426,13 @@ map.getLayers = function(name, map) {
   return results
 }
 
+map.moveLayer = function(layer, index, map) {
+  var m = map || Map
+  map.removeLayer(layer, map)
+  var map_layers = m.layers()
+  m.layers.insert(index, layer)
+}
+
 /** NUMBER */
 var number = {};
 
