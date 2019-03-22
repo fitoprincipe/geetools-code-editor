@@ -372,8 +372,15 @@ map.removeObject = function(eeobject, map) {
   // return a list of the indexes removed
   var m = map || Map
   var layers = m.layers()
+  var layersJS = layers.getJsArray()
   var removedIndexes = []
   var keepLayers = []
+  for (var i in layersJS) {
+    var layer = layersJS[i]
+    m.remove(layer)
+    removedIndexes.push(i)
+  }
+  /*
   layers.forEach(function(layer, i) {
     var object = layer.getEeObject()
     if (object === eeobject) {
@@ -383,6 +390,7 @@ map.removeObject = function(eeobject, map) {
     }
   })
   layers.reset(keepLayers)
+  */
   return removedIndexes
 }
 
