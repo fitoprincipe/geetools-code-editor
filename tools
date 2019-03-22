@@ -370,8 +370,18 @@ map.replaceLayer = function(layer, newlayer, map) {
 map.removeObject = function(eeobject, map) {
   // remove every added object in the map
   var m = map || Map
-  var layers = m.layers()
+  var layers = m.layers().getJsArray()
   var removedIndexes = []
+  for (var i in layers) {
+    var layer = layers[i]
+    var object = layer.getEeObject()
+    if (object === eeobject) {
+      print('equal')
+      //layers.remove(layer)
+      removedIndexes.push(i)
+    }
+  }
+  /*
   layers.forEach(function(layer, i) {
     var object = layer.getEeObject()
     if (object === eeobject) {
@@ -380,6 +390,7 @@ map.removeObject = function(eeobject, map) {
       removedIndexes.push(i)
     }
   })
+  */
   return removedIndexes
 }
 
