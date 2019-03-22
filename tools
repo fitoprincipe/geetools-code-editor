@@ -348,13 +348,15 @@ map.removeAllLayersByName = function(name, map) {
 map.removeLayer = function(layer, map) {
   var m = map || Map
   var layers = m.layers().getJsArray()
+  var removed = []
   for (var i in layers) {
     var lay = layers[i]
     if (lay === layer) {
       m.remove(lay)
-      return i
+      removed.push(Number(i))
     }
   }
+  return removed
 }
 
 map.replaceLayer = function(layer, newlayer, map) {
