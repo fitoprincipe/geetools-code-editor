@@ -371,29 +371,19 @@ map.removeObject = function(eeobject, map) {
   // remove every added object in the map
   var m = map || Map
   var layers = m.layers()
-  var layersJS = layers.getJsArray()
   var removedIndexes = []
-  for (var i in layersJS) {
-    var layer = layers[i]
-    if (layer) {
-      var object = layer.getEeObject()
-      if (object === eeobject) {
-        print('equal')
-        layers.remove(layer)
-        removedIndexes.push(i)
-      }
-    }
-  }
-  /*
+  var keepLayers = []
   layers.forEach(function(layer, i) {
     var object = layer.getEeObject()
     if (object === eeobject) {
       print('equal')
       //layers.remove(layer)
       removedIndexes.push(i)
+    } else {
+      keepLayers.push(layer)
     }
   })
-  */
+  layers.reset(keepLayers)
   return removedIndexes
 }
 
