@@ -346,7 +346,7 @@ map.removeLayerByName = function(name, map) {
   return removedIndexes
 }
 
-map.removeAllLayersByName = removeLayerByName
+map.removeAllLayersByName = map.removeLayerByName
 
 map.removeLayer = function(layer, map) {
   var m = map || Map
