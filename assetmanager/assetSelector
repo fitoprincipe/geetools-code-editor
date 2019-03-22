@@ -31,6 +31,10 @@ var AssetSelector = function(options) {
   })
   this.root_selector.onSelect(this.callback())
   
+  // make proxy callback
+  this.onCheckCallback = function() {}
+  this.root_selector.onCheck(this.onCheckCallback)
+  
   // set position & parent
   this.root_selector.position = 0
   this.root_selector.container = null
@@ -81,6 +85,10 @@ AssetSelector.prototype.getSelected = function() {
   return selected
 }
 
+AssetSelector.prototype.onCheck = function(callback) {
+  this.onCheckCallback = callback
+}
+
 AssetSelector.prototype.update = function() {
   // Update the list of selectors using the list of selectors
   this.panel.clear()
@@ -123,8 +131,9 @@ AssetSelector.prototype.callback = function() {
       // set properties to selector
       selector.position = cs.position + 1 
       selector.container = cs
-      // set callback
+      // set callbacks
       selector.onSelect(self.callback())
+      selector.onCheck(self.onCheckCallback)
       // add selector to global list
       self.selectors[selector.position] = selector
       // clear old selectors
