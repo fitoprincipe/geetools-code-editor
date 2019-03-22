@@ -375,7 +375,8 @@ map.removeObject = function(eeobject, map) {
   layers.forEach(function(layer, i) {
     var object = layer.getEeObject()
     if (object === eeobject) {
-      layers.remove(layer)
+      print('equal')
+      //layers.remove(layer)
       removedIndexes.push(i)
     }
   })
