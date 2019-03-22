@@ -310,6 +310,7 @@ map.addImageCollection = function(col, options) {
 
 // Remove Layer
 // https://gis.stackexchange.com/questions/291199/google-earth-engine-remove-layer-from-the-layer-manager
+/*
 map.removeLayerByName = function(name, map) {
   var m = map || Map
   var layers = m.layers()
@@ -329,8 +330,8 @@ map.removeLayerByName = function(name, map) {
     print('Layer '+name+' not found')
   }
 }
-
-map.removeAllLayersByName = function(name, map) {
+*/
+map.removeLayerByName = function(name, map) {
   var m = map || Map
   var layers = m.layers().getJsArray()
   var removedIndexes = []
@@ -344,6 +345,8 @@ map.removeAllLayersByName = function(name, map) {
   }
   return removedIndexes
 }
+
+map.removeAllLayersByName = removeLayerByName
 
 map.removeLayer = function(layer, map) {
   var m = map || Map
