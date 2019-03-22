@@ -369,6 +369,7 @@ map.replaceLayer = function(layer, newlayer, map) {
 
 map.removeObject = function(eeobject, map) {
   // remove every added object in the map
+  // return a list of the indexes removed
   var m = map || Map
   var layers = m.layers()
   var removedIndexes = []
@@ -376,8 +377,6 @@ map.removeObject = function(eeobject, map) {
   layers.forEach(function(layer, i) {
     var object = layer.getEeObject()
     if (object === eeobject) {
-      print('equal')
-      //layers.remove(layer)
       removedIndexes.push(i)
     } else {
       keepLayers.push(layer)
