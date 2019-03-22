@@ -370,9 +370,10 @@ map.replaceLayer = function(layer, newlayer, map) {
 map.removeObject = function(eeobject, map) {
   // remove every added object in the map
   var m = map || Map
-  var layers = m.layers().getJsArray()
+  var layers = m.layers()
+  var layersJS = layers.getJsArray()
   var removedIndexes = []
-  for (var i in layers) {
+  for (var i in layersJS) {
     var layer = layers[i]
     var object = layer.getEeObject()
     if (object === eeobject) {
