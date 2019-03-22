@@ -375,11 +375,13 @@ map.removeObject = function(eeobject, map) {
   var removedIndexes = []
   for (var i in layersJS) {
     var layer = layers[i]
-    var object = layer.getEeObject()
-    if (object === eeobject) {
-      print('equal')
-      layers.remove(layer)
-      removedIndexes.push(i)
+    if (layer) {
+      var object = layer.getEeObject()
+      if (object === eeobject) {
+        print('equal')
+        layers.remove(layer)
+        removedIndexes.push(i)
+      }
     }
   }
   /*
