@@ -349,6 +349,7 @@ map.removeLayer = function(layer, map) {
     var lay = layers[i]
     if (lay === layer) {
       m.remove(lay)
+      return i
     }
   }
 }
