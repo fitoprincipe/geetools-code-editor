@@ -82,7 +82,7 @@ var geometry = {};
 // mask out pixels inside a geometry (return a function for mapping)
 geometry.maskInside = function(image, geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
-  return img.updateMask(mask)
+  return image.updateMask(mask)
 }
 
 // paint geometries
