@@ -80,13 +80,9 @@ string.format = function(string, replacement) {
 var geometry = {};
 
 // mask out pixels inside a geometry (return a function for mapping)
-geometry.maskInside = function(geometry) {
+geometry.maskInside = function(image, geometry) {
   var mask = ee.Image.constant(1).clip(geometry).mask().not()
-  
-  var wrap = function(img) {
-    return img.updateMask(mask)
-  }
-  return wrap
+  return img.updateMask(mask)
 }
 
 // paint geometries
