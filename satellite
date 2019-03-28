@@ -364,6 +364,8 @@ var Sentinel = function(number) {
       }
       this.min = 0
       this.max = 10000
+      this.start_date = '2015-01-23'
+      this.end_date = null
       
       // VISAULIZATION
       this.vis = {};
