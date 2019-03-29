@@ -128,11 +128,7 @@ object.is = function (obj, type) {
 }
 
 object.keys = function(obj) {
-  var k = []
-  for (var key in obj) {
-    k.push(key)
-  }
-  return k
+  return Object.keys(obj)
 }
 
 object.values = function(obj) {
