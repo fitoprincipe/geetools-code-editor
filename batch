@@ -9,6 +9,17 @@ Some batch useful tools
 var tools = require('users/fitoprincipe/geetools:tools')
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
+/*
+DRIVE
+driveFileNamePrefix
+driveFolder
+fileFormat
+
+ASSET
+assetId
+*/
+
+
 // TASK CLASS
 var Task = function(taskId, config) {
   this.id = taskId
@@ -143,6 +154,26 @@ Download.Table.toAsset = function(collection, options) {
   var def = {
     description: 'myExportTableTask',
     assetId: null
+  }
+  var opt = tools.get_options(def, options)
+  
+  var full_config = {
+      'type': 'EXPORT_FEATURES',
+      'json': collection.serialize(),
+      'description': opt.description,
+      'state': 'UNSUBMITTED',
+  }
+  full_config.assetId = opt.assetId
+  var task = new Task(ee.data.newTaskId()[0], full_config)
+  return task
+}
+
+Download.Table.toDrive = function(collection, options) {
+  var def = {
+    description: 'myExportTableTask',
+    driveFileNamePrefix: 'myExportTableTask',
+    driveFolder: null,
+    fileFormat: 'CSV'
   }
   var opt = tools.get_options(def, options)
   
