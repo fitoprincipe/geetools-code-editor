@@ -171,11 +171,13 @@ Download.Table.toAsset = function(collection, options) {
 Download.Table.toDrive = function(collection, options) {
   var def = {
     description: 'myExportTableTask',
-    driveFileNamePrefix: 'myExportTableTask',
-    driveFolder: null,
+    fileNamePrefix: 'myExportTableTask',
+    folder: null,
     fileFormat: 'CSV'
   }
   var opt = tools.get_options(def, options)
+  //driveFileNamePrefix
+  //driveFolder
   
   var full_config = {
       'type': 'EXPORT_FEATURES',
