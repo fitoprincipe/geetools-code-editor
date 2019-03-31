@@ -231,7 +231,9 @@ Download.Image.toDrive = function(image, options) {
     description: 'myExportImageTask',
     fileNamePrefix: 'myExportImageTask',
     folder: null,
-    fileFormat: 'GeoTIFF'
+    fileFormat: 'GeoTIFF',
+    region: getRegion(image),
+    scale: image.projection().nominalScale().getInfo()
   }
   var opt = tools.get_options(def, options)
   
@@ -242,7 +244,9 @@ Download.Image.toDrive = function(image, options) {
       'state': 'UNSUBMITTED',
       'driveFileNamePrefix': opt['fileNamePrefix'],
       'driveFolder': opt['folder'],
-      'fileFormat': opt['fileFormat']
+      'fileFormat': opt['fileFormat'],
+      'scale': opt.scale,
+      'region': opt.region
   }
   var task = new Task(ee.data.newTaskId()[0], full_config)
   return task
