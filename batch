@@ -176,8 +176,11 @@ Download.Table.toDrive = function(collection, options) {
     fileFormat: 'CSV'
   }
   var opt = tools.get_options(def, options)
-  //driveFileNamePrefix
-  //driveFolder
+  // update config
+  opt['driveFileNamePrefix'] = opt['fileNamePrefix']
+  opt = helpers.object.remove('fileNamePrefix')
+  opt['driveFolder'] = opt['folder']
+  opt = helpers.object.remove('folder')
   
   var full_config = {
       'type': 'EXPORT_FEATURES',
