@@ -186,6 +186,7 @@ Download.Table.toAsset = function(collection, options) {
 }
 
 Download.Table.toDrive = function(collection, options) {
+  print('test')
   var def = {
     description: 'myExportTableTask',
     fileNamePrefix: 'myExportTableTask',
