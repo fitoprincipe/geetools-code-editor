@@ -167,6 +167,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
   }
   
 Download.Table.toAsset = function(collection, options) {
+  print('test')
   var def = {
     description: 'myExportTableTask',
     assetId: null
