@@ -140,6 +140,17 @@ object.values = function(obj) {
   return v
 }
 
+object.remove = function(obj, key) {
+  var newobj = {}
+  for (var k in obj) {
+    var val = obj[k]
+    if (k !== key) {
+      newobj[k] = val
+    }
+  }
+  return newobj
+}
+
 object.insert = function(obj, key, value) {
   var newobj = {}
   for (var k in obj) {
