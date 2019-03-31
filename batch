@@ -19,6 +19,22 @@ ASSET
 assetId
 */
 
+var getRegion = function(object) {
+  try {
+    var name = object.name()
+    if (name === 'Image' || name === 'Feature') {
+      var geom = object.geometry()
+    } else {
+      var geom = object
+    }
+    return geom.getInfo()['coordinates']
+    
+  } catch(err) {
+    print(err)
+    return object
+  }
+  
+}
 
 // TASK CLASS
 var Task = function(taskId, config) {
@@ -185,6 +201,51 @@ Download.Table.toDrive = function(collection, options) {
   var full_config = {
       'type': 'EXPORT_FEATURES',
       'json': collection.serialize(),
+      'description': opt.description,
+      'state': 'UNSUBMITTED',
+  }
+  full_config.assetId = opt.assetId
+  var task = new Task(ee.data.newTaskId()[0], full_config)
+  return task
+}
+
+Download.Image.toAsset = function(image, options) {
+  var def = {
+    description: 'myExportImageTask',
+    assetId: null,
+    region: getRegion(image),
+    scale: image.projection().nominalScale().getInfo()
+  }
+  var opt = tools.get_options(def, options)
+  
+  var full_config = {
+      'type': 'EXPORT_IMAGE',
+      'json': image.serialize(),
+      'description': opt.description,
+      'state': 'UNSUBMITTED',
+  }
+  full_config.assetId = opt.assetId
+  var task = new Task(ee.data.newTaskId()[0], full_config)
+  return task
+}
+
+Download.Image.toDrive = function(image, options) {
+  var def = {
+    description: 'myExportImageTask',
+    fileNamePrefix: 'myExportImageTask',
+    folder: null,
+    fileFormat: 'GeoTIFF'
+  }
+  var opt = tools.get_options(def, options)
+  // update config
+  opt['driveFileNamePrefix'] = opt['fileNamePrefix']
+  opt = helpers.object.remove('fileNamePrefix')
+  opt['driveFolder'] = opt['folder']
+  opt = helpers.object.remove('folder')
+  
+  var full_config = {
+      'type': 'EXPORT_IMAGE',
+      'json': image.serialize(),
       'description': opt.description,
       'state': 'UNSUBMITTED',
   }
