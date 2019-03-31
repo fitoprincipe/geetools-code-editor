@@ -204,7 +204,7 @@ Download.Table.toDrive = function(collection, options) {
       'description': opt.description,
       'state': 'UNSUBMITTED',
   }
-  full_config.assetId = opt.assetId
+  //full_config.assetId = opt.assetId
   var task = new Task(ee.data.newTaskId()[0], full_config)
   return task
 }
