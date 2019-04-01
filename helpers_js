@@ -182,6 +182,35 @@ array.toString = function(array) {
   return '['+str+']'
 }
 
+array.countArraysInside = function(array) {
+  // Count the number of arrays inside another array
+  var arrays = 0
+  for (var i in array) {
+    var element = array[i]
+    if (helper.object.is(element, 'Array')) {
+      arrays += 1
+    } 
+  }
+  return arrays
+}
+
+array.writeableArray = function(array) {
+  // Make an array writeable
+  var ini = []
+  
+  for (var i in array) {ini.push(0)}
+  
+  for (var i in array) {
+    var e = array[i]
+    if (helper.object.is(e, 'Array')) {
+      ini[i] = readArray(e)
+    } else {
+      ini[i] = e
+    }
+  }
+  return ini
+}
+
 exports.array = array
 
 // Strings
