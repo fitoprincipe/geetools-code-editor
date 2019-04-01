@@ -213,6 +213,29 @@ var writeableArray = function(array) {
 
 array.writeableArray = writeableArray
 
+var arrayToString = function(array) {
+  // make sure it is writeable
+  array = array.writeableArray(array)
+  for (var i in array) {
+    var element = array[i]
+    if (object.is(element, 'Array')) {
+      var n = array.countArraysInside(element)
+      if (n === 0) {
+        var str = element.toString()
+        str = '['+str+']'
+        array[i] = str
+      } else {
+        array[i] = arrayToString(element)
+      }
+    } 
+  }
+  var str = array.toString()
+  str = '['+str+']'
+  return str
+}
+
+array.toString = arrayToString
+
 exports.array = array
 
 // Strings
