@@ -214,7 +214,7 @@ Download.Image.toAsset = function(image, options) {
       'json': image.serialize(),
       'description': opt.description,
       'state': 'UNSUBMITTED',
-      'region': getRegion(opt.region),
+      'region': opt.region,
       'scale': opt.scale
   }
   full_config.assetId = opt.assetId
