@@ -17,9 +17,7 @@ var getRegion = function(object) {
     } else {
       var geom = object
     }
-    print(geom)
     return geom.getInfo()['coordinates']
-    print(geom.getInfo()['coordinates'])
     
   } catch(err) {
     print(err)
@@ -224,7 +222,7 @@ Download.Image.toDrive = function(image, options) {
     fileNamePrefix: 'myExportImageTask',
     folder: null,
     fileFormat: 'GeoTIFF',
-    region: getRegion(image),
+    region: image,
     scale: image.projection().nominalScale().getInfo()
   }
   var opt = tools.get_options(def, options)
@@ -238,7 +236,7 @@ Download.Image.toDrive = function(image, options) {
       'driveFolder': opt['folder'],
       'fileFormat': opt['fileFormat'],
       'scale': opt.scale,
-      'region': opt.region
+      'region': getRegion(opt.region)
   }
   var task = new Task(ee.data.newTaskId()[0], full_config)
   return task
