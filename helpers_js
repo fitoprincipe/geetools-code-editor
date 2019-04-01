@@ -213,23 +213,23 @@ var writeableArray = function(array) {
 
 array.writeableArray = writeableArray
 
-var arrayToString = function(array) {
+var arrayToString = function(arr) {
   // make sure it is writeable
-  array = writeableArray(array)
-  for (var i in array) {
-    var element = array[i]
+  arr = array.writeableArray(arr)
+  for (var i in arr) {
+    var element = arr[i]
     if (object.is(element, 'Array')) {
       var n = array.countArraysInside(element)
       if (n === 0) {
         var str = element.toString()
         str = '['+str+']'
-        array[i] = str
+        arr[i] = str
       } else {
-        array[i] = arrayToString(element)
+        arr[i] = arrayToString(element)
       }
     } 
   }
-  var str = array.toString()
+  var str = arr.toString()
   str = '['+str+']'
   return str
 }
