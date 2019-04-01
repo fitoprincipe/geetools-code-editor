@@ -17,7 +17,9 @@ var getRegion = function(object) {
     } else {
       var geom = object
     }
+    print(geom)
     return geom.getInfo()['coordinates']
+    print(geom.getInfo()['coordinates'])
     
   } catch(err) {
     print(err)
