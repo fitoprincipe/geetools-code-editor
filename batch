@@ -17,9 +17,9 @@ var getRegion = function(object) {
     } else {
       var geom = object
     }
-    print(geom.toGeoJSONString())
+    print(geom.getInfo())
     
-    return geom.toGeoJSONString()
+    return geom.getInfo()
     
     
   } catch(err) {
