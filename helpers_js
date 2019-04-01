@@ -203,7 +203,7 @@ array.writeableArray = function(array) {
   for (var i in array) {
     var e = array[i]
     if (object.is(e, 'Array')) {
-      ini[i] = writeableArray(e)
+      ini[i] = array.writeableArray(e)
     } else {
       ini[i] = e
     }
