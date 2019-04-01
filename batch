@@ -203,7 +203,7 @@ Download.Image.toAsset = function(image, options) {
   var def = {
     description: 'myExportImageTask',
     assetId: null,
-    region: getRegion(image),
+    region: image,
     scale: image.projection().nominalScale().getInfo()
   }
   var opt = tools.get_options(def, options)
@@ -213,6 +213,8 @@ Download.Image.toAsset = function(image, options) {
       'json': image.serialize(),
       'description': opt.description,
       'state': 'UNSUBMITTED',
+      'region': getRegion(opt.region),
+      'scale': opt.scale
   }
   full_config.assetId = opt.assetId
   var task = new Task(ee.data.newTaskId()[0], full_config)
