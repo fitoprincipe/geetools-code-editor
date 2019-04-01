@@ -187,7 +187,7 @@ array.countArraysInside = function(array) {
   var arrays = 0
   for (var i in array) {
     var element = array[i]
-    if (helper.object.is(element, 'Array')) {
+    if (object.is(element, 'Array')) {
       arrays += 1
     } 
   }
@@ -202,7 +202,7 @@ array.writeableArray = function(array) {
   
   for (var i in array) {
     var e = array[i]
-    if (helper.object.is(e, 'Array')) {
+    if (object.is(e, 'Array')) {
       ini[i] = readArray(e)
     } else {
       ini[i] = e
