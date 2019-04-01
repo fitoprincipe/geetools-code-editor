@@ -177,6 +177,11 @@ array.insert = function(array, index, element) {
   return firstPart
 }
 
+array.toString = function(array) {
+  var str = array.toString()
+  return '['+str+']'
+}
+
 exports.array = array
 
 // Strings
