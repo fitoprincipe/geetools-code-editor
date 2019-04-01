@@ -17,11 +17,8 @@ var getRegion = function(object) {
     } else {
       var geom = object
     }
-    print(geom)
-    print(geom.getInfo()['coordinates'])
-    
-    return geom.getInfo()['coordinates']
-    
+    var coords = geom.getInfo()['coordinates']
+    return helpers.array.toString(coords)
     
   } catch(err) {
     print(err)
@@ -214,7 +211,7 @@ Download.Image.toAsset = function(image, options) {
       'json': image.serialize(),
       'description': opt.description,
       'state': 'UNSUBMITTED',
-      'region': opt.region,
+      'region': getRegion(opt.region),
       'scale': opt.scale
   }
   full_config.assetId = opt.assetId
