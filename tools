@@ -683,7 +683,7 @@ date.fromDOY = function(doy, year) {
     return ee.String('0').cat(ee.Number(doy).format())
   }
   
-  doy = doy.add(1)
+  doy = ee.Number(doy).add(1)
   var year_str = ee.Number(year).format()
   var doy_str = ee.Algorithms.If(
     doy.lt(10), less10(doy),
