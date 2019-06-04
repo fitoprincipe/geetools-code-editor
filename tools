@@ -286,12 +286,13 @@ image.removeBands = function(image, bands) {
 }
 
 // DOY TO DATE
-image.doyToDate = function(image, year, options) {
+image.doyToDate = function(image, options) {
   
   var defaults = {
     doyBandName: 'doy',
     dateBandName: 'date',
     dateFormat: 'yyyyMMdd'
+    year: image.date().get('year')
   }
   var opt = helpersJS.get_options(defaults, options)
   
