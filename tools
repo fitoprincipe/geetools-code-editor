@@ -242,6 +242,34 @@ image.removeBands = function(image, bands) {
   return image.select(diff)
 }
 
+// DOY TO DATE
+image.doyToDate = function(image, year, options) {
+  
+  var defaults = {
+    doyBandName: 'doy',
+    dateBandName: 'date',
+    dateFormat: 'yyyyMMdd'
+  }
+  var opt = helpersJS.get_options(defaults, options)
+  
+  var doyband = image.select(opt.doyBandName)
+  var leap = date.isLeap(year)
+  var limit = ee.Number(ee.Algorithms.If(leap, 365, 364))
+  var alldoys = ee.List.sequence(0, limit)
+  year = ee.Number(year)
+  
+  var datei = ee.Image(alldoys.iterate(function(doy, i){
+    i = ee.Image(i)
+    doy = ee.Number(doy)
+    var date = date.fromDOY(doy, year)
+    var date_band = ee.Image.constant(ee.Number.parse(date.format(opt.dateFormat)))
+    var condition = i.eq(doy)
+    return i.where(condition, date_band)
+  }, doyband))
+  
+  return datei.rename(opt.dateBandName)
+}
+
 //** IMAGE COLLECTIONS **//
 var imageCollection = {};
 
