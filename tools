@@ -67,6 +67,28 @@ date.isLeap = function(year) {
   return ee.Number(leap)
 }
 
+date.makeDateBand = function(image, options) {
+  
+  var defaults = {
+    dateFormat: 'YMMdd',
+    bandName: 'date'
+  }
+  
+  var opt = helpersJS.get_options(defaults, options)
+  
+  var f = ee.String(opt.dateFormat)
+  // catch string formats for month
+  var pattern = f.replace('(MMM+)', 'MM')
+
+  var footprint = image.geometry()
+
+  var idate = image.date().format(pattern)
+  var idate_number = ee.Number.parse(idate)
+  var date_band = ee.Image.constant(idate_number).rename(opt.bandName)
+  return ee.Image(ee.Algorithms.If(footprint.isUnbounded(), date_band,
+                                   date_band.clip(footprint)))
+}
+
 /** COLLECTIONS **/
 var collection = {};
 
