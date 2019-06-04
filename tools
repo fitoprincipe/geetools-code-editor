@@ -696,6 +696,22 @@ date.fromDOY = function(doy, year) {
   return ee.Date.parse('DDDyyyy', str)
 }
 
+date.isLeap = function(year) {
+  year = ee.Number(year)
+  
+  var divisible4 = year.mod(4).gt(0)
+  var divisible100 = year.mod(100).gt(0)
+  var divisible400 = year.mod(400).gt(0)
+  
+  var leap = ee.Algorithms.If(
+      divisible4, 0,
+      ee.Algorithms.If(
+          divisible100, 1,
+          ee.Algorithms.If(
+              divisible400, 0, 1)))
+  return ee.Number(leap)
+}
+
 /** MISC */
 
 // UUID4
