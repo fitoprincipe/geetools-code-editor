@@ -295,7 +295,7 @@ image.doyToDate = function(image, options) {
     year: image.date().get('year')
   }
   var opt = helpersJS.get_options(defaults, options)
-  year = ee.Number(opt.year)
+  var year = ee.Number(opt.year)
   
   var doyband = image.select(opt.doyBandName)
   var leap = date.isLeap(year)
