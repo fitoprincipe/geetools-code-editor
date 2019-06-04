@@ -676,14 +676,16 @@ var date = {}
 
 date.fromDOY = function(doy, year) {
   var less10 = function(doy) {
+    doy = doy.toInt()
     return ee.String('00').cat(ee.Number(doy).format())
   }
   
   var less100 = function(doy) {
+    doy = doy.toInt()
     return ee.String('0').cat(ee.Number(doy).format())
   }
   
-  doy = ee.Number(doy).add(1)
+  doy = ee.Number(doy).add(1).toInt()
   var year_str = ee.Number(year).format()
   var doy_str = ee.Algorithms.If(
     doy.lt(10), less10(doy),
