@@ -304,8 +304,8 @@ image.doyToDate = function(image, year, options) {
   var datei = ee.Image(alldoys.iterate(function(doy, i){
     i = ee.Image(i)
     doy = ee.Number(doy)
-    var date = date.fromDOY(doy, year)
-    var date_band = ee.Image.constant(ee.Number.parse(date.format(opt.dateFormat)))
+    var d = date.fromDOY(doy, year)
+    var date_band = ee.Image.constant(ee.Number.parse(d.format(opt.dateFormat)))
     var condition = i.eq(doy)
     return i.where(condition, date_band)
   }, doyband))
