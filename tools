@@ -311,7 +311,7 @@ image.removeBands = function(image, bands) {
 image.doyToDate = function(image, options) {
   
   var defaults = {
-    doyBandName: 'doy',
+    doyBandName: [0],
     dateBandName: 'date',
     dateFormat: 'yyyyMMdd',
     year: image.date().get('year')
