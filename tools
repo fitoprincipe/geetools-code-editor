@@ -311,15 +311,13 @@ image.removeBands = function(image, bands) {
 image.doyToDate = function(image, options) {
   
   var defaults = {
-    //doyBandName: [0],
-    //dateBandName: 'date',
     dateFormat: 'yyyyMMdd',
     year: image.date().get('year')
   }
   var opt = helpersJS.get_options(defaults, options)
   var year = ee.Number(opt.year)
   
-  var doyband = image.select(opt.doyBandName)
+  var doyband = image.select([0])
   var leap = date.isLeap(year)
   var limit = ee.Number(ee.Algorithms.If(leap, 365, 364))
   var alldoys = ee.List.sequence(0, limit)
@@ -333,7 +331,7 @@ image.doyToDate = function(image, options) {
     return i.where(condition, date_band)
   }, doyband))
   
-  return datei.rename(opt.dateBandName)
+  return datei
 }
 
 //** IMAGE COLLECTIONS **//
