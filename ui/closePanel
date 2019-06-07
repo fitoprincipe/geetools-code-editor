@@ -68,7 +68,7 @@ var ClosePanel = function(options) {
   // Scope
   this.onCloseCallback = null
 }
-
+/*
 ClosePanel.prototype.closeCallback = function() {
   var panel = this
   var wrap = function() {
@@ -87,6 +87,22 @@ ClosePanel.prototype.close = function() {
     }
   }
   return wrap
+}
+*/
+ClosePanel.prototype.closeCallback = function() {
+  var panel = this
+  var wrap = function() {
+    var wids = panel.parent.widgets()
+    wids.remove(panel.outter)
+    if (panel.onCloseCallback) {
+      panel.onCloseCallback(panel)
+    }
+  }
+  return wrap
+}
+
+ClosePanel.prototype.close = function() {
+  this.closeCallback()()
 }
 
 ClosePanel.prototype.build = function() {
