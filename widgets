@@ -13,3 +13,6 @@ exports.DrawingPanel = DrawingPanel
 
 var CheckSelect = require('users/fitoprincipe/geetools:ui/checkSelect').CheckSelect
 exports.CheckSelect = CheckSelect
+
+var asyncSelect = require('users/fitoprincipe/geetools:ui/async').asyncSelect
+exports.asyncSelect = asyncSelect
