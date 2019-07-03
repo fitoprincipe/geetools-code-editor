@@ -13,7 +13,7 @@ var asyncSelect = function(options) {
   catch(e){this.items = options.items}
   
   this.placeholder = options.placeholder
-  this.value = options.value
+  this.value = null
   this.onChange = options.onChange
   this.disabled = options.disabled
   this.style = options.style
@@ -33,6 +33,9 @@ var asyncSelect = function(options) {
       if (error === undefined) {
         sel.items().reset(items)
         sel.setPlaceholder('Select a value')
+        if (options.value) {
+          sel.setValue(options.value)
+        }
       } else {
         sel.setPlaceholder('Error')
         print(error)
