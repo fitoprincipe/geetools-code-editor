@@ -1,3 +1,10 @@
+/**
+ * Async Widgets
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+ 
 var asyncSelect = function(options) {
   
   this.loading = 'Loading...'
@@ -38,3 +45,5 @@ var asyncSelect = function(options) {
   
   return sel
 }
+
+exports.asyncSelect = asyncSelect
