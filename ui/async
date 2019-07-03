@@ -1,0 +1,40 @@
+var asyncSelect = function(options) {
+  
+  this.loading = 'Loading...'
+  
+  try {this.items = options.items.map(function(items){return ee.Algorithms.String(items)})}
+  catch(e){this.items = options.items}
+  
+  this.placeholder = options.placeholder
+  this.value = options.value
+  this.onChange = options.onChange
+  this.disabled = options.disabled
+  this.style = options.style
+  
+  
+  var sel = ui.Select({
+    items: [],
+    placeholder: this.loading,
+    value: this.value,
+    onChange: this.onChange,
+    disabled: this.disabled,
+    style: this.style
+  })
+  
+  try {
+    this.items.evaluate(function(items, error) {
+      if (error === undefined) {
+        sel.items().reset(items)
+        sel.setPlaceholder('Select a value')
+      } else {
+        sel.setPlaceholder('Error')
+        print(error)
+      }
+    })
+  } catch (e) {
+    sel.items().reset(options.items)
+    sel.setPlaceholder('Select a value')
+  }
+  
+  return sel
+}
