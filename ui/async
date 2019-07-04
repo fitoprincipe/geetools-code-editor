@@ -42,7 +42,7 @@ asyncSelect.prototype.setValue = function(value, trigger) {
   try {
     this.sel.setValue(value, trigger)
   } catch (e) {
-    print('value '+value+' may have not been retrieved yet, you can parse a value in function setItems')
+    print('value '+value+' may have not been retrieved yet or is not present in items.\nYou can parse a value in function setItems')
   }
 }
 
@@ -99,10 +99,10 @@ var test = function() {
   
   // UPPER LIMIT
   var select = new asyncSelect({
-    items: list,
-    //items: ['a', 'b']
+    //items: list,
+    items: ["a b c", "b c d"],
     //value: "5412"
-    onChange: function(el){print(el)}
+    onChange: function(el){print('onChange works, selected items is:', el)}
   })
   
   //select.onChange(function(el){print(el)})
