@@ -40,6 +40,9 @@ var asyncSelect = function(options) {
   this.items = function() {return this.sel.items}
   this.getPlaceholder = function() {return this.sel.getPlaceholder}
   this.getDisabled = function() {return this.sel.getDisabled}
+  this.getValue = function() {return this.sel.getValue}
+  // setters
+  
 }
 
 asyncSelect.prototype.formatItems = function(items) {
