@@ -17,7 +17,7 @@ var asyncSelect = function(options) {
   this.value = options.value
   this.onChange = options.onChange
   this.disabled = options.disabled
-  this.style = options.style
+  //this.style = options.style
   
   this.sel = ui.Select({
     items: [],
@@ -25,7 +25,7 @@ var asyncSelect = function(options) {
     value: null,
     onChange: this.onChange,
     disabled: this.disabled,
-    style: this.style
+    style: options.style
   })
   
   try {
@@ -41,6 +41,7 @@ var asyncSelect = function(options) {
   this.getPlaceholder = function() {return this.sel.getPlaceholder}
   this.getDisabled = function() {return this.sel.getDisabled}
   this.getValue = function() {return this.sel.getValue}
+  this.style = function() {return this.sel.style}
   // setters
   
 }
