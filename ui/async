@@ -17,8 +17,8 @@ var asyncSelect = function(options) {
     items: [],
     placeholder: this.loading,
     value: null,
-    onChange: this.onChange,
-    disabled: this.disabled,
+    onChange: options.onChange,
+    disabled: options.disabled,
     style: options.style
   })
   
@@ -102,7 +102,10 @@ var test = function() {
     items: list,
     //items: ['a', 'b']
     //value: "5412"
+    onChange: function(el){print(el)}
   })
+  
+  //select.onChange(function(el){print(el)})
   Map.add(select.build())
   
   //select.setItems(list)
