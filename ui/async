@@ -54,12 +54,12 @@ asyncSelect.prototype.formatItems = function(items) {
   }
 }
 
-asyncSelect.prototype.setItems = function(items, value) {
+asyncSelect.prototype.setItems = function(items, value, trigger) {
   if (items) {
     items = this.formatItems(items)
     this.sel.setPlaceholder(this.loading)
     try {
-      items.evaluate(this.evaluation(value))
+      items.evaluate(this.evaluation(value, trigger))
     } catch (e) {
       this.sel.items().reset(items)
       this.sel.setPlaceholder('Select a value')
@@ -69,7 +69,7 @@ asyncSelect.prototype.setItems = function(items, value) {
   }
 }
 
-asyncSelect.prototype.evaluation = function(value) {
+asyncSelect.prototype.evaluation = function(value, trigger) {
   var self = this
   var wrap = function(items, error) {
     if (error === undefined) {
@@ -81,9 +81,9 @@ asyncSelect.prototype.evaluation = function(value) {
       }
       if (value) {
         try {
-          self.sel.setValue(value.getInfo())
+          self.sel.setValue(value.getInfo(), trigger)
         } catch (e) {
-          self.sel.setValue(value)
+          self.sel.setValue(value, trigger)
         }
       }
     } else {
