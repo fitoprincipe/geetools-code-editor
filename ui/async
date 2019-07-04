@@ -11,7 +11,7 @@ var asyncSelect = function(options) {
   
   this.options = options
   
-  this.items = this.formatItems(options.items)
+  var items = this.formatItems(options.items)
   
   this.placeholder = options.placeholder
   this.value = options.value
@@ -29,11 +29,15 @@ var asyncSelect = function(options) {
   })
   
   try {
-    this.setItems(this.items)
+    this.setItems(items)
   } catch (e) {
     this.sel.items().reset(options.items)
     this.sel.setPlaceholder('Select a value')
   }
+  
+  // inherit
+  // getters
+  this.items = function() {return this.sel.items}
 }
 
 asyncSelect.prototype.formatItems = function(items) {
