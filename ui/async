@@ -9,44 +9,88 @@ var asyncSelect = function(options) {
   
   this.loading = 'Loading...'
   
-  try {this.items = options.items.map(function(items){return ee.Algorithms.String(items)})}
-  catch(e){this.items = options.items}
+  this.options = options
+  
+  this.items = this.formatItems(options.items)
   
   this.placeholder = options.placeholder
-  this.value = null
+  this.value = options.value
   this.onChange = options.onChange
   this.disabled = options.disabled
   this.style = options.style
   
-  
-  var sel = ui.Select({
+  this.sel = ui.Select({
     items: [],
     placeholder: this.loading,
-    value: this.value,
+    value: null,
     onChange: this.onChange,
     disabled: this.disabled,
     style: this.style
   })
   
   try {
-    this.items.evaluate(function(items, error) {
-      if (error === undefined) {
-        sel.items().reset(items)
-        sel.setPlaceholder('Select a value')
-        if (options.value) {
-          sel.setValue(options.value)
-        }
-      } else {
-        sel.setPlaceholder('Error')
-        print(error)
-      }
-    })
+    this.setItems(this.items)
   } catch (e) {
-    sel.items().reset(options.items)
-    sel.setPlaceholder('Select a value')
+    this.sel.items().reset(options.items)
+    this.sel.setPlaceholder('Select a value')
   }
-  
-  return sel
+}
+
+asyncSelect.prototype.formatItems = function(items) {
+  try {
+    return items.map(function(it){return ee.Algorithms.String(it)})
+  }
+  catch(e){
+    return this.options.items
+  }
+}
+
+asyncSelect.prototype.setItems = function(items) {
+  items = this.formatItems(items)
+  this.sel.setPlaceholder(this.loading)
+  items.evaluate(this.evaluation())
+}
+
+asyncSelect.prototype.evaluation = function() {
+  var self = this
+  var wrap = function(items, error) {
+    if (error === undefined) {
+      self.sel.items().reset(items)
+      self.sel.setPlaceholder('Select a value')
+      if (self.options.value) {
+        self.sel.setValue(self.options.value)
+      }
+    } else {
+      self.sel.setPlaceholder('Error')
+      print(error)
+    }
+  }
+  return wrap
+}
+
+asyncSelect.prototype.build = function() {
+  return this.sel
 }
 
 exports.asyncSelect = asyncSelect
+
+var test = function() {
+  var image = ee.Image('COPERNICUS/S2_SR/20170328T083601_20170328T084228_T35RNK')
+  
+  var list = image.reduceRegion({
+    reducer: 'mean',
+    geometry: image.geometry().centroid().buffer(10000),
+    scale: 100
+  }).values().map(function(item){return ee.Number(item).toInt()})
+  
+  // UPPER LIMIT
+  var select = new asyncSelect({
+    items: list,
+    value: "5412"
+  })
+  Map.add(select.build())
+  
+  //select.setItems(list)
+}
+
+//test()
