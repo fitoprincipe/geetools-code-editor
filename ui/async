@@ -4,20 +4,14 @@
  * email: fitoprincipe82@gmail.com
  * license: MIT
  **/
+
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
  
 var asyncSelect = function(options) {
   
   this.loading = 'Loading...'
   
   this.options = options
-  
-  var items = this.formatItems(options.items)
-  
-  this.placeholder = options.placeholder
-  //this.value = options.value
-  this.onChange = options.onChange
-  this.disabled = options.disabled
-  //this.style = options.style
   
   this.sel = ui.Select({
     items: [],
@@ -28,7 +22,7 @@ var asyncSelect = function(options) {
     style: options.style
   })
   
-  this.setItems(items, options.value)
+  this.setItems(options.items, options.value)
   
   // inherit
   // getters
@@ -53,11 +47,10 @@ asyncSelect.prototype.setValue = function(value, trigger) {
 }
 
 asyncSelect.prototype.formatItems = function(items) {
-  try {
-    return items.map(function(it){return ee.Algorithms.String(it)})
-  }
-  catch(e){
+  if (helpers.object.is(items, 'Array')) {
     return this.options.items
+  } else {
+    return items.map(function(it){return ee.Algorithms.String(it)})
   }
 }
 
@@ -107,6 +100,7 @@ var test = function() {
   // UPPER LIMIT
   var select = new asyncSelect({
     items: list,
+    //items: ['a', 'b']
     //value: "5412"
   })
   Map.add(select.build())
@@ -115,4 +109,4 @@ var test = function() {
   Map.onClick(function(coords){select.setValue("5412")})
 }
 
-//test()
+test()
