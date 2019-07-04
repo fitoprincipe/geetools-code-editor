@@ -99,34 +99,3 @@ asyncSelect.prototype.build = function() {
 }
 
 exports.asyncSelect = asyncSelect
-
-var test = function() {
-  var image = ee.Image('COPERNICUS/S2_SR/20170328T083601_20170328T084228_T35RNK')
-  
-  var list = image.reduceRegion({
-    reducer: 'mean',
-    geometry: image.geometry().centroid().buffer(10000),
-    scale: 100
-  }).values().map(function(item){return ee.Number(item).toInt()})
-  
-  // UPPER LIMIT
-  var select = new asyncSelect({
-    //items: list,
-    //items: ["a b c", "b c d"],
-    //value: "5412"
-    onChange: function(el){print('onChange works, selected item is:', el)}
-  })
-  
-  //select.onChange(function(el){print(el)})
-  Map.add(select.build())
-  
-  //var it = ["a b c", "b c d"]
-  //var it = ee.List([])
-  var it = list
-  select.setItems(it, ee.String("196"))
-  
-  //select.setItems(list)
-  Map.onClick(function(coords){select.setValue("5412")})
-}
-
-//test()
