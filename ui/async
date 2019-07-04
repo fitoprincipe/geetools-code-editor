@@ -28,12 +28,7 @@ var asyncSelect = function(options) {
     style: options.style
   })
   
-  try {
-    this.setItems(items, options.value)
-  } catch (e) {
-    this.sel.items().reset(options.items)
-    this.sel.setPlaceholder('Select a value')
-  }
+  this.setItems(items, options.value)
   
   // inherit
   // getters
@@ -69,7 +64,12 @@ asyncSelect.prototype.formatItems = function(items) {
 asyncSelect.prototype.setItems = function(items, value) {
   items = this.formatItems(items)
   this.sel.setPlaceholder(this.loading)
-  items.evaluate(this.evaluation(value))
+  try {
+    items.evaluate(this.evaluation(value))
+  } catch (e) {
+    this.sel.items().reset(items)
+    this.sel.setPlaceholder('Select a value')
+  }
 }
 
 asyncSelect.prototype.evaluation = function(value) {
