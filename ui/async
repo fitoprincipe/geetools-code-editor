@@ -124,4 +124,4 @@ var test = function() {
   Map.onClick(function(coords){select.setValue("5412")})
 }
 
-test()
+//test()
