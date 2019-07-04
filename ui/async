@@ -49,6 +49,14 @@ var asyncSelect = function(options) {
   this.unlisten = function(idOrType) {this.sel.unlisten(idOrType)}
 }
 
+asyncSelect.prototype.setValue = function(value, trigger) {
+  try {
+    this.sel.setValue(value, trigger)
+  } catch (e) {
+    this.setValue(value, trigger)
+  }
+}
+
 asyncSelect.prototype.formatItems = function(items) {
   try {
     return items.map(function(it){return ee.Algorithms.String(it)})
@@ -99,11 +107,12 @@ var test = function() {
   // UPPER LIMIT
   var select = new asyncSelect({
     items: list,
-    value: "5412"
+    //value: "5412"
   })
   Map.add(select.build())
   
   //select.setItems(list)
+  select.setValue("5412")
 }
 
 //test()
