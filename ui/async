@@ -80,7 +80,11 @@ asyncSelect.prototype.evaluation = function(value) {
         self.sel.setPlaceholder('No items')
       }
       if (value) {
-        self.sel.setValue(value)
+        try {
+          self.sel.setValue(value.getInfo())
+        } catch (e) {
+          self.sel.setValue(value)
+        }
       }
     } else {
       self.sel.setPlaceholder('Error')
@@ -110,15 +114,16 @@ var test = function() {
     //items: list,
     //items: ["a b c", "b c d"],
     //value: "5412"
-    onChange: function(el){print('onChange works, selected items is:', el)}
+    onChange: function(el){print('onChange works, selected item is:', el)}
   })
   
   //select.onChange(function(el){print(el)})
   Map.add(select.build())
   
   //var it = ["a b c", "b c d"]
-  var it = ee.List([])
-  select.setItems(it)
+  //var it = ee.List([])
+  var it = list
+  select.setItems(it, ee.String("196"))
   
   //select.setItems(list)
   Map.onClick(function(coords){select.setValue("5412")})
