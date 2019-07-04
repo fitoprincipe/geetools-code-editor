@@ -38,6 +38,8 @@ var asyncSelect = function(options) {
   // inherit
   // getters
   this.items = function() {return this.sel.items}
+  this.getPlaceholder = function() {return this.sel.getPlaceholder}
+  this.getDisabled = function() {return this.sel.getDisabled}
 }
 
 asyncSelect.prototype.formatItems = function(items) {
