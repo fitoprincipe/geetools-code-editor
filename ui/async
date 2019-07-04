@@ -77,7 +77,7 @@ asyncSelect.prototype.evaluation = function(value) {
       if (items.length > 0) {
         self.sel.setPlaceholder('Select a value')
       } else {
-        self.sel.setPlaceholder('No values')
+        self.sel.setPlaceholder('No items')
       }
       if (value) {
         self.sel.setValue(value)
