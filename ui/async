@@ -14,7 +14,7 @@ var asyncSelect = function(options) {
   var items = this.formatItems(options.items)
   
   this.placeholder = options.placeholder
-  this.value = options.value
+  //this.value = options.value
   this.onChange = options.onChange
   this.disabled = options.disabled
   //this.style = options.style
@@ -29,7 +29,7 @@ var asyncSelect = function(options) {
   })
   
   try {
-    this.setItems(items)
+    this.setItems(items, options.value)
   } catch (e) {
     this.sel.items().reset(options.items)
     this.sel.setPlaceholder('Select a value')
@@ -50,10 +50,12 @@ var asyncSelect = function(options) {
 }
 
 asyncSelect.prototype.setValue = function(value, trigger) {
-  try {
-    this.sel.setValue(value, trigger)
-  } catch (e) {
-    this.setValue(value, trigger)
+  for (var i = 0; i<1000; i++) {
+    try {
+      this.sel.setValue(value, trigger)
+    } catch (e) {
+      print(i)
+    }
   }
 }
 
@@ -66,20 +68,20 @@ asyncSelect.prototype.formatItems = function(items) {
   }
 }
 
-asyncSelect.prototype.setItems = function(items) {
+asyncSelect.prototype.setItems = function(items, value) {
   items = this.formatItems(items)
   this.sel.setPlaceholder(this.loading)
-  items.evaluate(this.evaluation())
+  items.evaluate(this.evaluation(value))
 }
 
-asyncSelect.prototype.evaluation = function() {
+asyncSelect.prototype.evaluation = function(value) {
   var self = this
   var wrap = function(items, error) {
     if (error === undefined) {
       self.sel.items().reset(items)
       self.sel.setPlaceholder('Select a value')
-      if (self.options.value) {
-        self.sel.setValue(self.options.value)
+      if (value) {
+        self.sel.setValue(value)
       }
     } else {
       self.sel.setPlaceholder('Error')
@@ -112,7 +114,7 @@ var test = function() {
   Map.add(select.build())
   
   //select.setItems(list)
-  select.setValue("5412")
+  Map.onClick(function(coords){select.setValue("5412")})
 }
 
-//test()
+test()
