@@ -38,12 +38,15 @@ var asyncSelect = function(options) {
   // inherit
   // getters
   this.items = function() {return this.sel.items()}
-  this.getPlaceholder = function() {return this.sel.getPlaceholder}
-  this.getDisabled = function() {return this.sel.getDisabled}
-  this.getValue = function() {return this.sel.getValue}
-  this.style = function() {return this.sel.style}
+  this.getPlaceholder = function() {return this.sel.getPlaceholder()}
+  this.getDisabled = function() {return this.sel.getDisabled()}
+  this.getValue = function() {return this.sel.getValue()}
+  this.style = function() {return this.sel.style()}
   // setters
-  
+  this.setDisabled = function(disabled) {this.sel.setDisabled(disabled)}
+  this.setPlaceholder = function(placeholder) {this.sel.setPlaceholder(placeholder)}
+  this.onChange = function(callback) {this.sel.onChange(callback)}
+  this.unlisten = function(idOrType) {this.sel.unlisten(idOrType)}
 }
 
 asyncSelect.prototype.formatItems = function(items) {
