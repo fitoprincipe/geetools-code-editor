@@ -48,20 +48,24 @@ asyncSelect.prototype.setValue = function(value, trigger) {
 
 asyncSelect.prototype.formatItems = function(items) {
   if (helpers.object.is(items, 'Array')) {
-    return this.options.items
+    return items
   } else {
     return items.map(function(it){return ee.Algorithms.String(it)})
   }
 }
 
 asyncSelect.prototype.setItems = function(items, value) {
-  items = this.formatItems(items)
-  this.sel.setPlaceholder(this.loading)
-  try {
-    items.evaluate(this.evaluation(value))
-  } catch (e) {
-    this.sel.items().reset(items)
-    this.sel.setPlaceholder('Select a value')
+  if (items) {
+    items = this.formatItems(items)
+    this.sel.setPlaceholder(this.loading)
+    try {
+      items.evaluate(this.evaluation(value))
+    } catch (e) {
+      this.sel.items().reset(items)
+      this.sel.setPlaceholder('Select a value')
+    }
+  } else {
+    this.sel.setPlaceholder('No items')
   }
 }
 
@@ -100,13 +104,16 @@ var test = function() {
   // UPPER LIMIT
   var select = new asyncSelect({
     //items: list,
-    items: ["a b c", "b c d"],
+    //items: ["a b c", "b c d"],
     //value: "5412"
     onChange: function(el){print('onChange works, selected items is:', el)}
   })
   
   //select.onChange(function(el){print(el)})
   Map.add(select.build())
+  
+  var it = ["a b c", "b c d"]
+  select.setItems(it, "a b c")
   
   //select.setItems(list)
   Map.onClick(function(coords){select.setValue("5412")})
