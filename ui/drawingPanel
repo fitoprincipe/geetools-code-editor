@@ -176,7 +176,11 @@ DrawingPanel.prototype.stop = function() {
         // call user onStop callback
       }
       if (app.onStopCallback) {
-        app.onStopCallback(app, drawing)
+        try {
+          app.onStopCallback(app, drawing)
+        } catch (error) {
+          print("Something went wrong in 'onStop' callback:\n"+error.message)
+        }
       }
       app.started = false
     }
@@ -216,3 +220,17 @@ DrawingPanel.prototype.insertTo = function(widget, position) {
 }
 
 exports.DrawingPanel = DrawingPanel
+
+var test = function() {
+  var panel = new DrawingPanel()
+  panel.addTo(Map)
+  
+  var printResult = function(dp, polygon) {
+    
+    print(polygon)
+    Map.addLayer(polygon)
+  }
+  panel.onStop(printResult)
+}
+
+test()
