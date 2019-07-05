@@ -104,3 +104,21 @@ Polygon.prototype.getDrawing = function() {
 }
 
 exports.Polygon = Polygon
+
+var test = function() {
+  var pol = new Polygon()
+  
+  var start = ui.Button('Start')
+  start.onClick(function(){pol.start()})
+  
+  var stop = ui.Button('Stop')
+  stop.onClick(function(){
+    pol.stop()
+    print(pol.drawing)
+  })
+  
+  Map.add(start)
+  Map.add(stop)
+}
+
+//test()
