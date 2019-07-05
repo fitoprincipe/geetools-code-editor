@@ -334,6 +334,56 @@ image.doyToDate = function(image, options) {
   return datei.rename('date')
 }
 
+image.maskPercent = function(image, geometry, options) {
+  var def = {
+    scale: 1000,
+    max_pixels: 1e13
+  }
+  
+  var opt = helpersJS.get_options(def, options)
+  var scale = opt.scale
+  var max_pixels = opt.max_pixels
+  
+  // get projection
+  var projection = image.projection()
+  
+  // get band name
+  var band = ee.String(image.bandNames().get(0))
+  
+  // Make an image with all ones
+  var ones_i = ee.Image.constant(1).reproject(projection).rename(band)
+  
+  // Get total number of pixels
+  var ones = ones_i.reduceRegion({
+       reducer: ee.Reducer.count(),
+       geometry: geometry,
+       scale: scale,
+       maxPixels: max_pixels
+      }).get(band)
+  
+  ones = ee.Number(ones)
+  
+  // select first band, unmask and get the inverse
+  image = image.select([0])
+  var mask = image.mask()
+  var mask_not = mask.not()
+  var image_to_compute = mask.updateMask(mask_not)
+  
+  // Get number of zeros in the given mask_image
+  zeros_in_mask =  image_to_compute.reduceRegion({
+      reducer: ee.Reducer.count(),
+      geometry: geometry,
+      scale: scale,
+      maxPixels: max_pixels
+  }).get(band)
+  var zeros_in_mask = ee.Number(zeros_in_mask)
+  
+  // var percentage = tools.number.trim_decimals(zeros_in_mask.divide(ones), 4)
+  var percentage = zeros_in_mask.divide(ones)
+  
+  return percentage.multiply(100)
+}
+
 //** IMAGE COLLECTIONS **//
 var imageCollection = {};
 
