@@ -334,7 +334,7 @@ image.doyToDate = function(image, options) {
   return datei.rename('date')
 }
 
-image.maskPercent = function(image, geometry, options) {
+image.maskCover = function(image, geometry, options) {
   var def = {
     scale: 1000,
     max_pixels: 1e13
