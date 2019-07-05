@@ -24,54 +24,6 @@ var Polygon = function(options) {
   
   this.started = false
   
-  this.start = function() {
-    
-    if (this.started) {
-      print('There is a drawing already started, please stop it before a new drawing')
-      return null
-    }
-    
-    this.started = true
-    
-    // unbound callback if parsed
-    if (this.opt.map_callback && this.opt.map_callback_id) {
-      //print('on start', this.opt.map_callback_id)
-      this.opt.map.unlisten(this.opt.map_callback_id)
-    }
-    
-    this.point_list = []
-    this.uuid = helper.uuid4()
-    
-    var fc = ee.FeatureCollection([])
-    Map.addLayer(fc, null, this.uuid)
-    
-    var app = this
-    
-    var callback = function(coords) {
-      var lon = coords.lon
-      var lat = coords.lat
-      var p = [lon, lat]
-      app.point_list.push(p)
-      if (app.point_list.length === 1) {
-        var feat = ee.Feature(ee.Geometry.Point(p))
-      } 
-      else if (app.point_list.length === 2) {
-        var feat = ee.Feature(ee.Geometry.LineString(app.point_list))
-      } 
-      else {
-        var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
-      }
-      
-      var newfc = ee.FeatureCollection([feat])
-      var layer = tools.map.getLayer(app.uuid)
-      var newlayer = ui.Map.Layer(newfc, null, app.uuid)
-      tools.map.replaceLayer(layer, newlayer, app.opt.map)
-    }
-    
-    this.opt.map.style().set('cursor', 'crosshair')
-    this.callback_ID = this.opt.map.onClick(callback)
-  }
-  
   this.stop = function() {
     
     // unbound drawing callback
@@ -102,4 +54,53 @@ var Polygon = function(options) {
     return this.drawing
   }
 }
+
+Polygon.prototype.start = function() {
+    
+  if (this.started) {
+    print('There is a drawing already started, please stop it before a new drawing')
+    return null
+  }
+  
+  this.started = true
+  
+  // unbound callback if parsed
+  if (this.opt.map_callback && this.opt.map_callback_id) {
+    //print('on start', this.opt.map_callback_id)
+    this.opt.map.unlisten(this.opt.map_callback_id)
+  }
+  
+  this.point_list = []
+  this.uuid = helper.uuid4()
+  
+  var fc = ee.FeatureCollection([])
+  Map.addLayer(fc, null, this.uuid)
+  
+  var app = this
+  
+  var callback = function(coords) {
+    var lon = coords.lon
+    var lat = coords.lat
+    var p = [lon, lat]
+    app.point_list.push(p)
+    if (app.point_list.length === 1) {
+      var feat = ee.Feature(ee.Geometry.Point(p))
+    } 
+    else if (app.point_list.length === 2) {
+      var feat = ee.Feature(ee.Geometry.LineString(app.point_list))
+    } 
+    else {
+      var feat = ee.Feature(ee.Geometry.Polygon(app.point_list))
+    }
+  
+    var newfc = ee.FeatureCollection([feat])
+    var layer = tools.map.getLayer(app.uuid)
+    var newlayer = ui.Map.Layer(newfc, null, app.uuid)
+    tools.map.replaceLayer(layer, newlayer, app.opt.map)
+  }
+    
+  this.opt.map.style().set('cursor', 'crosshair')
+  this.callback_ID = this.opt.map.onClick(callback)
+}
+
 exports.Polygon = Polygon
