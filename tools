@@ -336,16 +336,20 @@ image.doyToDate = function(image, options) {
 
 image.maskCover = function(image, geometry, options) {
   var def = {
-    scale: 1000,
+    scale: null,
     max_pixels: 1e13
   }
   
+  // select first band
+  image = image.select([0])
+  
   var opt = helpersJS.get_options(def, options)
-  var scale = opt.scale
   var max_pixels = opt.max_pixels
   
   // get projection
   var projection = image.projection()
+  
+  var scale = opt.scale || projection.nominalScale()
   
   // get band name
   var band = ee.String(image.bandNames().get(0))
