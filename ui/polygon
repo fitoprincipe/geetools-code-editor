@@ -23,36 +23,6 @@ var Polygon = function(options) {
   this.drawing = null
   
   this.started = false
-  
-  this.stop = function() {
-    
-    // unbound drawing callback
-    this.opt.map.unlisten(this.callback_ID)
-    
-    // bound callback again
-    if (this.opt.map_callback && this.opt.map_callback_id) {
-      this.opt.map_callback_id = this.opt.map.onClick(this.opt.map_callback)
-      //print('on stop', this.opt.map_callback_id)
-    }
-    
-    // remove temp layer
-    tools.map.removeLayerByName(this.uuid, this.opt.map)
-    
-    if (this.point_list.length >= 3) {
-      var polygon = ee.Geometry.Polygon(this.point_list)
-      //Map.addLayer(polygon, null, this.opt.name)
-      this.drawing = polygon
-    } else {
-      this.drawing = null
-      print('The Polygon must have a minimum of 3 points')
-    }
-    this.opt.map.style().set('cursor', 'hand')
-    this.started = false
-  }
-  
-  this.getDrawing = function() {
-    return this.drawing
-  }
 }
 
 Polygon.prototype.start = function() {
@@ -101,6 +71,36 @@ Polygon.prototype.start = function() {
     
   this.opt.map.style().set('cursor', 'crosshair')
   this.callback_ID = this.opt.map.onClick(callback)
+}
+
+Polygon.prototype.stop = function() {
+    
+  // unbound drawing callback
+  this.opt.map.unlisten(this.callback_ID)
+  
+  // bound callback again
+  if (this.opt.map_callback && this.opt.map_callback_id) {
+    this.opt.map_callback_id = this.opt.map.onClick(this.opt.map_callback)
+    //print('on stop', this.opt.map_callback_id)
+  }
+  
+  // remove temp layer
+  tools.map.removeLayerByName(this.uuid, this.opt.map)
+  
+  if (this.point_list.length >= 3) {
+    var polygon = ee.Geometry.Polygon(this.point_list)
+    //Map.addLayer(polygon, null, this.opt.name)
+    this.drawing = polygon
+  } else {
+    this.drawing = null
+    print('The Polygon must have a minimum of 3 points')
+  }
+  this.opt.map.style().set('cursor', 'hand')
+  this.started = false
+}
+
+Polygon.prototype.getDrawing = function() {
+  return this.drawing
 }
 
 exports.Polygon = Polygon
