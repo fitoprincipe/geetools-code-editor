@@ -544,11 +544,13 @@ map.removeObject = function(eeobject, map) {
 map.getLayer = function(name, map) {
   var m = map || Map
   var layers = m.layers()
+  var lay = null
   var l = layers.length()
   for (var i=0; i<l; i++) {
-    var lay = layers.get(i)
-    var n = lay.getName()
+    var layer = layers.get(i)
+    var n = layer.getName()
     if (n === name) {
+      lay = layer
       break
     }
   }
