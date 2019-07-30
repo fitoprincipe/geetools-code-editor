@@ -1,0 +1,32 @@
+var text = require('users/gena/packages:text')
+
+var cat = function(img1, img2) {
+  var img1mask = img1.mask().select(0).gt(0).rename('mask')
+  img1 = img1.addBands(img1mask)
+  var img2mask = img2.mask().select(0).gt(0).rename('mask')
+  img2 = img2.addBands(img2mask)
+  var concat = img2.unmask().where(img1.unmask().select(0).gt(0), img1.unmask())
+  var mask = concat.select('mask')
+  return concat.updateMask(mask).select([0,1,2])
+}
+
+var labelF = function(feat, column, scale, options) {
+  var cent = feat.geometry().centroid()
+  var prop = ee.Algorithms.String(feat.get(column))
+  return ee.Image(text.draw(prop, cent, scale, options))
+}
+
+var label = function(fc, column, scale, options) {
+  var first = labelF(ee.Feature(fc.first()), column, scale, options)
+  var result = fc.iterate(function(feat, start) {
+    feat = ee.Feature(feat)
+    start = ee.Image(start)
+    label = labelF(feat, column, scale, options)
+    return cat(start, label)
+  }, first)
+  
+  return ee.Image(result)
+}
+
+exports.labelCollection = label
+exports.labelFeature = labelF
