@@ -20,9 +20,9 @@ var rgbToHex = function(R,G,B) {
     return hex;
   };
   
-  var red = rgbToHex(r);
-  var green = rgbToHex(g);
-  var blue = rgbToHex(b);
+  var red = rgbToHex(R);
+  var green = rgbToHex(G);
+  var blue = rgbToHex(B);
   return red+green+blue;
 }
 
