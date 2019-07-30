@@ -16,3 +16,6 @@ exports.CheckSelect = CheckSelect
 
 var asyncSelect = require('users/fitoprincipe/geetools:ui/async').asyncSelect
 exports.asyncSelect = asyncSelect
+
+var labelWidget = require('users/fitoprincipe/geetools:ui/labels').labelWidget
+exports.labelWidget = labelWidget
