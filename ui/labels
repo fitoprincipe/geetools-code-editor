@@ -40,10 +40,10 @@ var labelWidget = function(fc, prop, options) {
     this.fontType = def.fontType
   }
   
-  if (this.options.fontSize in sizes[this.fontType]) {
-    this.fontSize = this.options.fontSize
+  if (this.options.fontSize.toString() in sizes[this.fontType]) {
+    this.fontSize = this.options.fontSize.toString()
   } else {
-    this.fontSize = def.fontSize
+    this.fontSize = def.fontSize.toString()
   }
   
   var app = this
