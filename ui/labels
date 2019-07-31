@@ -29,7 +29,7 @@ var labelWidget = function(fc, prop, options) {
   
   var fonts = ['Arial', 'Consolas']
   var sizes = {
-    'Arial': [10,12,14,16,18,24,32,64],
+    'Arial': ['10','12','14','16','18','24','32','64'],
     'Consolas': ['16', '18', '24', '32']
   }
   
@@ -41,10 +41,11 @@ var labelWidget = function(fc, prop, options) {
   }
   
   print(
-    this.options.fontSize,
+    '64',
     'in', 
     sizes[this.fontType],
-    this.options.fontSize in sizes[this.fontType]
+    //this.options.fontSize in sizes[this.fontType]
+    '64' in sizes[this.fontType]
   )
   
   if (this.options.fontSize in sizes[this.fontType]) {
