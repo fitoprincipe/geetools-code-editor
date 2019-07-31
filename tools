@@ -579,6 +579,12 @@ map.moveLayer = function(layer, index, m) {
   map_layers.insert(index, layer)
 }
 
+map.getBounds = function(m) {
+  m = m || Map
+  var b = m.getBounds()
+  return ee.Geometry.Rectangle([[b[0], b[1]], [b[2], b[3]]])
+}
+
 /** NUMBER */
 var number = {};
 
