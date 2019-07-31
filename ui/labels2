@@ -166,4 +166,4 @@ var Test = function() {
   Map.add(button)
 }
 
-Test()
+//Test()
