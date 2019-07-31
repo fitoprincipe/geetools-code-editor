@@ -194,6 +194,14 @@ array.countArraysInside = function(array) {
   return arrays
 }
 
+array.contains = function(array, element) {
+  var r = false
+  array.map(function(el){
+    if (element === el) {r = true}
+  })
+  return r
+}
+
 var writeableArray = function(array) {
   // Make an array writeable
   var ini = []
