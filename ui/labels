@@ -1,0 +1,152 @@
+/**
+ * label Widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+
+var labels = require('users/fitoprincipe/geetools:labels')
+var tools = require('users/fitoprincipe/geetools:tools')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var labelWidget = function(fc, prop, options) {
+  
+  var def = {
+    fontType: 'Arial',
+    fontSize: 32,
+    scale: 30,
+    red: 1,
+    green: 0,
+    blue: 0,
+    map: Map
+  }
+  
+  this.options = helpers.get_options(def, options)
+  this.map = this.options.map
+  
+  this.fc = fc
+  this.prop = prop
+  
+  var fonts = ['Arial', 'Consolas']
+  var sizes = {
+    'Arial': ['10','12','14','16','18','24','32','64'],
+    'Consolas': ['16', '18', '24', '32']
+  }
+  
+  // Check if passed args are in in the lists of availables
+  if (this.options.fontType in fonts) {
+    this.fontType = this.options.fontType
+  } else {
+    this.fontType = def.fontType
+  }
+  
+  if (this.options.fontSize in sizes[this.fontType]) {
+    this.fontSize = this.options.fontSize
+  } else {
+    this.fontSize = def.fontSize
+  }
+  
+  var app = this
+  
+  // DROPDOWNS
+  this.sizesDD = ui.Select([])
+  this.fontsDD = ui.Select({
+    items: fonts
+  })
+  
+  // SET DD OPTIONS
+  this.fontsDD.onChange(function(font){
+    app.sizesDD.items().reset(sizes[font])
+    app.sizesDD.setValue(app.fontSize.toString())
+  })
+  this.fontsDD.setValue(this.fontType, true)
+  
+  var fontPanel = ui.Panel([this.fontsDD, this.sizesDD], ui.Panel.Layout.flow('horizontal'))
+  
+  this.scaleTB = ui.Textbox({
+    value: this.options.scale.toString(), 
+    style:{width:'50px'}
+  })
+  var scalePanel = ui.Panel([ui.Label('scale:'), this.scaleTB], ui.Panel.Layout.flow('horizontal'))
+  
+  this.RED = ui.Textbox({value: this.options.red.toString(), style:{width:'40px'}})
+  this.GREEN = ui.Textbox({value: this.options.green.toString(), style:{width:'40px'}})
+  this.BLUE = ui.Textbox({value: this.options.blue.toString(), style:{width:'40px'}})
+  var colors = ui.Panel([
+    ui.Label('R'), this.RED, 
+    ui.Label('G'), this.GREEN, 
+    ui.Label('B'), this.BLUE], ui.Panel.Layout.flow('horizontal'))
+  
+  this.panel = ui.Panel([fontPanel, scalePanel, colors])
+}
+
+// GETTERS
+labelWidget.prototype.getColor = function() {
+  var R = Number(this.RED.getValue())
+  var G = Number(this.GREEN.getValue())
+  var B = Number(this.BLUE.getValue())
+  return labels.rgbToHex(R, G, B)
+}
+
+labelWidget.prototype.getScale = function() {
+  return this.scaleTB.getValue()
+}
+
+labelWidget.prototype.getFontType = function() {
+  return this.fontsDD.getValue()
+}
+
+labelWidget.prototype.getFontSize = function() {
+  return this.sizesDD.getValue()
+}
+
+labelWidget.prototype.layerName = function(pattern) {
+  var f = this.getFontType()
+  var s = this.getFontSize()
+  var sc = this.getScale()
+  var color = this.getColor()
+  
+  var pattern = pattern || 'labels {property} {fontType} {fontSize} {scale} {color}'
+  
+  return helpers.string.format(pattern, {
+    property: this.prop,
+    fontType: f,
+    fontSize: s,
+    scale: sc,
+    color: color
+  })
+}
+
+labelWidget.prototype.getLabelLayer = function() {
+  var bounds = tools.map.getBounds(this.map)
+  
+  var filtered = this.fc.filterBounds(bounds)
+  var f = this.fontsDD.getValue()
+  var s = this.sizesDD.getValue()
+  var sc = this.scaleTB.getValue()
+  var color = this.getColor()
+  var l = labels.labelCollection(filtered, this.prop, Number(sc), {
+      textColor: color,
+      fontType: f,
+      fontSize: s
+    })
+  return l
+}
+
+labelWidget.prototype.build = function() {
+  return this.panel
+}
+
+labelWidget.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+  return widget
+}
+
+labelWidget.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
+
+exports.labelWidget = labelWidget
