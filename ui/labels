@@ -121,7 +121,7 @@ labelWidget.prototype.layerName = function(pattern) {
   })
 }
 
-labelWidget.prototype.getLabelLayer = function() {
+labelWidget.prototype.getLabelsLayer = function() {
   var bounds = tools.map.getBounds(this.map)
   
   var filtered = this.fc.filterBounds(bounds)
