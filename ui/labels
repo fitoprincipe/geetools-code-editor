@@ -43,9 +43,9 @@ var labelWidget = function(fc, prop, options) {
   print(
     '64',
     'in', 
-    sizes[this.fontType],
+    ['1', '64'],
     //this.options.fontSize in sizes[this.fontType]
-    '64' in sizes[this.fontType]
+    '64' in ['1', '64']
   )
   
   if (this.options.fontSize in sizes[this.fontType]) {
