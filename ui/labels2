@@ -1,5 +1,5 @@
 /**
- * CheckSelect Widget
+ * label Widget
  * Author: Rodrigo E. Principe
  * email: fitoprincipe82@gmail.com
  * license: MIT
@@ -46,6 +46,8 @@ var labelWidget = function(fc, prop, options) {
     this.fontSize = def.fontSize
   }
   
+  var app = this
+  
   // DROPDOWNS
   this.sizesDD = ui.Select([])
   this.fontsDD = ui.Select({
@@ -53,55 +55,82 @@ var labelWidget = function(fc, prop, options) {
   })
   
   // SET DD OPTIONS
-  var app = this
-  print(app)
   this.fontsDD.onChange(function(font){
-    //print(app)
-    this.sizesDD.items().reset(sizes[font])
-    this.sizesDD.setValue(this.fontSize.toString())
+    app.sizesDD.items().reset(sizes[font])
+    app.sizesDD.setValue(app.fontSize.toString())
   })
   this.fontsDD.setValue(this.fontType, true)
   
   var fontPanel = ui.Panel([this.fontsDD, this.sizesDD], ui.Panel.Layout.flow('horizontal'))
   
-  var scale = ui.Textbox({
+  this.scaleTB = ui.Textbox({
     value: this.options.scale.toString(), 
     style:{width:'50px'}
   })
-  var scalePanel = ui.Panel([ui.Label('scale:'), scale], ui.Panel.Layout.flow('horizontal'))
+  var scalePanel = ui.Panel([ui.Label('scale:'), this.scaleTB], ui.Panel.Layout.flow('horizontal'))
   
-  var red = ui.Textbox({value: this.options.red.toString(), style:{width:'40px'}})
-  var green = ui.Textbox({value: this.options.green.toString(), style:{width:'40px'}})
-  var blue = ui.Textbox({value: this.options.blue.toString(), style:{width:'40px'}})
+  this.RED = ui.Textbox({value: this.options.red.toString(), style:{width:'40px'}})
+  this.GREEN = ui.Textbox({value: this.options.green.toString(), style:{width:'40px'}})
+  this.BLUE = ui.Textbox({value: this.options.blue.toString(), style:{width:'40px'}})
   var colors = ui.Panel([
-    ui.Label('R'), red, 
-    ui.Label('G'), green, 
-    ui.Label('B'), blue], ui.Panel.Layout.flow('horizontal'))
+    ui.Label('R'), this.RED, 
+    ui.Label('G'), this.GREEN, 
+    ui.Label('B'), this.BLUE], ui.Panel.Layout.flow('horizontal'))
   
   this.panel = ui.Panel([fontPanel, scalePanel, colors])
 }
 
-labelWidget.prototype.getLabels = function() {
+// GETTERS
+labelWidget.prototype.getColor = function() {
+  var R = Number(this.RED.getValue())
+  var G = Number(this.GREEN.getValue())
+  var B = Number(this.BLUE.getValue())
+  return labels.rgbToHex(R, G, B)
+}
+
+labelWidget.prototype.getScale = function() {
+  return this.scaleTB.getValue()
+}
+
+labelWidget.prototype.getFontType = function() {
+  return this.fontsDD.getValue()
+}
+
+labelWidget.prototype.getFontSize = function() {
+  return this.sizesDD.getValue()
+}
+
+labelWidget.prototype.layerName = function(pattern) {
+  var f = this.getFontType()
+  var s = this.getFontSize()
+  var sc = this.getScale()
+  var color = this.getColor()
+  
+  var pattern = pattern || 'labels {property} {fontType} {fontSize} {scale} {color}'
+  
+  return helpers.string.format(pattern, {
+    property: this.prop,
+    fontType: f,
+    fontSize: s,
+    scale: sc,
+    color: color
+  })
+}
+
+labelWidget.prototype.getLabelLayer = function() {
   var bounds = tools.map.getBounds(this.map)
   
   var filtered = this.fc.filterBounds(bounds)
-  var f = fontsDD.getValue()
-  var s = sizesDD.getValue()
-  var sc = scale.getValue()
-  var color = labels.rgbToHex(Number(red.getValue()), Number(green.getValue()), Number(blue.getValue()))
-  var l = labels.labelCollection(filtered, prop, Number(sc), {
+  var f = this.fontsDD.getValue()
+  var s = this.sizesDD.getValue()
+  var sc = this.scaleTB.getValue()
+  var color = this.getColor()
+  var l = labels.labelCollection(filtered, this.prop, Number(sc), {
       textColor: color,
       fontType: f,
       fontSize: s
     })
-  var name = 'labels '+prop+' '+f+' '+s+' '+sc+' '+color
-  var layer = tools.map.getLayer(name)
-  var newlayer = ui.Map.Layer(l, {}, name)
-  if (layer) {
-    tools.map.replaceLayer(layer, newlayer)
-  } else {
-    Map.addLayer(l, {}, name)
-  }
+  return l
 }
 
 labelWidget.prototype.build = function() {
@@ -124,8 +153,17 @@ exports.labelWidget = labelWidget
 
 var Test = function() {
   var table = ee.FeatureCollection('users/fitoprincipe/SAT/formosa_08_11')
-  var wid = new labelWidget(table, 'Id')
+  Map.addLayer(table, {}, 'table')
+  var wid = new labelWidget(table, 'Id', {scale: 10})
   wid.addTo(Map)
+  
+  var button = ui.Button('Label')
+  button.onClick(function(){
+    var layer = wid.getLabelLayer()
+    Map.addLayer(layer, {}, wid.layerName('my pattern {fontSize} {property}'))
+    print('color', wid.getColor())
+  })
+  Map.add(button)
 }
 
 Test()
