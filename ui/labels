@@ -34,21 +34,15 @@ var labelWidget = function(fc, prop, options) {
   }
   
   // Check if passed args are in in the lists of availables
-  if (this.options.fontType in fonts) {
+  //if (this.options.fontType in fonts) {
+  if (helpers.array.contains(fonts, this.options.fontType)) {  
     this.fontType = this.options.fontType
   } else {
     this.fontType = def.fontType
   }
   
-  print(
-    '64',
-    'in', 
-    ['1', '64'],
-    //this.options.fontSize in sizes[this.fontType]
-    '64' in ['1', '64']
-  )
-  
-  if (this.options.fontSize in sizes[this.fontType]) {
+  //if (this.options.fontSize in sizes[this.fontType]) {
+  if (helpers.array.contains(sizes[this.fontType], this.options.fontSize.toString())) {
     this.fontSize = this.options.fontSize.toString()
   } else {
     this.fontSize = def.fontSize.toString()
