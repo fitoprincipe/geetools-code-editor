@@ -18,7 +18,8 @@ var labelWidget = function(fc, prop, options) {
     red: 1,
     green: 0,
     blue: 0,
-    map: Map
+    map: Map,
+    style: {}
   }
   
   this.options = helpers.get_options(def, options)
@@ -77,7 +78,10 @@ var labelWidget = function(fc, prop, options) {
     ui.Label('G'), this.GREEN, 
     ui.Label('B'), this.BLUE], ui.Panel.Layout.flow('horizontal'))
   
-  this.panel = ui.Panel([fontPanel, scalePanel, colors])
+  this.panel = ui.Panel({
+    widgets: [fontPanel, scalePanel, colors],
+    style: this.options.style
+  })
 }
 
 // GETTERS
