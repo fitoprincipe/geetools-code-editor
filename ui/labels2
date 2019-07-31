@@ -1,0 +1,83 @@
+/**
+ * CheckSelect Widget
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+
+var labels = require('users/fitoprincipe/geetools:labels')
+var tools = require('users/fitoprincipe/geetools:tools')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var labelWidget = function(fc, prop, options) {
+  
+  var def = {
+    fontType: 'Arial',
+    fontSize: 32,
+    scale: 30
+  }
+  
+  this.options = helpers.get_options(def, options)
+  this.scale = this.options.scale
+  
+  var fonts = ['Arial', 'Consolas']
+  var sizes = {
+    'Arial': ['10','12','14','16','18','24','32','64'],
+    'Consolas': ['16', '18', '24', '32']
+  }
+  var sizesDD = ui.Select([])
+  var fontsDD = ui.Select({
+    items: fonts
+  })
+  fontsDD.onChange(function(font){
+    sizesDD.items().reset(sizes[font])
+    sizesDD.setValue('32')
+  })
+  fontsDD.setValue('Arial', true)
+  var fontPanel = ui.Panel([fontsDD, sizesDD], ui.Panel.Layout.flow('horizontal'))
+  
+  var scale = ui.Textbox({value: '30', style:{width:'50px'}})
+  var scalePanel = ui.Panel([ui.Label('scale:'), scale], ui.Panel.Layout.flow('horizontal'))
+  
+  var red = ui.Textbox({value:'1', style:{width:'40px'}})
+  var green = ui.Textbox({value:'0', style:{width:'40px'}})
+  var blue = ui.Textbox({value:'0', style:{width:'40px'}})
+  var colors = ui.Panel([
+    ui.Label('R'), red, 
+    ui.Label('G'), green, 
+    ui.Label('B'), blue], ui.Panel.Layout.flow('horizontal'))
+  
+  var label = function() {
+    var b = Map.getBounds()
+    var bounds = ee.Geometry.Rectangle([[b[0], b[1]], [b[2], b[3]]])
+
+    var filtered = fc.filterBounds(bounds)
+    var f = fontsDD.getValue()
+    var s = sizesDD.getValue()
+    var sc = scale.getValue()
+    var color = labels.rgbToHex(Number(red.getValue()), Number(green.getValue()), Number(blue.getValue()))
+    var l = labels.labelCollection(filtered, prop, Number(sc), {
+      textColor: color,
+      fontType: f,
+      fontSize: s
+    })
+    var name = 'labels '+prop+' '+f+' '+s+' '+sc+' '+color
+    var layer = tools.map.getLayer(name)
+    var newlayer = ui.Map.Layer(l, {}, name)
+    if (layer) {
+      tools.map.replaceLayer(layer, newlayer)
+    } else {
+      Map.addLayer(l, {}, name)
+    }
+  }
+  
+  var butt = ui.Button('Label')
+  butt.onClick(label)
+  return ui.Panel([fontPanel, scalePanel, colors, butt])
+}
+
+labelWidget.prototype.label = function() {
+  
+}
+
+exports.labelWidget = labelWidget
