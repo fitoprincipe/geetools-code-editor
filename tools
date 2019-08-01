@@ -200,6 +200,16 @@ geometry.paint = function(geometry, options) {
 /** IMAGES */
 var image = {};
 
+image.cat = function(img1, img2) {
+  var img1mask = img1.mask().select(0).gt(0).rename('mask')
+  img1 = img1.addBands(img1mask)
+  var img2mask = img2.mask().select(0).gt(0).rename('mask')
+  img2 = img2.addBands(img2mask)
+  var concat = img2.unmask().where(img1.unmask().select(0).gt(0), img1.unmask())
+  var mask = concat.select('mask')
+  return concat.updateMask(mask).select([0, 1, 2])
+}
+
 // get value from point
 image.getValue = function(image, point, scale) {
   var sc = ee.Number(scale).toInt() || 10;
