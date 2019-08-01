@@ -686,7 +686,7 @@ featureCollection.enumerateProperty = function(col, name) {
   return ee.FeatureCollection(featlist)
 }
 
-featureCollection.paint = function(collection, propertyName, styles) {
+featureCollection.paint = function(table, propertyName, styles) {
   var results = []
   
   var keys = Object.keys(styles)
