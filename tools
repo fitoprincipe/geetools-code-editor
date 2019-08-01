@@ -696,6 +696,9 @@ featureCollection.paint = function(table, propertyName, styles) {
     if (key === 'default') {
       var filter = ee.Filter.inList(propertyName, keys).not()
       var filtered = table.filter(filter)
+    } else if (key === 'null') {
+      key = null
+      var filtered = table.filterMetadata(propertyName, 'equals', key)
     } else {
       var filtered = table.filterMetadata(propertyName, 'equals', key)
     }
