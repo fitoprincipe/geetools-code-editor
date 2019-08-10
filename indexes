@@ -77,6 +77,13 @@ var custom_savi = function(NIR, RED, L) {
   }
 }
 
+var SAVI = {
+  custom: custom_savi,
+  sentinel2: function(L) {return custom_savi('B8', 'B4', L)},
+  landsat8: function(L) {return custom_savi('B5', 'B4', L)},
+  landsat457: function(L) {return custom_savi('B4', 'B3', L)},
+}
+
 var NDVI = {
  custom: custom_ndvi, 
  sentinel2: custom_ndvi('B8','B4'),
@@ -109,4 +116,5 @@ exports.NDVI = NDVI
 exports.NBR = NBR
 exports.NBR2 = NBR2
 exports.EVI = EVI
+exports.SAVI = SAVI
 exports.help = help
