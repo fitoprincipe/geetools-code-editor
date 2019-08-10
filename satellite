@@ -358,6 +358,7 @@ var Sentinel = function(number) {
       this.evi = indexes.EVI.sentinel2
       this.nbr = indexes.NBR.sentinel2
       this.nbr2 = indexes.NBR2.sentinel2
+      this.savi = indexes.SAVI.sentinel2
       this.cloud_masks = {
         'qa': cld.sentinel2, 
         'hollstein': cld.hollstein_S2
