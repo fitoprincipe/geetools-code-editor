@@ -63,6 +63,20 @@ var custom_evi = function(NIR, RED, BLUE) {
 }
 exports.evi = custom_evi
 
+var custom_savi = function(NIR, RED, L) {
+  L = ee.Number(L)
+  var wrap = function(img) {
+    var nir = img.select([NIR])
+    var red = img.select([RED])
+    
+    var savi = img.expression(
+      '((N – R)/(N + R + l))*(1 + l)',
+      {N: nir, R: red, l: L}).rename('SAVI')
+    
+    return img.addBands(savi)
+  }
+}
+
 var NDVI = {
  custom: custom_ndvi, 
  sentinel2: custom_ndvi('B8','B4'),
