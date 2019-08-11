@@ -75,6 +75,7 @@ var custom_savi = function(NIR, RED, L) {
     
     return img.addBands(savi)
   }
+  return wrap
 }
 exports.savi = custom_savi
 
