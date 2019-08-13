@@ -42,7 +42,7 @@ var medoid = function(collection, bands) {
   var ibands = first_image.bandNames()
   
   bands = bands || ibands
-  collection = collection.select(bands)
+  //collection = collection.select(bands)
   
   var enumerated = tools.imageCollection.enumerateProperty(collection)
   var collist = enumerated.toList(enumerated.size())
@@ -51,7 +51,10 @@ var medoid = function(collection, bands) {
     im = ee.Image(im)
     var n = ee.Number(im.get('enumeration'))
     var filtered = tools.list.removeIndex(collist, n)
-    var dist = sum_distance(im, filtered).multiply(-1)
+    var dist = sum_distance(
+      im.select(bands), 
+      filtered.select(bands)
+    ).multiply(-1)
     return im.addBands(dist)
   }))
   
