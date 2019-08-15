@@ -18,12 +18,6 @@ var ImageSlider = function(collection, options) {
   var ordered = collection.sort('system:time_start', true)
   this.collection = ordered
   
-  if (this.options.site) {
-    this.hash = helpers.hash(site.serialize())
-  } else {
-    this.hash = null
-  }
-  
   if (!this.options.start) {
     var first = ordered.first()
     this.options.start = first.date().format().getInfo()
@@ -34,17 +28,9 @@ var ImageSlider = function(collection, options) {
   }
   
   this.slider = ui.DateSlider(this.options.start, this.options.end)
-  var forth = ui.Button({
-    label: 'forward'
-  })
-  var back = ui.Button({
-    label: 'backward'
-  })
-  var buttons = ui.Panel([back, forth])
-  buttons.setLayout(ui.Panel.Layout.flow('horizontal'))
   
   this.panel = ui.Panel({
-    widgets: [ui.Label(this.options.title), this.slider, buttons]
+    widgets: [ui.Label(this.options.title), this.slider]
   })
   
   this.setWidth(this.options.width)
@@ -88,17 +74,17 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy) {
     var sorted = filtered.sort('system:time_start', false)
     var first = ee.Image(sorted.first())
     var start = first.date() 
-    this.slider.setValue(start.millis().getInfo())
+    start.evaluate(function(d){this.slider.setValue(d)})
   } else if (strategy === 'forth') {
     filtered = filtered.filterDate(date, date.advance(1, 'month'))
     var sorted = filtered.sort('system:time_start', true)
     var first = ee.Image(sorted.first())
     var start = first.date()
-    this.slider.setValue(start.millis().getInfo())
+    start.evaluate(function(d){this.slider.setValue(d)})
   } else if (strategy === 'closest') {
     var image = tools.imageCollection.getClosestTo(filtered, date)
     var start = image.date()
-    this.slider.setValue(start.millis().getInfo())
+    start.evaluate(function(d){this.slider.setValue(d)})
   }
   var end = start.advance(1, 'day')
   filtered = filtered.filterDate(start, end)
@@ -113,7 +99,7 @@ ImageSlider.prototype.getImage = function(options) {
     date: this.getDate(),
     site: this.options.site,
     mosaic: this.options.mosaic,
-    strategy: 'closest'
+    strategy: 'exact'
   }
   var opt = helpers.get_options(def, options)
   
@@ -135,37 +121,38 @@ ImageSlider.prototype.getImage = function(options) {
   }
   
   if (this.options.site) { // storte in images dict
-    
+    if (this.images[opt.date]) {
+      return this.images[opt.date]
+    } else {
+      var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
+      var image = getImage(filtered)
+      this.images[opt.date] = image
+    }
+  } else {
+    var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
+    var image = getImage(filtered)
   }
-  
-  var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
-  return getImage(filtered)
-  
+  return image
 }
 
-ImageSlider.prototype.forward = function(site, mosaic) {
-  site = site || this.options.site || this.options.map.getBounds()
+ImageSlider.prototype.getForward = function(site, mosaic) {
+  site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
-  /*
-  var start = ee.Date(this.getValue())
-  var end = ee.Date(this.slider.getEnd()).advance(1, 'day')
-  var filtered = this.collection.filterDate(start, end)
-  var image = filtered.first()
-  // set slider value
-  image.date().evaluate(function(d){this.slider.setValue(d)})
-  this.image
-  */
+  return this.getImage({site: site, mosaic: mosaic, strategy:'forth'})
 }
 
-ImageSlider.prototype.backward = function() {
-  var start = ee.Date(this.slider.getStart())
-  var end = ee.Date(this.getValue()).advance(1, 'day')
-  var filtered = this.collection.filterDate(start, end)
-  var image = ee.Image(filtered.toList(filtered.size()).get(-1))
-  // set slider value
-  image.date().evaluate(function(d){this.slider.setValue(d)})
-  this.image
+ImageSlider.prototype.getBackward = function(site, mosaic) {
+  site = site || this.options.site
+  mosaic = mosaic || this.options.mosaic
+  return this.getImage({site: site, mosaic: mosaic, strategy:'back'})
 }
+
+ImageSlider.prototype.getClosest = function(site, mosaic) {
+  site = site || this.options.site
+  mosaic = mosaic || this.options.mosaic
+  return this.getImage({site: site, mosaic: mosaic, strategy:'closest'})
+}
+
 
 var test = function() {
   var col = ee.ImageCollection('COPERNICUS/S2')
@@ -174,7 +161,7 @@ var test = function() {
   slider.addTo(Map)
   var but = ui.Button('get')
   but.onClick(function() {
-    var i = slider.getImage()
+    var i = slider.getClosest()
     if (i) {
       Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, 'S2')
     } else { print('no images') }
