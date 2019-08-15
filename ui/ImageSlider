@@ -66,13 +66,14 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy, k
   var filtered = collection.filterBounds(site)
   date = ee.Date(date)
   var self = this
+  print('keepCurrent', keepCurrent)
   if (strategy === 'exact') {
     var start = date
   } else if (strategy === 'back') {
     if (keepCurrent) {
-      filtered = filtered.filterDate('1970-01-01', date)
+      filtered = filtered.filterDate('1970-01-01', date.advance(1, 'day'))
     } else {
-      filtered = filtered.filterDate('1970-01-01', date.advance(-1, 'day'))
+      filtered = filtered.filterDate('1970-01-01', date)
     }
     var sorted = filtered.sort('system:time_start', false)
     var first = ee.Image(sorted.first())
@@ -120,6 +121,8 @@ ImageSlider.prototype.getImage = function(options) {
     var filtered = filt[0]
     var date = filt[1]
     
+    date = ee.Date.fromYMD(date.get('year'), date.get('month'), date.get('day'))
+    
     var size = filtered.size()
     if (opt.mosaic) {
       var geom = tools.imageCollection.mergeGeometries(filtered)
@@ -135,33 +138,48 @@ ImageSlider.prototype.getImage = function(options) {
     if (this.images[opt.date]) {
       return this.images[opt.date]
     } else {
-      var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
+      var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy, opt.keepCurrent)
       var image = getImage(filtered)
       this.images[opt.date] = image
     }
   } else {
-    var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
+    var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy, opt.keepCurrent)
     var image = getImage(filtered)
   }
   return image
 }
 
-ImageSlider.prototype.getForward = function(site, mosaic, keepCurrent) {
-  site = site || this.options.site
-  mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'forth', keepCurrent:keepCurrent})
+ImageSlider.prototype.getForward = function(options) {
+  var def = {
+    site: this.options.site,
+    mosaic: this.options.mosaic,
+    keepCurrent: false
+  }
+  var opt = helpers.get_options(def, options)
+  
+  return this.getImage({site: opt.site, mosaic: opt.mosaic, strategy:'forth', keepCurrent: opt.keepCurrent})
 }
 
-ImageSlider.prototype.getBackward = function(site, mosaic, keepCurrent) {
-  site = site || this.options.site
-  mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'back', keepCurrent:keepCurrent})
+ImageSlider.prototype.getBackward = function(options) {
+  var def = {
+    site: this.options.site,
+    mosaic: this.options.mosaic,
+    keepCurrent: false
+  }
+  var opt = helpers.get_options(def, options)
+  
+  return this.getImage({site: opt.site, mosaic: opt.mosaic, strategy:'back', keepCurrent: opt.keepCurrent})
 }
 
-ImageSlider.prototype.getClosest = function(site, mosaic, keepCurrent) {
-  site = site || this.options.site
-  mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'closest', keepCurrent:keepCurrent})
+ImageSlider.prototype.getClosest = function(options) {
+  var def = {
+    site: this.options.site,
+    mosaic: this.options.mosaic,
+    keepCurrent: false
+  }
+  var opt = helpers.get_options(def, options)
+  
+  return this.getImage({site: opt.site, mosaic: opt.mosaic, strategy:'closest', keepCurrent: opt.keepCurrent})
 }
 
 exports.ImageSlider = ImageSlider
@@ -182,13 +200,13 @@ var test = function() {
     } else { print('no images') }
   })
   f.onClick(function() {
-    var i = slider.getForward()
+    var i = slider.getForward({keepCurrent:true})
     if (i) {
       Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, i.date().format().getInfo())
     } else { print('no images') }
   })
   b.onClick(function() {
-    var i = slider.getBackward()
+    var i = slider.getBackward({keepCurrent:false})
     if (i) {
       Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, i.date().format().getInfo())
     } else { print('no images') }
