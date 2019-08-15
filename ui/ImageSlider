@@ -72,37 +72,69 @@ ImageSlider.prototype.getDate = function() {
   return this.slider.getValue()[0]
 }
 
-ImageSlider.prototype.getImage = function(date, site, mosaic) {
+var getFiltered = function(collection, date, site, strategy) {
+  var filtered = collection.filterBounds(site)
+  date = ee.Date(date)
+  if (strategy === 'exact') {
+    var start = date
+  } else if (strategy === 'back') {
+    filtered = filtered.filterDate('1970-01-01', date.advance(1, 'day'))
+    var sorted = filtered.sort('system:time_start', false)
+    var first = ee.Image(sorted.first())
+    var start = first.date() 
+  } else if (strategy === 'forth') {
+    filtered = filtered.filterDate(date, date.advance(1, 'month'))
+    var sorted = filtered.sort('system:time_start', true)
+    var first = ee.Image(sorted.first())
+    var start = first.date()
+  } else if (strategy === 'closest') {
+    var image = tools.imageCollection.getClosestTo(filtered, date)
+    var start = image.date()
+  }
+  var end = start.advance(1, 'day')
+  filtered = filtered.filterDate(start, end)
+  
+  return filtered
+}
+
+ImageSlider.prototype.getImage = function(options) {
+  // date param must be in milliseconds
+  
+  var def = {
+    date: this.getDate(),
+    site: this.options.site,
+    mosaic: this.options.mosaic,
+    strategy: 'closest'
+  }
+  var opt = helpers.get_options(def, options)
+  
+  var site = opt.site || tools.map.getBounds(this.map)
+  
   var self = this
-  site = site || this.options.site
-  mosaic = mosaic || this.options.mosaic
-  var date = date || this.getDate()
   
-  if (this.images[date] === undefined) {
-    this.images[date] = {}
-  }
-  
-  var filterCol = function(s) {
-    var start = ee.Date(date)
-    var end = start.advance(1, 'day')
-    var filtered = self.collection.filterDate(start, end).filterBounds(s)
-    return filtered
-  }
-  
-  var getImage = function(filtered, geom) {
+  var getImage = function(filtered) {
     var size = filtered.size()
-    if (mosaic) {
-      var image = filtered.mosaic().set('system:time_start', date).clip(geom)
+    if (opt.mosaic) {
+      var geom = tools.imageCollection.mergeGeometries(filtered)
+      var image = filtered.mosaic().set('system:time_start', opt.date).clip(geom)
     } else {
       var image = filtered.first()
     }
     return image
   }
+  var proxy = ee.Image(0).selfMask()
+  var filtered = getFiltered(this.collection, opt.date, site, opt.strategy)
+  var image = ee.Image(ee.Algorithms.If(filtered.size(), getImage(filtered), proxy))
+  return image
+  /*
+  if (this.images[date] === undefined) {
+    this.images[date] = {}
+  }
   
   if (site) {
     var hash = helpers.hash(site.serialize())
     if (this.images[date][hash] === undefined) {
-      var filtered = filterCol(site)
+      var filtered = getFiltered(site)
       var size = filtered.size().getInfo()
       if (size <= 0) {
         this.images[date][hash] = null
@@ -118,7 +150,7 @@ ImageSlider.prototype.getImage = function(date, site, mosaic) {
     }
   } else {
     site = tools.map.getBounds(this.options.map)
-    var filtered = filterCol(site)
+    var filtered = getFiltered(site)
     var size = filtered.size().getInfo()
     if (size <= 0) {
         this.images[date][hash] = null
@@ -135,6 +167,7 @@ ImageSlider.prototype.getImage = function(date, site, mosaic) {
       }
     }
   }
+*/
 }
 
 ImageSlider.prototype.forward = function(site, mosaic) {
