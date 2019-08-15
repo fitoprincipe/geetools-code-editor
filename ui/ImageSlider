@@ -71,26 +71,26 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy) {
   if (strategy === 'exact') {
     var start = date
   } else if (strategy === 'back') {
-    filtered = filtered.filterDate('1970-01-01', date.advance(1, 'day'))
+    filtered = filtered.filterDate('1970-01-01', date.advance(-1, 'day'))
     var sorted = filtered.sort('system:time_start', false)
     var first = ee.Image(sorted.first())
-    var start = first.date() 
-    start.format().evaluate(function(d){self.slider.setValue(d)})
+    var start = first.date()
+    start.millis().evaluate(function(d){self.slider.setValue(d)})
   } else if (strategy === 'forth') {
-    filtered = filtered.filterDate(date, date.advance(1, 'month'))
+    filtered = filtered.filterDate(date.advance(1, 'day'), date.advance(1, 'month'))
     var sorted = filtered.sort('system:time_start', true)
     var first = ee.Image(sorted.first())
     var start = first.date()
-    start.format().evaluate(function(d){self.slider.setValue(d)})
+    start.millis().evaluate(function(d){self.slider.setValue(d)})
   } else if (strategy === 'closest') {
     var image = tools.imageCollection.getClosestTo(filtered, date)
     var start = image.date()
-    start.format().evaluate(function(d){self.slider.setValue(d)})
+    start.millis().evaluate(function(d){self.slider.setValue(d)})
   }
   var end = start.advance(1, 'day')
   filtered = filtered.filterDate(start, end)
   
-  return filtered
+  return [filtered, start]
 }
 
 ImageSlider.prototype.getImage = function(options) {
@@ -109,11 +109,14 @@ ImageSlider.prototype.getImage = function(options) {
   var self = this
   var proxy = ee.Image(0).selfMask()
   
-  var getImage = function(filtered) {
+  var getImage = function(filt) {
+    var filtered = filt[0]
+    var date = filt[1]
+    
     var size = filtered.size()
     if (opt.mosaic) {
       var geom = tools.imageCollection.mergeGeometries(filtered)
-      var image = filtered.mosaic().set('system:time_start', opt.date).clip(geom)
+      var image = filtered.mosaic().set('system:time_start', date.millis()).clip(geom)
     } else {
       var image = filtered.first()
     }
