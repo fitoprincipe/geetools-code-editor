@@ -19,3 +19,6 @@ exports.asyncSelect = asyncSelect
 
 var labelWidget = require('users/fitoprincipe/geetools:ui/labels').labelWidget
 exports.labelWidget = labelWidget
+
+var ImageSlider = require('users/fitoprincipe/geetools:ui/ImageSlider').ImageSlider
+exports.ImageSlider = ImageSlider
