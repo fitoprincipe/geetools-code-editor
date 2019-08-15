@@ -80,7 +80,6 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy, k
     var sorted = filtered.sort('system:time_start', false)
     var first = ee.Image(sorted.first())
     var start = first.date()
-    start.millis().evaluate(function(d){self.slider.setValue(d)})
   } else if (strategy === 'forth') {
     if (keepCurrent) {
       filtered = filtered.filterDate(date, date.advance(1, 'month'))
@@ -90,11 +89,9 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy, k
     var sorted = filtered.sort('system:time_start', true)
     var first = ee.Image(sorted.first())
     var start = first.date()
-    start.millis().evaluate(function(d){self.slider.setValue(d)})
   } else if (strategy === 'closest') {
     var image = tools.imageCollection.getClosestTo(filtered, date)
     var start = image.date()
-    start.millis().evaluate(function(d){self.slider.setValue(d)})
   }
   var end = start.advance(1, 'day')
   filtered = filtered.filterDate(start, end)
@@ -104,6 +101,8 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy, k
 
 ImageSlider.prototype.getImage = function(options) {
   // date param must be in milliseconds
+  
+  this.logger.setValue('Loading image...')
   
   var def = {
     date: this.getDate(),
@@ -133,6 +132,10 @@ ImageSlider.prototype.getImage = function(options) {
       var image = filtered.first()
     }
     image = ee.Image(ee.Algorithms.If(size, image, proxy))
+    date.millis().evaluate(function(d){
+      self.slider.setValue(d)
+      self.logger.setValue('Image loaded')
+    })
     return image
   }
   
