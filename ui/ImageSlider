@@ -1,0 +1,82 @@
+var sat = require('users/fitoprincipe/geetools:satellite')
+var tools = require('users/fitoprincipe/geetools:tools')
+var wid = require('users/fitoprincipe/geetools:widgets')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+
+var ImageSlider = function(collection, visParams, options) {
+  var def = {
+    start: null,
+    end: null,
+    title: 'ImageSlider',
+    width: 200
+  }
+  this.collection = collection
+  
+  this.options = helpers.get_options(def, options)
+  var ordered = collection.sort('system:time_start', true)
+  var first = ordered.first()
+  var last = ee.Image(ordered.toList(ordered.size()).get(-1))
+  
+  if (!this.options.start) {
+    this.options.start = first.date().format().getInfo()
+  }
+  if (!this.options.end) {
+    this.options.end = last.date().format().getInfo()
+  }
+  
+  this.slider = ui.DateSlider(this.options.start, this.options.end)
+  var forth = ui.Button({
+    label: 'forward'
+  })
+  var back = ui.Button({
+    label: 'backward'
+  })
+  var buttons = ui.Panel([back, forth])
+  buttons.setLayout(ui.Panel.Layout.flow('horizontal'))
+  
+  this.panel = ui.Panel({
+    widgets: [ui.Label(this.options.title), this.slider, buttons]
+  })
+  
+  this.setWidth(this.options.width)
+}
+
+ImageSlider.prototype.build = function() {
+  return this.panel
+}
+
+ImageSlider.prototype.addTo = function(widget) {
+  widget.add(this.build())
+  this.parent = widget
+  return widget
+}
+
+ImageSlider.prototype.insertTo = function(widget, position) {
+  widget.insert(position, this.build())
+  this.parent = widget
+  return widget
+}
+
+ImageSlider.prototype.setWidth = function(width) {
+  var ps = new helpers.PixelSize(width)
+  this.panel.style().set('width', ps.value())
+  var sliderwidth = ps.subtract(30).value()
+  this.slider.style().set('width', sliderwidth)
+}
+
+ImageSlider.prototype.getValue = function() {
+  return this.slider.getValue()[0]
+}
+
+ImageSlider.prototype.fordward = function() {
+  
+}
+
+var test = function() {
+  var col = ee.ImageCollection('COPERNICUS/S2')
+  var slider = new ImageSlider(col, null, {start: '2018-01-01', end:'2018-05-01'})
+  slider.setWidth(500)
+  slider.addTo(Map)
+}
+
+test()
