@@ -54,6 +54,20 @@ var uuid4 = function() {
   }
 exports.uuid4 = uuid4
 
+// HASH
+// from https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+var hash = function(str) {
+  var h = 0, i, chr;
+  if (str.length === 0) return h;
+  for (i = 0; i < str.length; i++) {
+    chr   = str.charCodeAt(i);
+    h  = ((h << 5) - h) + chr;
+    h |= 0; // Convert to 32bit integer
+  }
+  return h;
+}
+exports.hash = hash
+
 // Catch Widget Object Type
 var isWidget = function(obj) {
   try {
