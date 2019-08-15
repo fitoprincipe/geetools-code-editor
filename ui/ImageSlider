@@ -73,33 +73,58 @@ ImageSlider.prototype.getDate = function() {
 }
 
 ImageSlider.prototype.getImage = function(date, site, mosaic) {
-  site = site || this.options.site || tools.map.getBounds(Map)
+  site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
   var date = date || this.getDate()
-  var hash = helpers.hash(site.serialize())
   
   if (this.images[date] === undefined) {
     this.images[date] = {}
   }
   
-  if (this.images[date][hash] === undefined) {
+  var filterCol = function(s) {
     var start = ee.Date(date)
     var end = start.advance(1, 'day')
-    var filtered = this.collection.filterDate(start, end).filterBounds(site)
+    var filtered = this.collection.filterDate(start, end).filterBounds(s)
+    return filtered
+  }
+  
+  var getImage = function(filtered, geom) {
     var size = filtered.size()
-    if (size.getInfo() > 0) {
-      if (mosaic) {
-        var image = filtered.mosaic().set('system:time_start', date)
+      if (size.getInfo() > 0) {
+        if (mosaic) {
+          var image = filtered.mosaic().set('system:time_start', date).clip(geom)
+        } else {
+          var image = filtered.first()
+        }
       } else {
-        var image = filtered.first()
+        var image = null
       }
-    } else {
-      var image = null
-    }
-    this.images[date][hash] = image
     return image
+  }
+  
+  if (site) {
+    var hash = helpers.hash(site.serialize())
+    if (this.images[date][hash] === undefined) {
+      var filtered = filterCol(site)
+      var geom = tools.imageCollection.mergeGeometries(filtered)
+      var image = getImage(filtered, geom)
+      this.images[date][hash] = image
+      return image
+    } else {
+      return this.images[date][hash]
+    }
   } else {
-    return this.images[date][hash]
+    site = tools.map.getBounds(this.options.map)
+    var filtered = filterCol(site)
+    var geom = tools.imageCollection.mergeGeometries(filtered)
+    var hash = helpers.hash(geom.serialize())
+    if (this.images[date][hash] === undefined) {
+      var image = getImage(filtered, geom)
+      this.images[date][hash] = image
+      return image
+    } else {
+      return this.images[date][hash]
+    }
   }
 }
 
