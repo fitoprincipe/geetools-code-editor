@@ -167,19 +167,19 @@ var test = function() {
   but.onClick(function() {
     var i = slider.getClosest()
     if (i) {
-      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, 'S2')
+      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, i.date().format().getInfo())
     } else { print('no images') }
   })
   f.onClick(function() {
     var i = slider.getForward()
     if (i) {
-      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, 'S2')
+      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, i.date().format().getInfo())
     } else { print('no images') }
   })
   b.onClick(function() {
     var i = slider.getBackward()
     if (i) {
-      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, 'S2')
+      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, i.date().format().getInfo())
     } else { print('no images') }
   })
   Map.add(but)
