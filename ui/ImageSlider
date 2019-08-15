@@ -27,8 +27,11 @@ var ImageSlider = function(collection, options) {
   
   this.slider = ui.DateSlider(this.options.start, this.options.end)
   
+  this.logger = ui.Label('')
+  this.logger.style().set('color', 'red')
+  
   this.panel = ui.Panel({
-    widgets: [ui.Label(this.options.title), this.slider]
+    widgets: [ui.Label(this.options.title), this.logger, this.slider]
   })
   
   this.setWidth(this.options.width)
@@ -66,7 +69,6 @@ ImageSlider.prototype.getFiltered = function(collection, date, site, strategy, k
   var filtered = collection.filterBounds(site)
   date = ee.Date(date)
   var self = this
-  print('keepCurrent', keepCurrent)
   if (strategy === 'exact') {
     var start = date
   } else if (strategy === 'back') {
