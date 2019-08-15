@@ -433,6 +433,17 @@ imageCollection.mergeGeometries = function(collection) {
     return ee.Geometry(rest.iterate(wrap, first.geometry()))
 }
 
+imageCollection.getClosestTo = function(collection, date) {
+  date = ee.Date(date)
+  var distance = collection.map(function(img){
+    var idate = img.date()
+    var diff = date.difference(idate, 'second').abs()
+    return img.set('closestDateGEETOOLS', diff)
+  })
+  var sorted = distance.sort('closestDateGEETOOLS', true)
+  return ee.Image(sorted.first())
+}
+
 /** MAP */
 var map = {};
 
