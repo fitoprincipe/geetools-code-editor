@@ -146,22 +146,22 @@ ImageSlider.prototype.getImage = function(options) {
   return image
 }
 
-ImageSlider.prototype.getForward = function(site, mosaic) {
+ImageSlider.prototype.getForward = function(site, mosaic, keepCurrent) {
   site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'forth'})
+  return this.getImage({site: site, mosaic: mosaic, strategy:'forth', keepCurrent:keepCurrent})
 }
 
-ImageSlider.prototype.getBackward = function(site, mosaic) {
+ImageSlider.prototype.getBackward = function(site, mosaic, keepCurrent) {
   site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'back'})
+  return this.getImage({site: site, mosaic: mosaic, strategy:'back', keepCurrent:keepCurrent})
 }
 
-ImageSlider.prototype.getClosest = function(site, mosaic) {
+ImageSlider.prototype.getClosest = function(site, mosaic, keepCurrent) {
   site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
-  return this.getImage({site: site, mosaic: mosaic, strategy:'closest'})
+  return this.getImage({site: site, mosaic: mosaic, strategy:'closest', keepCurrent:keepCurrent})
 }
 
 exports.ImageSlider = ImageSlider
