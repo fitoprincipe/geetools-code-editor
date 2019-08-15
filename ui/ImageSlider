@@ -157,6 +157,7 @@ ImageSlider.prototype.getClosest = function(site, mosaic) {
   return this.getImage({site: site, mosaic: mosaic, strategy:'closest'})
 }
 
+exports.ImageSlider = ImageSlider
 
 var test = function() {
   var col = ee.ImageCollection('COPERNICUS/S2')
