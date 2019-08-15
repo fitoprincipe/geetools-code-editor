@@ -18,6 +18,12 @@ var ImageSlider = function(collection, options) {
   var ordered = collection.sort('system:time_start', true)
   this.collection = ordered
   
+  if (this.options.site) {
+    this.hash = helpers.hash(site.serialize())
+  } else {
+    this.hash = null
+  }
+  
   if (!this.options.start) {
     var first = ordered.first()
     this.options.start = first.date().format().getInfo()
@@ -72,7 +78,7 @@ ImageSlider.prototype.getDate = function() {
   return this.slider.getValue()[0]
 }
 
-var getFiltered = function(collection, date, site, strategy) {
+ImageSlider.prototype.getFiltered = function(collection, date, site, strategy) {
   var filtered = collection.filterBounds(site)
   date = ee.Date(date)
   if (strategy === 'exact') {
@@ -82,14 +88,17 @@ var getFiltered = function(collection, date, site, strategy) {
     var sorted = filtered.sort('system:time_start', false)
     var first = ee.Image(sorted.first())
     var start = first.date() 
+    this.slider.setValue(start.millis().getInfo())
   } else if (strategy === 'forth') {
     filtered = filtered.filterDate(date, date.advance(1, 'month'))
     var sorted = filtered.sort('system:time_start', true)
     var first = ee.Image(sorted.first())
     var start = first.date()
+    this.slider.setValue(start.millis().getInfo())
   } else if (strategy === 'closest') {
     var image = tools.imageCollection.getClosestTo(filtered, date)
     var start = image.date()
+    this.slider.setValue(start.millis().getInfo())
   }
   var end = start.advance(1, 'day')
   filtered = filtered.filterDate(start, end)
@@ -111,6 +120,7 @@ ImageSlider.prototype.getImage = function(options) {
   var site = opt.site || tools.map.getBounds(this.map)
   
   var self = this
+  var proxy = ee.Image(0).selfMask()
   
   var getImage = function(filtered) {
     var size = filtered.size()
@@ -120,54 +130,17 @@ ImageSlider.prototype.getImage = function(options) {
     } else {
       var image = filtered.first()
     }
+    image = ee.Image(ee.Algorithms.If(size, image, proxy))
     return image
   }
-  var proxy = ee.Image(0).selfMask()
-  var filtered = getFiltered(this.collection, opt.date, site, opt.strategy)
-  var image = ee.Image(ee.Algorithms.If(filtered.size(), getImage(filtered), proxy))
-  return image
-  /*
-  if (this.images[date] === undefined) {
-    this.images[date] = {}
+  
+  if (this.options.site) { // storte in images dict
+    
   }
   
-  if (site) {
-    var hash = helpers.hash(site.serialize())
-    if (this.images[date][hash] === undefined) {
-      var filtered = getFiltered(site)
-      var size = filtered.size().getInfo()
-      if (size <= 0) {
-        this.images[date][hash] = null
-        return null
-      } else {
-        var geom = tools.imageCollection.mergeGeometries(filtered)
-        var image = getImage(filtered, geom)
-        this.images[date][hash] = image
-        return image
-      }
-    } else {
-      return this.images[date][hash]
-    }
-  } else {
-    site = tools.map.getBounds(this.options.map)
-    var filtered = getFiltered(site)
-    var size = filtered.size().getInfo()
-    if (size <= 0) {
-        this.images[date][hash] = null
-        return null
-    } else {
-      var geom = tools.imageCollection.mergeGeometries(filtered)
-      var hash = helpers.hash(geom.serialize())
-      if (this.images[date][hash] === undefined) {
-        var image = getImage(filtered, geom)
-        this.images[date][hash] = image
-        return image
-      } else {
-        return this.images[date][hash]
-      }
-    }
-  }
-*/
+  var filtered = this.getFiltered(this.collection, opt.date, site, opt.strategy)
+  return getImage(filtered)
+  
 }
 
 ImageSlider.prototype.forward = function(site, mosaic) {
