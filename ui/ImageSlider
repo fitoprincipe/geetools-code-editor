@@ -73,6 +73,7 @@ ImageSlider.prototype.getDate = function() {
 }
 
 ImageSlider.prototype.getImage = function(date, site, mosaic) {
+  var self = this
   site = site || this.options.site
   mosaic = mosaic || this.options.mosaic
   var date = date || this.getDate()
@@ -84,21 +85,17 @@ ImageSlider.prototype.getImage = function(date, site, mosaic) {
   var filterCol = function(s) {
     var start = ee.Date(date)
     var end = start.advance(1, 'day')
-    var filtered = this.collection.filterDate(start, end).filterBounds(s)
+    var filtered = self.collection.filterDate(start, end).filterBounds(s)
     return filtered
   }
   
   var getImage = function(filtered, geom) {
     var size = filtered.size()
-      if (size.getInfo() > 0) {
-        if (mosaic) {
-          var image = filtered.mosaic().set('system:time_start', date).clip(geom)
-        } else {
-          var image = filtered.first()
-        }
-      } else {
-        var image = null
-      }
+    if (mosaic) {
+      var image = filtered.mosaic().set('system:time_start', date).clip(geom)
+    } else {
+      var image = filtered.first()
+    }
     return image
   }
   
@@ -106,24 +103,36 @@ ImageSlider.prototype.getImage = function(date, site, mosaic) {
     var hash = helpers.hash(site.serialize())
     if (this.images[date][hash] === undefined) {
       var filtered = filterCol(site)
-      var geom = tools.imageCollection.mergeGeometries(filtered)
-      var image = getImage(filtered, geom)
-      this.images[date][hash] = image
-      return image
+      var size = filtered.size().getInfo()
+      if (size <= 0) {
+        this.images[date][hash] = null
+        return null
+      } else {
+        var geom = tools.imageCollection.mergeGeometries(filtered)
+        var image = getImage(filtered, geom)
+        this.images[date][hash] = image
+        return image
+      }
     } else {
       return this.images[date][hash]
     }
   } else {
     site = tools.map.getBounds(this.options.map)
     var filtered = filterCol(site)
-    var geom = tools.imageCollection.mergeGeometries(filtered)
-    var hash = helpers.hash(geom.serialize())
-    if (this.images[date][hash] === undefined) {
-      var image = getImage(filtered, geom)
-      this.images[date][hash] = image
-      return image
+    var size = filtered.size().getInfo()
+    if (size <= 0) {
+        this.images[date][hash] = null
+        return null
     } else {
-      return this.images[date][hash]
+      var geom = tools.imageCollection.mergeGeometries(filtered)
+      var hash = helpers.hash(geom.serialize())
+      if (this.images[date][hash] === undefined) {
+        var image = getImage(filtered, geom)
+        this.images[date][hash] = image
+        return image
+      } else {
+        return this.images[date][hash]
+      }
     }
   }
 }
