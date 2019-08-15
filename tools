@@ -415,6 +415,24 @@ imageCollection.enumerateProperty = function(col, name) {
   return ee.ImageCollection.fromImages(featlist)
 }
 
+imageCollection.mergeGeometries = function(collection) {
+    /// Merge the geometries of many images. Return ee.Geometry
+    var imlist = collection.toList(collection.size())
+
+    var first = ee.Image(imlist.get(0))
+    var rest = imlist.slice(1)
+
+    var wrap = function(img, ini) {
+        ini = ee.Geometry(ini)
+        img = ee.Image(img)
+        var geom = img.geometry()
+        var union = geom.union(ini)
+        return union.dissolve()
+    }
+
+    return ee.Geometry(rest.iterate(wrap, first.geometry()))
+}
+
 /** MAP */
 var map = {};
 
