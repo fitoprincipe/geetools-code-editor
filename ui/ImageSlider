@@ -3,24 +3,27 @@ var tools = require('users/fitoprincipe/geetools:tools')
 var wid = require('users/fitoprincipe/geetools:widgets')
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
-var ImageSlider = function(collection, visParams, options) {
+var ImageSlider = function(collection, options) {
   var def = {
     start: null,
     end: null,
     title: 'ImageSlider',
-    width: 200
+    width: 200,
+    mosaic: true,
+    site: null,
+    map: Map
   }
-  this.collection = collection
   
   this.options = helpers.get_options(def, options)
   var ordered = collection.sort('system:time_start', true)
-  var first = ordered.first()
-  var last = ee.Image(ordered.toList(ordered.size()).get(-1))
+  this.collection = ordered
   
   if (!this.options.start) {
+    var first = ordered.first()
     this.options.start = first.date().format().getInfo()
   }
   if (!this.options.end) {
+    var last = ee.Image(ordered.toList(ordered.size()).get(-1))
     this.options.end = last.date().format().getInfo()
   }
   
@@ -39,6 +42,7 @@ var ImageSlider = function(collection, visParams, options) {
   })
   
   this.setWidth(this.options.width)
+  this.images = {}
 }
 
 ImageSlider.prototype.build = function() {
@@ -64,19 +68,78 @@ ImageSlider.prototype.setWidth = function(width) {
   this.slider.style().set('width', sliderwidth)
 }
 
-ImageSlider.prototype.getValue = function() {
+ImageSlider.prototype.getDate = function() {
   return this.slider.getValue()[0]
 }
 
-ImageSlider.prototype.fordward = function() {
+ImageSlider.prototype.getImage = function(date, site, mosaic) {
+  site = site || this.options.site || tools.map.getBounds(Map)
+  mosaic = mosaic || this.options.mosaic
+  var date = date || this.getDate()
+  var hash = helpers.hash(site.serialize())
   
+  if (this.images[date] === undefined) {
+    this.images[date] = {}
+  }
+  
+  if (this.images[date][hash] === undefined) {
+    var start = ee.Date(date)
+    var end = start.advance(1, 'day')
+    var filtered = this.collection.filterDate(start, end).filterBounds(site)
+    var size = filtered.size()
+    if (size.getInfo() > 0) {
+      if (mosaic) {
+        var image = filtered.mosaic().set('system:time_start', date)
+      } else {
+        var image = filtered.first()
+      }
+    } else {
+      var image = null
+    }
+    this.images[date][hash] = image
+    return image
+  } else {
+    return this.images[date][hash]
+  }
+}
+
+ImageSlider.prototype.forward = function(site, mosaic) {
+  site = site || this.options.site || this.options.map.getBounds()
+  mosaic = mosaic || this.options.mosaic
+  /*
+  var start = ee.Date(this.getValue())
+  var end = ee.Date(this.slider.getEnd()).advance(1, 'day')
+  var filtered = this.collection.filterDate(start, end)
+  var image = filtered.first()
+  // set slider value
+  image.date().evaluate(function(d){this.slider.setValue(d)})
+  this.image
+  */
+}
+
+ImageSlider.prototype.backward = function() {
+  var start = ee.Date(this.slider.getStart())
+  var end = ee.Date(this.getValue()).advance(1, 'day')
+  var filtered = this.collection.filterDate(start, end)
+  var image = ee.Image(filtered.toList(filtered.size()).get(-1))
+  // set slider value
+  image.date().evaluate(function(d){this.slider.setValue(d)})
+  this.image
 }
 
 var test = function() {
   var col = ee.ImageCollection('COPERNICUS/S2')
-  var slider = new ImageSlider(col, null, {start: '2018-01-01', end:'2018-05-01'})
+  var slider = new ImageSlider(col, {start: '2018-01-01', end:'2018-05-01'})
   slider.setWidth(500)
   slider.addTo(Map)
+  var but = ui.Button('get')
+  but.onClick(function() {
+    var i = slider.getImage()
+    if (i) {
+      Map.addLayer(i, {bands:['B4', 'B3', 'B2'], min:0, max:5000}, 'S2')
+    } else { print('no images') }
+  })
+  Map.add(but)
 }
 
 test()
