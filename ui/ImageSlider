@@ -1,4 +1,3 @@
-var sat = require('users/fitoprincipe/geetools:satellite')
 var tools = require('users/fitoprincipe/geetools:tools')
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
