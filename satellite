@@ -395,7 +395,7 @@ exports.Sentinel = Sentinel
 
 var Modis = function(product) {
   this.product = product
-  this.base = '"MODIS/006/'
+  this.base = 'MODIS/006/'
   switch (product) {
     case 'MOD09GQ':
       this.band = {
