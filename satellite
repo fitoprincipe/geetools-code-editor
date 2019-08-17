@@ -393,6 +393,39 @@ var Sentinel = function(number) {
 }
 exports.Sentinel = Sentinel
 
+var Modis = function(product) {
+  this.product = product
+  this.base = '"MODIS/006/'
+  switch (product) {
+    case 'MOD09GQ':
+      this.band = {
+        'num_observations': 'num_observations',
+        'red': 'sur_refl_b01',
+        'nir': 'sur_refl_b02',
+        'QC_250m': 'QC_250m',
+        'obscov': 'obscov',
+        'iobs_res': 'iobs_res',
+        'orbit_pnt': 'orbit_pnt',
+        'granule_pnt': 'granule_pnt'
+      }
+      this.scale = {
+        'num_observations': 250,
+        'red': 250,
+        'nir': 250,
+        'QC_250m': 250,
+        'obscov': 250,
+        'iobs_res': 250,
+        'orbit_pnt': 250,
+        'granule_pnt': 250
+      }
+      this.process = 'SR'
+  }
+  this.ndvi = indexes.NDVI[this.product]
+  this.id = this.base+this.product
+  this.collection = ee.ImageCollection(this.id)
+}
+exports.Modis = Modis
+
 var fromId = function(id) {
   var list = id.split('/')
   var sat = list[0]
