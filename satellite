@@ -419,6 +419,10 @@ var Modis = function(product) {
         'granule_pnt': 250
       }
       this.process = 'SR'
+      this.min = 100
+      this.max = 16000
+      this.start_date = '2000-02-24'
+      this.end_date = null
   }
   this.ndvi = indexes.NDVI[this.product]
   this.id = this.base+this.product
