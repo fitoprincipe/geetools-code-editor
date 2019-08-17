@@ -84,13 +84,15 @@ var SAVI = {
   sentinel2: function(L) {return custom_savi('B8', 'B4', L)},
   landsat8: function(L) {return custom_savi('B5', 'B4', L)},
   landsat457: function(L) {return custom_savi('B4', 'B3', L)},
+  MOD09GQ: function(L) {return custom_savi('sur_refl_b02', 'sur_refl_b01', L)},
 }
 
 var NDVI = {
  custom: custom_ndvi, 
  sentinel2: custom_ndvi('B8','B4'),
  landsat8: custom_ndvi('B5', 'B4'),
- landsat457: custom_ndvi('B4', 'B3')
+ landsat457: custom_ndvi('B4', 'B3'),
+ MOD09GQ: custom_ndvi('sur_refl_b02', 'sur_refl_b01')
 }
 var NBR = {
  custom: custom_nbr,
