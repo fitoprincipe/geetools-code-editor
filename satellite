@@ -423,6 +423,37 @@ var Modis = function(product) {
       this.max = 16000
       this.start_date = '2000-02-24'
       this.end_date = null
+      break
+    /* WIP
+    case 'MOD09GA':
+      this.band = {
+        'state_1km': 'state_1km',
+        'num_observations': 'num_observations',
+        'red': 'sur_refl_b01',
+        'nir': 'sur_refl_b02',
+        'QC_250m': 'QC_250m',
+        'obscov': 'obscov',
+        'iobs_res': 'iobs_res',
+        'orbit_pnt': 'orbit_pnt',
+        'granule_pnt': 'granule_pnt'
+      }
+      this.scale = {
+        'num_observations': 250,
+        'red': 250,
+        'nir': 250,
+        'QC_250m': 250,
+        'obscov': 250,
+        'iobs_res': 250,
+        'orbit_pnt': 250,
+        'granule_pnt': 250
+      }
+      this.process = 'SR'
+      this.min = 100
+      this.max = 16000
+      this.start_date = '2000-02-24'
+      this.end_date = null
+      break
+    */
   }
   this.ndvi = indexes.NDVI[this.product]
   this.id = this.base+this.product
