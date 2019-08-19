@@ -1,0 +1,183 @@
+var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+
+/** MAP */
+var map = {};
+
+// ADD COLLECTION TO MAP
+map.addImageCollection = function(col, options) {
+  
+  var fbands = ee.Image(col.first()).bandNames();
+  
+  var bands = ee.List(ee.Algorithms.If(
+    fbands.size().gt(2), 
+    ee.List([fbands.get(0), fbands.get(1), fbands.get(2)]),
+    ee.List([fbands.get(0)])
+    ))
+    
+  var def = {
+    vis: {bands: bands.getInfo(), min:0, max:1},
+    active: false,
+    label: 'system_id'
+  }
+  
+  var opt = helpersJS.get_options(def, options)
+  
+  // var label = label;
+  var n = col.size().getInfo();
+  var list = col.toList(n);
+  // var active = active;
+  for (var i = 0; i < n; i++) {
+    var img = ee.Image(list.get(i));
+    if (opt.label == "system_id") {
+      var id = img.id().getInfo();
+      var laylabel = opt.label+" "+id;
+    } else if (opt.label == "system_date") {
+      var date = img.date().format().getInfo()
+      var laylabel = date;
+    } else if (img.propertyNames().contains(opt.label).getInfo() === true) {
+      var p = img.get(opt.label).getInfo();
+      var laylabel = opt.label+" "+p
+    } else {
+      print(opt.label+" not found")
+      var laylabel = "No. "+i.toString();
+    }
+    Map.addLayer(img, opt.vis, laylabel, opt.active)
+  }
+}
+
+// Remove Layer
+// https://gis.stackexchange.com/questions/291199/google-earth-engine-remove-layer-from-the-layer-manager
+/*
+map.removeLayerByName = function(name, map) {
+  var m = map || Map
+  var layers = m.layers()
+  // list of layers names
+  var names = []
+  layers.forEach(function(lay) {
+    var lay_name = lay.getName()
+    names.push(lay_name)
+  })
+  // get index
+  var index = names.indexOf(name)
+  if (index > -1) {
+    // if name in names
+    var layer = layers.get(index)
+    m.remove(layer)
+  } else {
+    print('Layer '+name+' not found')
+  }
+}
+*/
+map.removeLayerByName = function(name, map) {
+  var m = map || Map
+  var layers = m.layers().getJsArray()
+  var removedIndexes = []
+  for (var i in layers) {
+    var lay = layers[i]
+    var lay_name = lay.getName()
+    if (lay_name === name) {
+      m.remove(lay)
+      removedIndexes.push(Number(i))
+    }
+  }
+  return removedIndexes
+}
+
+map.removeAllLayersByName = map.removeLayerByName
+
+map.removeLayer = function(layer, map) {
+  var m = map || Map
+  var layers = m.layers().getJsArray()
+  var removed = []
+  for (var i in layers) {
+    var lay = layers[i]
+    if (lay === layer) {
+      m.remove(lay)
+      removed.push(Number(i))
+    }
+  }
+  return removed
+}
+
+map.replaceLayer = function(layer, newlayer, map) {
+  if (layer !== newlayer) {
+    var m = map || Map
+    var layers = m.layers()
+    var layersjs = layers.getJsArray()
+    var replaced = []
+    for (var i in layersjs) {
+      var lay = layersjs[i]
+      if (lay === layer) {
+        var i = layersjs.indexOf(layer)
+        layers.set(i, newlayer)
+        replaced.push(Number(i))
+      }
+    }
+  }
+  return replaced
+}
+
+map.removeObject = function(eeobject, map) {
+  // remove every added object in the map
+  // return a list of the indexes removed
+  var m = map || Map
+  var layers = m.layers()
+  var layersJS = layers.getJsArray()
+  var removedIndexes = []
+  
+  for (var i in layersJS) {
+    var layer = layersJS[i]
+    var object = layer.getEeObject()
+    if (object === eeobject) {
+      m.remove(layer)
+      removedIndexes.push(Number(i))
+    }
+  }
+  return removedIndexes
+}
+
+map.getLayer = function(name, map) {
+  var m = map || Map
+  var layers = m.layers()
+  var lay = null
+  var l = layers.length()
+  for (var i=0; i<l; i++) {
+    var layer = layers.get(i)
+    var n = layer.getName()
+    if (n === name) {
+      lay = layer
+      break
+    }
+  }
+  return lay
+}
+
+map.getLayers = function(name, map) {
+  var m = map || Map
+  var layers = m.layers()
+  var l = layers.length()
+  var results = []
+  for (var i=0; i<l; i++) {
+    var lay = layers.get(i)
+    var n = lay.getName()
+    if (n === name) {
+      results.push(lay)
+    }
+  }
+  return results
+}
+
+map.moveLayer = function(layer, index, m) {
+  m = m || Map
+  map.removeLayer(layer, m)
+  var map_layers = m.layers()
+  map_layers.insert(index, layer)
+}
+
+map.getBounds = function(m) {
+  m = m || Map
+  var b = m.getBounds()
+  return ee.Geometry.Rectangle([[b[0], b[1]], [b[2], b[3]]])
+}
+
+exports.map = map
