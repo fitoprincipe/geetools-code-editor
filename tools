@@ -8,6 +8,7 @@
 
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
 var string = require('users/fitoprincipe/geetools:_tools/string').string
+var date = require('users/fitoprincipe/geetools:_tools/date').date
 
 var msg = "geetools ver. 0.1.0\n\n"+
 "If you code depends on this module, and has \n"+
@@ -24,71 +25,6 @@ var help = {};
 
 // INTERNAL
 exports.get_options = helpersJS.get_options
-
-/** DATES **/
-var date = {}
-
-date.fromDOY = function(doy, year) {
-  var less10 = function(doy) {
-    doy = doy.toInt()
-    return ee.String('00').cat(ee.Number(doy).format())
-  }
-  
-  var less100 = function(doy) {
-    doy = doy.toInt()
-    return ee.String('0').cat(ee.Number(doy).format())
-  }
-  
-  doy = ee.Number(doy).add(1).toInt()
-  var year_str = ee.Number(year).format()
-  var doy_str = ee.Algorithms.If(
-    doy.lt(10), less10(doy),
-    ee.String(ee.Algorithms.If(
-        doy.lt(100), less100(doy), doy.format()
-      ))
-  )
-  var str = ee.String(doy_str).cat(year_str)
-  
-  return ee.Date.parse('DDDyyyy', str)
-}
-
-date.isLeap = function(year) {
-  year = ee.Number(year)
-  
-  var divisible4 = year.mod(4).gt(0)
-  var divisible100 = year.mod(100).gt(0)
-  var divisible400 = year.mod(400).gt(0)
-  
-  var leap = ee.Algorithms.If(
-      divisible4, 0,
-      ee.Algorithms.If(
-          divisible100, 1,
-          ee.Algorithms.If(
-              divisible400, 0, 1)))
-  return ee.Number(leap)
-}
-
-date.makeDateBand = function(image, options) {
-  
-  var defaults = {
-    dateFormat: 'YMMdd',
-    bandName: 'date'
-  }
-  
-  var opt = helpersJS.get_options(defaults, options)
-  
-  var f = ee.String(opt.dateFormat)
-  // catch string formats for month
-  var pattern = f.replace('(MMM+)', 'MM')
-
-  var footprint = image.geometry()
-
-  var idate = image.date().format(pattern)
-  var idate_number = ee.Number.parse(idate)
-  var date_band = ee.Image.constant(idate_number).rename(opt.bandName)
-  return ee.Image(ee.Algorithms.If(footprint.isUnbounded(), date_band,
-                                   date_band.clip(footprint)))
-}
 
 /** COLLECTIONS **/
 var collection = {};
