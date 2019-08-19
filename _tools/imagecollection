@@ -1,0 +1,47 @@
+var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+
+//** IMAGE COLLECTIONS **//
+var imageCollection = {};
+
+imageCollection.enumerateProperty = function(col, name) {
+  name = name || 'enumeration'
+  //var collist = col.toList(col.size())
+  var enumerated = collection.enumerate(col)
+  
+  var featlist = enumerated.map(function(l){
+    l = ee.List(l)
+    var index = ee.Number(l.get(0))
+    var element = l.get(1)
+    return ee.Image(element).set(name, index)
+  })
+  return ee.ImageCollection.fromImages(featlist)
+}
+
+imageCollection.mergeGeometries = function(collection) {
+    /// Merge the geometries of many images. Return ee.Geometry
+    var imlist = collection.toList(collection.size())
+
+    var first = ee.Image(imlist.get(0))
+    var rest = imlist.slice(1)
+
+    var wrap = function(img, ini) {
+        ini = ee.Geometry(ini)
+        img = ee.Image(img)
+        var geom = img.geometry()
+        var union = geom.union(ini)
+        return union.dissolve()
+    }
+
+    return ee.Geometry(rest.iterate(wrap, first.geometry()))
+}
+
+imageCollection.getClosestTo = function(collection, date) {
+  date = ee.Date(date)
+  var distance = collection.map(function(img){
+    var idate = img.date()
+    var diff = date.difference(idate, 'second').abs()
+    return img.set('closestDateGEETOOLS', diff)
+  })
+  var sorted = distance.sort('closestDateGEETOOLS', true)
+  return ee.Image(sorted.first())
+}
