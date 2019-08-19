@@ -116,32 +116,6 @@ collection.enumerate = function(col) {
   return list
 }
 
-/** STRINGS 
-var string = {};
-
-// format
-string.format = function(string, replacement) {
-  var str = ee.String(string)
-  var repl = ee.Dictionary(replacement)
-  var keys = repl.keys()
-  var values = repl.values()
-  var z = keys.zip(values)
-  
-  var newstr = z.iterate(function(kv, ini){
-    var keyval = ee.List(kv)
-    ini = ee.String(ini)
-    
-    var key = ee.String(keyval.get(0))
-    var value = ee.String(keyval.get(1))
-    
-    var pattern = ee.String('{').cat(key).cat(ee.String('}'))
-    
-    return ini.replace(pattern, value)
-    
-  }, str)
-  return ee.String(newstr)
-}
-*/
 
 /** GEOMETRIES */
 var geometry = {};
