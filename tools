@@ -7,6 +7,7 @@
  **********************************/
 
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+var string = require('users/fitoprincipe/geetools:_tools/string')
 
 var msg = "geetools ver. 0.1.0\n\n"+
 "If you code depends on this module, and has \n"+
