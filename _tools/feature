@@ -1,4 +1,6 @@
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+var list = require('users/fitoprincipe/geetools:_tools/list').list
+
 
 /** FEATURE */
 var feature = {};
