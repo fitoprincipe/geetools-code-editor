@@ -7,7 +7,7 @@
  **********************************/
 
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
-var string = require('users/fitoprincipe/geetools:_tools/string')
+var string = require('users/fitoprincipe/geetools:_tools/string').string
 
 var msg = "geetools ver. 0.1.0\n\n"+
 "If you code depends on this module, and has \n"+
@@ -116,7 +116,7 @@ collection.enumerate = function(col) {
   return list
 }
 
-/** STRINGS */
+/** STRINGS 
 var string = {};
 
 // format
@@ -141,6 +141,7 @@ string.format = function(string, replacement) {
   }, str)
   return ee.String(newstr)
 }
+*/
 
 /** GEOMETRIES */
 var geometry = {};
