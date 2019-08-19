@@ -45,3 +45,5 @@ imageCollection.getClosestTo = function(collection, date) {
   var sorted = distance.sort('closestDateGEETOOLS', true)
   return ee.Image(sorted.first())
 }
+
+exports.imageCollection = imageCollection
