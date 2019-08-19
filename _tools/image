@@ -200,3 +200,5 @@ image.maskCover = function(image, geometry, options) {
   
   return percentage.multiply(100)
 }
+
+exports.image = image
