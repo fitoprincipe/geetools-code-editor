@@ -1,0 +1,202 @@
+var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+
+/** IMAGES */
+var image = {};
+
+image.cat = function(img1, img2) {
+  var img1mask = img1.mask().select(0).gt(0).rename('mask')
+  img1 = img1.addBands(img1mask)
+  var img2mask = img2.mask().select(0).gt(0).rename('mask')
+  img2 = img2.addBands(img2mask)
+  var concat = img2.unmask().where(img1.unmask().select(0).gt(0), img1.unmask())
+  var mask = concat.select('mask')
+  return concat.updateMask(mask).select([0, 1, 2])
+}
+
+// get value from point
+image.getValue = function(image, point, scale) {
+  var sc = ee.Number(scale).toInt() || 10;
+  var result = image.reduceRegion(ee.Reducer.first(), point, sc);
+  return result
+}
+
+// replace one band with another band
+image.replaceBand = function(image, replace_band, add_band) {
+    var band = add_band.select([0]);
+    var bands = image.bandNames();
+    var resto = bands.remove(replace_band);
+    var img_resto = image.select(resto);
+    var img_final = img_resto.addBands(band);
+    return img_final
+}
+
+// SUFFIX TO BAND
+image.addSuffix = function(suffix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
+  var suf = ee.String(suffix)
+  var wrap = function(img) {
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, ee.String(band).cat(suf))
+    }, allbands)
+    newbands = ee.List(newbands)
+    return img.select(allbands, newbands)
+  }
+  return wrap
+}
+
+// PREFIX TO BAND
+image.addPrefix = function(prefix, bands) {
+  if (bands == undefined) {
+    var bands = null
+  } else {
+    var bands = ee.List(bands)
+  }
+  var suf = ee.String(prefix)
+  var wrap = function(img) {
+    var allbands = img.bandNames()
+    var bands_ = ee.List(ee.Algorithms.If(bands, bands, allbands))
+    var newbands = bands_.iterate(function(band, first){
+      var all = ee.List(first)
+      return all.replace(band, suf.cat(ee.String(band)))
+    }, allbands)
+    newbands = ee.List(newbands)
+    return img.select(allbands, newbands)
+  }
+  return wrap
+}
+
+// MAKE AN IMAGE FROM A DICT (Equals to Dictionary.toImage())
+image.fromDict = function(bands) {
+  // this is the same as doing ee.Dictionary().toImage()
+  
+  if (bands === undefined) {var opt={constant:0}} else {var opt=bands}
+  
+  var dict = ee.Dictionary(opt)
+  var bandnames = dict.keys()  // ee.List
+  var bandlist = dict.map(function(key, val){
+      var v = ee.Number(val);
+      var k = ee.String(key)
+      var f = ee.Image(v).select([0], [k])
+      return f
+      }).values()
+  bandlist = ee.List(bandlist)
+  var final = ee.Image(bandlist.iterate(function(img, ini){
+      ini = ee.Image(ini)
+      return ini.addBands(img)
+    }, ee.Image(0)))
+  return final.select(bandnames)
+}
+
+// MAKE AN IMAGE FROM A LIST
+image.fromList = function(list, value) {
+  if (value === undefined) {var val = 0} else {var val = value}
+  var listt = ee.List(list)
+  
+  var imglist = listt.map(function(name){
+    return ee.Image(val).select([0], [name])
+  })
+  var final = ee.Image(imglist.iterate(function(img, ini){
+    ini = ee.Image(ini)
+    return ini.addBands(img)
+  }, ee.Image(0)))
+  return final.select(listt)
+}
+
+image.removeBands = function(image, bands) {
+  var bnames = image.bandNames()
+  var bands = ee.List(bands)
+  
+  var inter = list.intersection(bnames, bands)
+  // var diff = list.subtract(bnames, inter)
+  var diff = bnames.removeAll(inter)
+  
+  return image.select(diff)
+}
+
+// DOY TO DATE
+image.doyToDate = function(image, options) {
+  
+  var defaults = {
+    dateFormat: 'yyyyMMdd',
+    year: image.date().get('year')
+  }
+  var opt = helpersJS.get_options(defaults, options)
+  var year = ee.Number(opt.year)
+  
+  var doyband = image.select([0])
+  var leap = date.isLeap(year)
+  var limit = ee.Number(ee.Algorithms.If(leap, 365, 364))
+  var alldoys = ee.List.sequence(0, limit)
+  
+  var datei = ee.Image(alldoys.iterate(function(doy, i){
+    i = ee.Image(i)
+    doy = ee.Number(doy)
+    var d = date.fromDOY(doy, year)
+    var date_band = ee.Image.constant(ee.Number.parse(d.format(opt.dateFormat)))
+    var condition = i.eq(doy)
+    return i.where(condition, date_band)
+  }, doyband))
+  
+  return datei.rename('date')
+}
+
+image.maskCover = function(image, geometry, options) {
+  var def = {
+    scale: null,
+    max_pixels: 1e13
+  }
+  
+  // select first band
+  image = image.select([0])
+  
+  var opt = helpersJS.get_options(def, options)
+  var max_pixels = opt.max_pixels
+  
+  // get projection
+  var projection = image.projection()
+  
+  var scale = opt.scale || projection.nominalScale()
+  
+  // get band name
+  var band = ee.String(image.bandNames().get(0))
+  
+  // Make an image with all ones
+  var ones_i = ee.Image.constant(1).reproject(projection).rename(band)
+  
+  // Get total number of pixels
+  var ones = ones_i.reduceRegion({
+       reducer: ee.Reducer.count(),
+       geometry: geometry,
+       scale: scale,
+       maxPixels: max_pixels
+      }).get(band)
+  
+  ones = ee.Number(ones)
+  
+  // select first band, unmask and get the inverse
+  image = image.select([0])
+  var mask = image.mask()
+  var mask_not = mask.not()
+  var image_to_compute = mask.updateMask(mask_not)
+  
+  // Get number of zeros in the given mask_image
+  zeros_in_mask =  image_to_compute.reduceRegion({
+      reducer: ee.Reducer.count(),
+      geometry: geometry,
+      scale: scale,
+      maxPixels: max_pixels
+  }).get(band)
+  var zeros_in_mask = ee.Number(zeros_in_mask)
+  
+  // var percentage = tools.number.trim_decimals(zeros_in_mask.divide(ones), 4)
+  var percentage = zeros_in_mask.divide(ones)
+  
+  return percentage.multiply(100)
+}
