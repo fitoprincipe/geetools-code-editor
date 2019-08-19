@@ -65,3 +65,6 @@ date.makeDateBand = function(image, options) {
   return ee.Image(ee.Algorithms.If(footprint.isUnbounded(), date_band,
                                    date_band.clip(footprint)))
 }
+
+
+exports.date = date
