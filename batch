@@ -124,7 +124,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         if (opt.name.indexOf('{id}') !== -1) {
           var iid = img.id().getInfo() || i.toString()
         }
-        if (opt.name.indexOf('{date}') !== -1) {
+        if (opt.name.indexOf('{system_date}') !== -1) {
           var idate = img.date().format(opt.dateFormat).getInfo()
         }
         var id = helpers.string.format(opt.name, {id:iid, date:idate, position:i.toString()})
