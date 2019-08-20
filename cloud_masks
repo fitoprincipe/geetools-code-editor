@@ -303,3 +303,4 @@ exports.make = make
 exports.hollstein_S2 = hollstein_S2
 exports.options = ee.Dictionary(help).keys()
 exports.compute = compute
+exports.scl = scl
