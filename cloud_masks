@@ -160,25 +160,22 @@ var sclData = ee.Dictionary({
 var scl = function(image) {
   // Decodify the SCL bands and create a mask for each category
         
-  var scl = image.select('SCL')
+  var i = image.select('SCL')
 
   var data = ee.Dictionary(sclData)
 
   var wrap = function(band_value, name) {
       var band_value = ee.Number.parse(band_value)
       var name = ee.String(name)
-      var mask = scl.eq(band_value).rename(name)
+      var mask = i.eq(band_value).rename(name)
       return mask
   }
 
   var newbands = ee.Dictionary(data.map(wrap))
-  var months = ee.List.sequence(1, 12).map(function(e){
-    return ee.Number(e).format()})
-  var bandslist = tools.dictionary.extractList(newbands, months)
-  var first = ee.Image(bandslist.get(0))
-  var image = first.addBands(ee.List(bandslist.slice(1)))
-
-  return image
+  var images = newbands.values()
+  var first = ee.Image(images.get(0))
+  var rest = images.slice(1)
+  return ee.Image(tools.image.addMultiBands(first, rest))
 }
 
 var hollstein_S2 = function(options) {
