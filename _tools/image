@@ -201,4 +201,14 @@ image.maskCover = function(image, geometry, options) {
   return percentage.multiply(100)
 }
 
+image.addMultiBands = function(image, imageList) {
+    
+    var iteration = function(img, ini) {
+        ini = ee.Image(ini)
+        var img = ee.Image(img)
+        return ini.addBands(img)
+    }
+    return ee.List(imageList).iterate(iteration, image)
+}
+
 exports.image = image
