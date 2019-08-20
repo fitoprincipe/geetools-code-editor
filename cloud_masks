@@ -172,7 +172,8 @@ var scl = function(image) {
   }
 
   var newbands = ee.Dictionary(data.map(wrap))
-  var months = ee.List.sequence(1, 12).map(function(e){return e.format()})
+  var months = ee.List.sequence(1, 12).map(function(e){
+    return ee.Number(e).format()})
   var bandslist = tools.dictionary.extractList(newbands, months)
   var first = ee.Image(bandslist.get(0))
   var image = first.addBands(ee.List(bandslist.slice(1)))
