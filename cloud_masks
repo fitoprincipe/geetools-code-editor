@@ -143,7 +143,7 @@ var modisSR = function(options) {
   return wrap
 }
 
-var scl = ee.Dictionary({
+var sclData = ee.Dictionary({
                 1: 'saturated',
                 2: 'dark',
                 3: 'shadow',
@@ -162,7 +162,7 @@ var scl = function(image) {
         
   var scl = image.select('SCL')
 
-  var data = ee.Dictionary(scl)
+  var data = ee.Dictionary(sclData)
 
   var wrap = function(band_value, name) {
       var band_value = ee.Number.parse(band_value)
