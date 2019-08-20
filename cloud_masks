@@ -143,6 +143,43 @@ var modisSR = function(options) {
   return wrap
 }
 
+var scl = ee.Dictionary({
+                1: 'saturated',
+                2: 'dark',
+                3: 'shadow',
+                4: 'vegetation',
+                5: 'bare_soil',
+                6: 'water',
+                7: 'cloud_low',
+                8: 'cloud_medium',
+                9: 'cloud_high',
+                10: 'cirrus',
+                11: 'snow'
+            })
+
+var scl = function(image) {
+  // Decodify the SCL bands and create a mask for each category
+        
+  var scl = image.select('SCL')
+
+  var data = ee.Dictionary(scl)
+
+  var wrap = function(band_value, name) {
+      var band_value = ee.Number.parse(band_value)
+      var name = ee.String(name)
+      var mask = scl.eq(band_value).rename(name)
+      return mask
+  }
+
+  var newbands = ee.Dictionary(data.map(wrap))
+  var months = ee.List.sequence(1, 12).map(function(e){return e.format()})
+  var bandslist = tools.dictionary.extractList(newbands, months)
+  var first = ee.Image(bandslist.get(0))
+  var image = first.addBands(ee.List(bandslist.slice(1)))
+
+  return image
+}
+
 var hollstein_S2 = function(options) {
   // Taken from André Hollstein et al. 2016 (doi:10.3390/rs8080666)
   // http://www.mdpi.com/2072-4292/8/8/666/pdf
