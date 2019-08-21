@@ -5,53 +5,62 @@
  * Licence: MIT
  * */
  
-var helpers = 
- 
-var medoid(collection, options) {
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
+var tools = require('users/fitoprincipe/geetools:tools')
+
+var medoid = function(collection, options) {
     // Compute a score to reflect 'how far' is from the medoid. Same params
     // as medoid() """
     
-    // bands=None, discard_zeros=False, bandname='sumdist', normalize=True
+    var def = {
+      bands: null,
+      discard_zeros: false,
+      bandname: 'sumdist',
+      normalize: true
+    }
+    var opt = helpers.get_options(def, options)
     
-    
-    if (!bands) {
+    if (!opt.bands) {
       var first_image = ee.Image(collection.first())
       var bands = first_image.bandNames()
     }
 
-    # Create a unique id property called 'enumeration'
+    // Create a unique id property called 'enumeration'
     enumerated = tools.imagecollection.enumerateProperty(collection)
     collist = enumerated.toList(enumerated.size())
 
-    def over_list(im):
+    var over_list = function(im) {
         im = ee.Image(im)
-        n = ee.Number(im.get('enumeration'))
+        var n = ee.Number(im.get('enumeration'))
 
-        # Remove the current image from the collection
-        filtered = tools.ee_list.removeIndex(collist, n)
+        // Remove the current image from the collection
+        var filtered = tools.list.removeIndex(collist, n)
 
-        # Select bands for medoid
-        to_process = im.select(bands)
+        // Select bands for medoid
+        var to_process = im.select(bands)
 
-        def over_collist(img):
+        var over_collist = function(img) {
             return ee.Image(img).select(bands)
-        filtered = filtered.map(over_collist)
+        }
+        var filtered = filtered.map(over_collist)
 
-        # Compute the sum of the euclidean distance between the current image
-        # and every image in the rest of the collection
-        dist = algorithms.sumDistance(
-            to_process, filtered,
-            name=bandname,
-            discard_zeros=discard_zeros)
+        // Compute the sum of the euclidean distance between the current image
+        // and every image in the rest of the collection
+        var dist = algorithms.sumDistance(
+                     to_process, filtered,
+                     name=bandname,
+                     discard_zeros=discard_zeros)
 
-        # Mask zero values
-        if not normalize:
-            # multiply by -1 to get the lowest value in the qualityMosaic
+        // Mask zero values
+        if (!opt.normalize) {
+            // multiply by -1 to get the lowest value in the qualityMosaic
             dist = dist.multiply(-1)
+        }
 
         return im.addBands(dist)
+    }
 
-    imlist = ee.List(collist.map(over_list))
+    var imlist = ee.List(collist.map(over_list))
 
     medcol = ee.ImageCollection.fromImages(imlist)
 
