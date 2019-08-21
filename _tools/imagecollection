@@ -1,9 +1,10 @@
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+var collection = require('users/fitoprincipe/geetools:_tools/collection').collection
 
 //** IMAGE COLLECTIONS **//
 var imageCollection = {};
 
-imageCollection.enumerateProperty = function(collection, name) {
+imageCollection.enumerateProperty = function(col, name) {
   name = name || 'enumeration'
   //var collist = col.toList(col.size())
   var enumerated = collection.enumerate(col)
