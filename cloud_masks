@@ -187,7 +187,7 @@ var sclMask = function(options) {
     var mask = opt.iterate(function(clas, i){
       clas = ee.String(clas)
       i = ee.Image(i)
-      iclas = s.select(clas).rename('mask')
+      var iclas = s.select(clas).rename('mask')
       return i.or(iclas)
     }, ee.Image.constant(0).rename('mask'))
     mask = ee.Image(mask)
