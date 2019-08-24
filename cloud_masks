@@ -10,6 +10,7 @@
 var tools = require('users/fitoprincipe/geetools:tools')
 var l_algo = require('users/fitoprincipe/geetools:list_algorithms')
 var dt = require('users/fitoprincipe/geetools:decision_tree')
+var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
 var help = {};
 
@@ -178,6 +179,23 @@ var scl = function(image) {
   return ee.Image(tools.image.addMultiBands(first, rest))
 }
 
+var sclMask = function(options) {
+  var opt = options || ['shadow', 'cloud_low', 'cloud_medium', 'cloud_high', 'cirrus', 'snow']
+  opt = ee.List(opt)
+  var wrap = function(img) {
+    var s = scl(img)
+    var mask = opt.iterate(function(clas, i){
+      clas = ee.String(clas)
+      i = ee.Image(i)
+      iclas = s.select(clas).rename('mask')
+      return i.or(iclas)
+    }, ee.Image.constant(0).rename('mask'))
+    mask = ee.Image(mask)
+    return img.updateMask(mask)
+  }
+  return wrap
+}
+
 var hollstein_S2 = function(options) {
   // Taken from André Hollstein et al. 2016 (doi:10.3390/rs8080666)
   // http://www.mdpi.com/2072-4292/8/8/666/pdf
@@ -302,3 +320,4 @@ exports.hollstein_S2 = hollstein_S2
 exports.options = ee.Dictionary(help).keys()
 exports.compute = compute
 exports.scl = scl
+exports.sclMask = sclMask
