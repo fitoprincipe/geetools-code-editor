@@ -403,6 +403,9 @@ var Sentinel = function(number, process) {
           this.cloud_masks = {
             'scl': null
           }
+          this.band['scl'] = 'SCL'
+          this.band['aot'] = 'AOT'
+          this.band['wvp'] = 'WVP'
           this.start_date = '2017-03-28'
           break
       }
