@@ -326,12 +326,20 @@ var Landsat = function(number, process, sensor, tier) {
 }
 exports.Landsat = Landsat
 
-var Sentinel = function(number) {
+var Sentinel = function(number, process) {
   this.number = number
+  this.process = process
   
   var numbers = [2]
+  var processes = ['TOA', 'SR']
+  
   if (numbers.indexOf(number) === -1) {
     print('Sentinel '+number+' not available')
+    return null;
+  }
+  
+  if (processes.indexOf(process) === -1) {
+    print('Sentinel '+number+' '+process+' not available')
     return null;
   }
   
@@ -351,21 +359,16 @@ var Sentinel = function(number) {
         'nir': 10, 'red_edge_4': 20, 'vapor': 60, 'cirrus': 60,
         'swir': 20, 'swir2': 20, 'qa': 60
       }
-      this.id = 'COPERNICUS/S2'
-      this.process = 'SR'
+      
       this.cloud_cover = 'CLOUD_COVERAGE_ASSESSMENT'
       this.ndvi = indexes.NDVI.sentinel2
       this.evi = indexes.EVI.sentinel2
       this.nbr = indexes.NBR.sentinel2
       this.nbr2 = indexes.NBR2.sentinel2
       this.savi = indexes.SAVI.sentinel2
-      this.cloud_masks = {
-        'qa': cld.sentinel2, 
-        'hollstein': cld.hollstein_S2
-      }
+      
       this.min = 0
       this.max = 10000
-      this.start_date = '2015-01-23'
       this.end_date = null
       
       // VISAULIZATION
@@ -384,6 +387,24 @@ var Sentinel = function(number) {
         bands:[this.band.nir, this.band.red, this.band.green],
         min: 0,
         max: this.max/2
+      }
+      
+      switch (process) {
+        case 'TOA':
+          this.id = 'COPERNICUS/S2'
+          this.cloud_masks = {
+            'qa': cld.sentinel2, 
+            'hollstein': cld.hollstein_S2
+          }
+          this.start_date = '2015-01-23'
+          break
+        case 'SR':
+          this.id = 'COPERNICUS/S2_SR'
+          this.cloud_masks = {
+            'SCL': null
+          }
+          this.start_date = '2017-03-28'
+          break
       }
       
       break
