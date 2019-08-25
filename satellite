@@ -401,7 +401,7 @@ var Sentinel = function(number, process) {
         case 'SR':
           this.id = 'COPERNICUS/S2_SR'
           this.cloud_masks = {
-            'SCL': null
+            'scl': null
           }
           this.start_date = '2017-03-28'
           break
