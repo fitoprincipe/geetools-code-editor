@@ -145,17 +145,17 @@ var modisSR = function(options) {
 }
 
 var sclData = ee.Dictionary({
-                1: 'saturated',
-                2: 'dark',
-                3: 'shadow',
-                4: 'vegetation',
-                5: 'bare_soil',
-                6: 'water',
-                7: 'cloud_low',
-                8: 'cloud_medium',
-                9: 'cloud_high',
-                10: 'cirrus',
-                11: 'snow'
+                1: ['saturated', 0],
+                2: ['dark', 0],
+                3: ['shadow', 0],
+                4: ['vegetation', 1],
+                5: ['bare_soil', 1],
+                6: ['water', 0],
+                7: ['cloud_low', 0],
+                8: ['cloud_medium', 0],
+                9: ['cloud_high', 0],
+                10: ['cirrus', 0],
+                11: ['snow', 0]
             })
 
 var scl = function(image) {
@@ -165,9 +165,10 @@ var scl = function(image) {
 
   var data = ee.Dictionary(sclData)
 
-  var wrap = function(band_value, name) {
+  var wrap = function(band_value, list) {
+      list = ee.List(list)
       var band_value = ee.Number.parse(band_value)
-      var name = ee.String(name)
+      var name = ee.String(list.get(0))
       var mask = i.eq(band_value).rename(name)
       return mask
   }
@@ -321,3 +322,15 @@ exports.options = ee.Dictionary(help).keys()
 exports.compute = compute
 exports.scl = scl
 exports.sclMask = sclMask
+
+var Test = function() {
+  print('running')
+  var sat = require('users/fitoprincipe/geetools:satellite')
+  var s2 = new sat.Sentinel(2, 'SR')
+  var site = tools.map.getBounds(Map)
+  var col = s2.collection.filterBounds(site).filterMetadata(s2.cloud_cover, 'less_than', 10)
+  var first = col.first()
+  Map.addLayer(first, s2.vis.NSR, 'S2 SR')
+}
+
+//Test()
