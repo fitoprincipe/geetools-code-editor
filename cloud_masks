@@ -145,17 +145,17 @@ var modisSR = function(options) {
 }
 
 var sclData = ee.Dictionary({
-                1: ['saturated', 0],
-                2: ['dark', 0],
-                3: ['shadow', 0],
-                4: ['vegetation', 1],
-                5: ['bare_soil', 1],
-                6: ['water', 0],
-                7: ['cloud_low', 0],
-                8: ['cloud_medium', 0],
-                9: ['cloud_high', 0],
-                10: ['cirrus', 0],
-                11: ['snow', 0]
+                'saturated': [1, 0],
+                'dark': [2, 0],
+                'shadow': [3, 0],
+                'vegetation': [4, 1],
+                'bare_soil': [5, 1],
+                'water': [6, 0],
+                'cloud_low': [7, 0],
+                'cloud_medium': [8, 0],
+                'cloud_high': [9, 0],
+                'cirrus': [10, 0],
+                'snow': [11, 0]
             })
 
 var scl = function(image) {
@@ -165,10 +165,10 @@ var scl = function(image) {
 
   var data = ee.Dictionary(sclData)
 
-  var wrap = function(band_value, list) {
+  var wrap = function(name, list) {
       list = ee.List(list)
-      var band_value = ee.Number.parse(band_value)
-      var name = ee.String(list.get(0))
+      name = ee.String(name)
+      var band_value = ee.Number(list.get(0))
       var mask = i.eq(band_value).rename(name)
       return mask
   }
@@ -181,18 +181,25 @@ var scl = function(image) {
 }
 
 var sclMask = function(options) {
-  var opt = options || ['shadow', 'cloud_low', 'cloud_medium', 'cloud_high', 'cirrus', 'snow']
+  var opt = options || ['saturated', 'dark', 'shadow', 'cloud_low', 
+  'cloud_medium', 'cloud_high', 'cirrus', 'snow']
   opt = ee.List(opt)
   var wrap = function(img) {
-    var s = scl(img)
-    var mask = opt.iterate(function(clas, i){
-      clas = ee.String(clas)
+    var r = opt.iterate(function(name, i){
       i = ee.Image(i)
-      var iclas = s.select(clas).rename('mask')
-      return i.or(iclas)
-    }, ee.Image.constant(0).rename('mask'))
-    mask = ee.Image(mask).not()
-    return img.updateMask(mask)
+      name = ee.String(name)
+      var data = ee.List(sclData.get(name))
+      var value = ee.Number(data.get(0))
+      var direction = ee.Number(data.get(1))
+      var band = i.select('SCL')
+      var mask = ee.Algorithms.If(direction,
+        band.eq(value),
+        band.neq(value)
+      )
+      mask = ee.Image(mask)
+      return i.updateMask(mask)
+    }, img)
+    return ee.Image(r)
   }
   return wrap
 }
