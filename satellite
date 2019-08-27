@@ -401,7 +401,7 @@ var Sentinel = function(number, process) {
         case 'SR':
           this.id = 'COPERNICUS/S2_SR'
           this.cloud_masks = {
-            'scl': null
+            'scl': cld.sclMask
           }
           this.band['scl'] = 'SCL'
           this.band['aot'] = 'AOT'
