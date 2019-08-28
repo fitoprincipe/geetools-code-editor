@@ -17,6 +17,24 @@ var getRegion = function(object) {
     } else {
       var geom = object
     }
+    return geom
+    
+  } catch(err) {
+    print(err.message)
+    return object
+  }
+  
+}
+
+/*
+var getRegion = function(object) {
+  try {
+    var name = object.name()
+    if (name === 'Image' || name === 'Feature') {
+      var geom = object.geometry()
+    } else {
+      var geom = object
+    }
     var coords = geom.getInfo()['coordinates']
     return helpers.array.toString(coords)
     
@@ -26,6 +44,7 @@ var getRegion = function(object) {
   }
   
 }
+*/
 
 // TASK CLASS
 var Task = function(taskId, config) {
