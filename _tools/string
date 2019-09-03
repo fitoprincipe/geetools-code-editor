@@ -8,7 +8,7 @@ string.format = function(string, replacement) {
   var str = ee.String(string)
   var repl = ee.Dictionary(replacement)
   var keys = repl.keys()
-  var values = repl.values()
+  var values = repl.values().map(function(v){return ee.Algorithms.String(v)})
   var z = keys.zip(values)
   
   var newstr = z.iterate(function(kv, ini){
