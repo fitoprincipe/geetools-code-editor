@@ -502,7 +502,9 @@ var fromId = function(id) {
     if (list[1] === 'S1_GRD') {
       return new Sentinel(1)
     } else if (list[1] === 'S2') {
-      return new Sentinel(2)
+      return new Sentinel(2, 'TOA')
+    } else if (list[1] === 'S2_SR') {
+      return new Sentinel(2, 'SR')
     } else if (list[1] === 'S3') {
       return new Sentinel(3)
     }
