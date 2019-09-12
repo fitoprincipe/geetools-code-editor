@@ -21,7 +21,7 @@ map.addImageCollection = function(col, visParams, namePattern, datePattern, acti
     try {
       var img = ee.Image(list.get(i))
       var name = image_module.makeName(img, namePattern, datePattern)
-      Map.addLayer(img, visParams, name, active)
+      Map.addLayer(img, visParams, name.getInfo(), active)
       i++
     } catch (error) {
       print(error.message)
