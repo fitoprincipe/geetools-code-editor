@@ -87,7 +87,7 @@ imageCollection.mosaicSameDay = function(collection) {
 
       var newmos = ee.Image(ee.Algorithms.If(
           mos_bnames.contains(bname),
-          image_module.replace(mos, bname, mos.select(bname).setDefaultProjection(proj)),
+          image_module.replaceBand(mos, bname, mos.select(bname).setDefaultProjection(proj)),
           mos))
 
       return newmos
