@@ -211,4 +211,16 @@ image.addMultiBands = function(image, imageList) {
     return ee.List(imageList).iterate(iteration, image)
 }
 
+image.toQGIS = function(image, visParams, name) {
+  visParams = visParams || {min:0, max:1}
+  name = name || 'no_name_image'
+  var baseurl = 'https://str2txt-app.rodrigoprincipe.repl.co/image?name={name}&mapid={mapid}&token={token}'
+  var data = image.getMap(visParams)
+  var idtok = data['mapid']
+  idtok = idtok.split('/')[3]
+  var mapid = idtok.split('-')[0]
+  var token = idtok.split('-')[1]
+  return helpersJS.string.format(baseurl, {name:name, mapid:mapid, token:token})
+}
+
 exports.image = image
