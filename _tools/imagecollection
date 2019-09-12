@@ -47,4 +47,38 @@ imageCollection.getClosestTo = function(collection, date) {
   return ee.Image(sorted.first())
 }
 
+imageCollection.mosaicSameDay = function(collection) {
+  var make_date_list = function(img, l) {
+    l = ee.List(l)
+    img = ee.Image(img)
+    var date = img.date()
+    // make clean date
+    var day = date.get('day')
+    var month = date.get('month')
+    var year = date.get('year')
+    var clean_date = ee.Date.fromYMD(year, month, day)
+    var condition = l.contains(clean_date)
+
+    return ee.Algorithms.If(condition, l, l.add(clean_date))
+  }
+
+  var col_list = collection.toList(collection.size())
+  var date_list = ee.List(col_list.iterate(make_date_list, ee.List([])))
+
+  var make_col = function(date) {
+    date = ee.Date(date)
+    var filtered = collection.filterDate(date, date.advance(1, 'day'))
+    var first_img = ee.Image(collection.first())
+
+    var mosaic = filtered.mosaic()
+    mosaic = mosaic.set('system:time_start', date.millis(),
+                        'system:footprint', imageCollection.mergeGeometries(filtered))
+
+    return mosaic.rename(first_img.bandNames())
+  }
+
+  var  new_col = ee.ImageCollection.fromImages(date_list.map(make_col))
+  return new_col
+}
+
 exports.imageCollection = imageCollection
