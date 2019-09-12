@@ -80,7 +80,7 @@ imageCollection.mosaicSameDay = function(collection) {
     mosaic = mosaic.rename(bands)
     var reproject = function(bname, mos) {
       mos = ee.Image(mos)
-      mos_bnames = mos.bandNames()
+      var mos_bnames = mos.bandNames()
       var bname = ee.String(bname)
       var proj = first_img.select(bname).projection()
 
