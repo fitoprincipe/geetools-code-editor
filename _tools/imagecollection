@@ -127,7 +127,7 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
     }
   }
   var data = params.join(',')
-  var url = helpersJS.string.format(baseurl, {name: n, data: data})
+  var url = helpersJS.string.format(baseurl, {name: name, data: data})
   return url
 }
 
