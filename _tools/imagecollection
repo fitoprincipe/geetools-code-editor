@@ -114,7 +114,7 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
     try {
       var image = ee.Image(list.get(i))
       var n = image_module.makeName(image, namePattern, datePattern)
-      var imap = mos.getMap(visParams)
+      var imap = image.getMap(visParams)
       var idtok = imap['mapid']
       idtok = idtok.split('/')[3]
       var mapid = idtok.split('-')[0]
