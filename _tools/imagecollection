@@ -101,4 +101,8 @@ imageCollection.mosaicSameDay = function(collection) {
   return new_col
 }
 
+imageCollection.toQGIS = function(collection, visParams, namePattern) {
+  return null
+}
+
 exports.imageCollection = imageCollection
