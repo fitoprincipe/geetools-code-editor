@@ -24,7 +24,7 @@ map.addImageCollection = function(col, visParams, namePattern, datePattern, acti
       Map.addLayer(img, visParams, name, active)
       i++
     } catch (error) {
-      print(error)
+      print(error.message)
       return null
     }
   }
