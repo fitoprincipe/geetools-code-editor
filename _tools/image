@@ -1,4 +1,5 @@
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+var string_module = require('users/fitoprincipe/geetools:_tools/string').string
 
 /** IMAGES */
 var image = {};
@@ -221,6 +222,34 @@ image.toQGIS = function(image, visParams, name) {
   var mapid = idtok.split('-')[0]
   var token = idtok.split('-')[1]
   return helpersJS.string.format(baseurl, {name:name, mapid:mapid, token:token})
+}
+
+image.makeName = function(image, pattern, date_pattern) {
+    /*
+    Make a name with the given pattern. The pattern must contain the
+    propeties to replace between curly braces. There are 2 special words:
+
+    * 'system_date': replace with the date of the image formatted with
+      `date_pattern`, which defaults to 'yyyyMMdd'
+    * 'id' or 'ID': the image id. If None, it'll be replaced with 'id'
+
+    Pattern example (supposing each image has a property called `city`):
+    'image from {city} on {system_date}'
+    */
+    date_pattern = date_pattern || null
+    var img = ee.Image(image)
+    var props = img.toDictionary()
+    props = ee.Dictionary(ee.Algorithms.If(
+        img.id(),
+        props.set('id', img.id()).set('ID', img.id()),
+        props))
+    props = ee.Dictionary(ee.Algorithms.If(
+        img.propertyNames().contains('system:time_start'),
+        props.set('system_date', img.date().format(date_pattern)),
+        props))
+    var name = string_module.format(pattern, props)
+
+    return name
 }
 
 exports.image = image
