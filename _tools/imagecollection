@@ -119,7 +119,7 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
       idtok = idtok.split('/')[3]
       var mapid = idtok.split('-')[0]
       var token = idtok.split('-')[1]
-      params.push(n)
+      params.push(n.getInfo())
       params.push(mapid)
       params.push(token)
     } catch (error) {
