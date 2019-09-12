@@ -1,47 +1,31 @@
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
+var image_module = require('users/fitoprincipe/geetools:_tools/image').image
 
 /** MAP */
 var map = {};
 
 // ADD COLLECTION TO MAP
-map.addImageCollection = function(col, options) {
+map.addImageCollection = function(col, visParams, namePattern, datePattern, active) {
   
-  var fbands = ee.Image(col.first()).bandNames();
-  
-  var bands = ee.List(ee.Algorithms.If(
-    fbands.size().gt(2), 
-    ee.List([fbands.get(0), fbands.get(1), fbands.get(2)]),
-    ee.List([fbands.get(0)])
-    ))
-    
-  var def = {
-    vis: {bands: bands.getInfo(), min:0, max:1},
-    active: false,
-    label: 'system_id'
-  }
-  
-  var opt = helpersJS.get_options(def, options)
+  namePattern = namePattern || '{id}'
+  datePattern = datePattern || 'yyyy-MM-dd'
+  visParams = visParams || {min:0, max:1}
+  active = active || false
   
   // var label = label;
-  var n = col.size().getInfo();
-  var list = col.toList(n);
+  var list = col.toList(n)
+  var i = 0
+  
   // var active = active;
-  for (var i = 0; i < n; i++) {
-    var img = ee.Image(list.get(i));
-    if (opt.label == "system_id") {
-      var id = img.id().getInfo();
-      var laylabel = opt.label+" "+id;
-    } else if (opt.label == "system_date") {
-      var date = img.date().format().getInfo()
-      var laylabel = date;
-    } else if (img.propertyNames().contains(opt.label).getInfo() === true) {
-      var p = img.get(opt.label).getInfo();
-      var laylabel = opt.label+" "+p
-    } else {
-      print(opt.label+" not found")
-      var laylabel = "No. "+i.toString();
+  while (i >= 0) {
+    try {
+      var img = ee.Image(list.get(i))
+      var name = image_module.makeName(img, namePattern, datePattern)
+      Map.addLayer(img, visParams, name, active)
+      i++
+    } catch (error) {
+      return null
     }
-    Map.addLayer(img, opt.vis, laylabel, opt.active)
   }
 }
 
