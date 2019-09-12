@@ -122,6 +122,7 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
       params.push(n.getInfo())
       params.push(mapid)
       params.push(token)
+      i++
     } catch (error) {
       print(error.message)
       break
