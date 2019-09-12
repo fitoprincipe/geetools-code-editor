@@ -1,5 +1,6 @@
 var helpersJS = require('users/fitoprincipe/geetools:helpers_js')
 var collection = require('users/fitoprincipe/geetools:_tools/collection').collection
+var image_module = require('users/fitoprincipe/geetools:_tools/image').image
 
 //** IMAGE COLLECTIONS **//
 var imageCollection = {};
