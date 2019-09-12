@@ -65,16 +65,35 @@ imageCollection.mosaicSameDay = function(collection) {
   var col_list = collection.toList(collection.size())
   var date_list = ee.List(col_list.iterate(make_date_list, ee.List([])))
 
+  var first_img = ee.Image(collection.first())
+  var bands = first_img.bandNames()
+
   var make_col = function(date) {
     date = ee.Date(date)
     var filtered = collection.filterDate(date, date.advance(1, 'day'))
-    var first_img = ee.Image(collection.first())
+    
 
     var mosaic = filtered.mosaic()
     mosaic = mosaic.set('system:time_start', date.millis(),
                         'system:footprint', imageCollection.mergeGeometries(filtered))
 
-    return mosaic.rename(first_img.bandNames())
+    mosaic = mosaic.rename(bands)
+    var reproject = function(bname, mos) {
+      mos = ee.Image(mos)
+      mos_bnames = mos.bandNames()
+      var bname = ee.String(bname)
+      var proj = first_img.select(bname).projection()
+
+      var newmos = ee.Image(ee.Algorithms.If(
+          mos_bnames.contains(bname),
+          image_module.replace(mos, bname, mos.select(bname).setDefaultProjection(proj)),
+          mos))
+
+      return newmos
+    }
+
+    mosaic = ee.Image(bands.iterate(reproject, mosaic))
+    return mosaic
   }
 
   var  new_col = ee.ImageCollection.fromImages(date_list.map(make_col))
