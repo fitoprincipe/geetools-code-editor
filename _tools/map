@@ -13,7 +13,7 @@ map.addImageCollection = function(col, visParams, namePattern, datePattern, acti
   active = active || false
   
   // var label = label;
-  var list = col.toList(n)
+  var list = col.toList(col.size())
   var i = 0
   
   // var active = active;
