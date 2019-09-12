@@ -123,7 +123,8 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
       params.push(mapid)
       params.push(token)
     } catch (error) {
-      break
+      print(error.message)
+      //break
     }
   }
   var data = params.join(',')
