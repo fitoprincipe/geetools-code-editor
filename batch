@@ -9,26 +9,6 @@ Some batch useful tools
 var tools = require('users/fitoprincipe/geetools:tools')
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
-var dispatch = function(geometry) {
-  var info = geometry.getInfo()
-  var geomtype = info['type']
-  if (geomtype === 'GeometryCollection') {
-      var geometries = info['geometries']
-      var region = []
-      for (var i in geometries) {
-        var geom = geometries[i]
-        var this_type = geom['type']
-        if (this_type in ['Polygon', 'MultiPolygon', 'Rectangle']) {
-          region.append(geom['coordinates'])
-        }
-      }
-  } else {
-      region = info['coordinates']
-  }
-  return region
-}
-
-
 var getRegion = function(object, bounds) {
   bounds = bounds || false
   try {
@@ -41,7 +21,6 @@ var getRegion = function(object, bounds) {
     if (bounds) {
       geom = geom.bounds()
     }
-    //return dispatch(geom)
     return geom
   } catch(err) {
     print(err.message)
