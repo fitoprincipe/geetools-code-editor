@@ -41,7 +41,8 @@ var getRegion = function(object, bounds) {
     if (bounds) {
       geom = geom.bounds()
     }
-    return dispatch(geom)
+    //return dispatch(geom)
+    return geom
   } catch(err) {
     print(err.message)
     return object
