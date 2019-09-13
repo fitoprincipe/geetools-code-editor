@@ -133,38 +133,31 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     var colList = collection.toList(collection.size());
     
     var wrap = function(n, img) {
-          var geom = opt.region || img.geometry()
-          var region = getRegion(geom)
-          var imtype = IMAGE_TYPES(img, opt.type)
-          var description = helpers.string.formatTask(n)
-          var params = {
-            image: imtype,
-            description: description,
-            folder: folder,
-            fileNamePrefix: n,
-            region: region,
-            scale: opt.scale,
-            maxPixels: opt.maxPixels
-          }
-          if (opt.crs) {
-            params.crs = opt.crs
-          }
-          Export.image.toDrive(params)
-        }
+      var geom = opt.region || img.geometry()
+      var region = getRegion(geom)
+      var imtype = IMAGE_TYPES(img, opt.type)
+      var description = helpers.string.formatTask(n)
+      var params = {
+        image: imtype,
+        description: description,
+        folder: folder,
+        fileNamePrefix: n,
+        region: region,
+        scale: opt.scale,
+        maxPixels: opt.maxPixels
+      }
+      if (opt.crs) {
+        params.crs = opt.crs
+      }
+      Export.image.toDrive(params)
+    }
     
     var i = 0
     while (i >= 0) {
       try {
         var img = ee.Image(colList.get(i));
-        var n = tools.image.makeName(img, opt.name, opt.dateFormat)
-        if (opt.async) {
-          n = n.getInfo()
-          wrap(n, img)
-        } else {
-          n.evaluate(function(name, img){
-            wrap(name)
-          })
-        }
+        var n = tools.image.makeName(img, opt.name, opt.dateFormat).getInfo()
+        wrap(n, img)
         i++
       } catch (err) {
         var msg = err.message
