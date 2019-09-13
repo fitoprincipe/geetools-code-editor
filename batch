@@ -145,7 +145,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     while (i > 0) {
       try {
         var img = ee.Image(colList.get(i));
-        var n = tools.image.makeName(img, opt.name, dateFormat).getInfo()
+        var n = tools.image.makeName(img, opt.name, opt.dateFormat).getInfo()
         var geom = opt.region || img.geometry()
         var region = tools.geometry.getRegion(geom)
         var imtype = IMAGE_TYPES(img, opt.type)
