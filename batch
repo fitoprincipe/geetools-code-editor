@@ -166,12 +166,16 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         if (opt.crs) {
           params.crs = opt.crs
         }
-        print(i)
         Export.image.toDrive(params)
         i++
       } catch (err) {
-        print(err.message)
-        break
+        var msg = err.message
+        if (msg.slice(0, 36) === 'List.get: List index must be between') {
+          break  
+        } else {
+          print(msg)
+          break
+        }
       }
       
       /*
