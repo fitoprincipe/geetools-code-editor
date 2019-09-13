@@ -127,18 +127,47 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     
     var opt = tools.get_options(defaults, options)
     
-    var n = collection.size().getInfo();
+    //var n = collection.size().getInfo();
     
-    var colList = collection.toList(n);
+    var colList = collection.toList(collection.size());
     
+    /*
     if (!opt.name) {
       var colID = collection.getInfo()['id'] || ""
       //colID = colID.replace('/','_')
       colID = helpers.string.formatTask(colID)
     }
+    */
     
-    for (var i = 0; i < n; i++) {
-      var img = ee.Image(colList.get(i));
+    var i = 1
+    
+    while (i > 0) {
+      try {
+        var img = ee.Image(colList.get(i));
+        var n = tools.image.makeName(img, name, dateFormat).getInfo()
+        var geom = opt.region || img.geometry()
+        var region = tools.geometry.getRegion(geom)
+        var imtype = IMAGE_TYPES(img, opt.type)
+        var description = helpers.string.formatTask(n)
+        var params = {
+          image: imtype,
+          description: description,
+          folder: folder,
+          fileNamePrefix: n,
+          region: region,
+          scale: opt.scale,
+          maxPixels: opt.maxPixels
+        }
+        if (opt.crs) {
+          params.crs = opt.crs
+        }
+        Export.image.toDrive(params)
+        i++
+      } catch (err) {
+        break
+      }
+      
+      /*
       if (opt.name) {
         if (opt.name.indexOf('{id}') !== -1) {
           var iid = img.id().getInfo() || i.toString()
@@ -155,7 +184,6 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       
       var region = opt.region || img.geometry().bounds().getInfo()["coordinates"];
       
-      var imtype = IMAGE_TYPES(img, opt.type)
       
       id = helpers.string.formatTask(id)
       
@@ -173,6 +201,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       }
       
       Export.image.toDrive(params)
+      */
     }
   }
   
