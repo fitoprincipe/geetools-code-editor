@@ -144,9 +144,9 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     }
     */
     
-    var i = 1
+    var i = 0
     
-    while (i > 0) {
+    while (i >= 0) {
       try {
         var img = ee.Image(colList.get(i));
         var n = tools.image.makeName(img, opt.name, opt.dateFormat).getInfo()
