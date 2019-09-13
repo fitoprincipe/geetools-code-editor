@@ -9,22 +9,46 @@ Some batch useful tools
 var tools = require('users/fitoprincipe/geetools:tools')
 var helpers = require('users/fitoprincipe/geetools:helpers_js')
 
-var getRegion = function(object) {
+var dispatch = function(geometry) {
+  var info = geometry.getInfo()
+  var geomtype = info['type']
+  if (geomtype === 'GeometryCollection') {
+      var geometries = info['geometries']
+      var region = []
+      for (var i in geometries) {
+        var geom = geometries[i]
+        var this_type = geom['type']
+        if (this_type in ['Polygon', 'MultiPolygon', 'Rectangle']) {
+          region.append(geom['coordinates'])
+        }
+      }
+  } else {
+      region = info['coordinates']
+  }
+  return region
+}
+
+
+var getRegion = function(object, bounds) {
+  bounds = bounds || false
   try {
     var name = object.name()
-    if (name === 'Image' || name === 'Feature') {
+    if (name in ['Image', 'Feature', 'ImageCollection', 'FeatureCollection']) {
       var geom = object.geometry()
     } else {
       var geom = object
     }
-    return geom
-    
+    if (bounds) {
+      geom = geom.bounds()
+    }
+    return dispatch(geom)
   } catch(err) {
     print(err.message)
     return object
   }
-  
 }
+
+exports.getRegion = getRegion
 
 /*
 var getRegion = function(object) {
@@ -147,7 +171,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         var img = ee.Image(colList.get(i));
         var n = tools.image.makeName(img, opt.name, opt.dateFormat).getInfo()
         var geom = opt.region || img.geometry()
-        var region = tools.geometry.getRegion(geom)
+        var region = getRegion(geom)
         var imtype = IMAGE_TYPES(img, opt.type)
         var description = helpers.string.formatTask(n)
         var params = {
