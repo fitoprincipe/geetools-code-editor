@@ -122,7 +122,8 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       region: null,
       name: '{id}',
       crs: null,
-      dateFormat: 'yyyy-MM-dd'
+      dateFormat: 'yyyy-MM-dd',
+      async: false
     }
     
     var opt = tools.get_options(defaults, options)
@@ -164,6 +165,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
         Export.image.toDrive(params)
         i++
       } catch (err) {
+        print(err.message)
         break
       }
       
