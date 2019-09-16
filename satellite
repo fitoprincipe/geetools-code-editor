@@ -299,10 +299,12 @@ var Landsat = function(number, process, sensor, tier) {
   switch (this.process) {
     case 'SR':
       this.cloud_masks = {'qa': cld.landsatSR}
+      this.cloud_mask = cld.landsatSR
       break
     case 'TOA': case 'RAW':
       //print(this.process)
       this.cloud_masks = {'qa': cld.landsatTOA}
+      this.cloud_mask = cld.landsatTOA
       break
   }
   
@@ -396,6 +398,7 @@ var Sentinel = function(number, process) {
             'qa': cld.sentinel2, 
             'hollstein': cld.hollstein_S2
           }
+          this.cloud_mask = cld.sentinel2
           this.start_date = '2015-01-23'
           break
         case 'SR':
@@ -403,6 +406,7 @@ var Sentinel = function(number, process) {
           this.cloud_masks = {
             'scl': cld.sclMask
           }
+          this.cloud_mask = cld.sclMask
           this.band['scl'] = 'SCL'
           this.band['aot'] = 'AOT'
           this.band['wvp'] = 'WVP'
