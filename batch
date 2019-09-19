@@ -93,7 +93,7 @@ Download.ImageCollection.toAsset = function(collection, assetFolder, options) {
       name: null,
       scale: 1000,
       maxPixels: 1e13,
-      region: null,
+      region: null
     }
     
   var opt = tools.get_options(defaults, options)
@@ -127,7 +127,8 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
       name: '{id}',
       crs: null,
       dateFormat: 'yyyy-MM-dd',
-      async: false
+      async: false,
+      properties: null
     }
     var opt = tools.get_options(defaults, options)
     var colList = collection.toList(collection.size());
@@ -156,7 +157,7 @@ Download.ImageCollection.toDrive = function(collection, folder, options) {
     while (i >= 0) {
       try {
         var img = ee.Image(colList.get(i));
-        var n = tools.image.makeName(img, opt.name, opt.dateFormat).getInfo()
+        var n = tools.image.makeName(img, opt.name, opt.properties, opt.dateFormat).getInfo()
         wrap(n, img)
         i++
       } catch (err) {
