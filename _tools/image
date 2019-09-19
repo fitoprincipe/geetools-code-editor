@@ -224,7 +224,7 @@ image.toQGIS = function(image, visParams, name) {
   return helpersJS.string.format(baseurl, {name:name, mapid:mapid, token:token})
 }
 
-image.makeName = function(image, pattern, date_pattern) {
+image.makeName = function(image, pattern, properties, date_pattern) {
     /*
     Make a name with the given pattern. The pattern must contain the
     propeties to replace between curly braces. There are 2 special words:
@@ -237,8 +237,10 @@ image.makeName = function(image, pattern, date_pattern) {
     'image from {city} on {system_date}'
     */
     date_pattern = date_pattern || null
+    properties = properties || null
     var img = ee.Image(image)
-    var props = img.toDictionary()
+    var props = ee.Dictionary(
+      ee.Algorithms.If(properties, img.toDictionary(properties), {}))
     props = ee.Dictionary(ee.Algorithms.If(
         img.id(),
         props.set('id', img.id()).set('ID', img.id()),
