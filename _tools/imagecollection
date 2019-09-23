@@ -101,7 +101,8 @@ imageCollection.mosaicSameDay = function(collection) {
   return new_col
 }
 
-imageCollection.toQGIS = function(collection, name, visParams, namePattern, datePattern) {
+imageCollection.toQGIS = function(collection, name, visParams, 
+                                  namePattern, properties, datePattern) {
   name = name || 'ee2qgis'
   namePattern = namePattern || '{id}'
   datePattern = datePattern || 'yyyy-MM-dd'
@@ -113,7 +114,7 @@ imageCollection.toQGIS = function(collection, name, visParams, namePattern, date
   while (i>=0) {
     try {
       var image = ee.Image(list.get(i))
-      var n = image_module.makeName(image, namePattern, datePattern)
+      var n = image_module.makeName(image, namePattern, properties, datePattern)
       var imap = image.getMap(visParams)
       var idtok = imap['mapid']
       idtok = idtok.split('/')[3]
