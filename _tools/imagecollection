@@ -173,7 +173,7 @@ imageCollection.outliers = function(collection, options) {
       var ibands = im.select(bands)
       ibands = ibands.updateMask(outs.not())
     } else {
-      var ibands = image_module.addSuffix(outs, '_outlier')
+      var ibands = image_module.addSuffix('_outlier')(outs)
     }
 
     return im.addBands(ibands, overwrite=true)
