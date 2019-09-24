@@ -134,4 +134,52 @@ imageCollection.toQGIS = function(collection, name, visParams,
   return url
 }
 
+imageCollection.outliers = function(collection, options) {
+  //Compute outliers by:
+
+  //outlier > mean+(sigma*stddev)
+  //outlier < mean+(sigma*stddev)
+
+  //if `updateMask` is False return the passed collection in which each image
+  //have new bands (a mask) corresponding to the passed dict and a suffix '_outlier'
+  //else return the passed collection with the passed bands masked if are
+  //outliers (the outlier band is not returned).
+
+  //idea from: https://www.kdnuggets.com/2017/02/removing-outliers-standard-deviation-python.html
+  var def = {
+    bands: null,
+    sigma: 2,
+    updateMask: false
+  }
+  var opt = helpersJS.get_options(def, options)
+  var bands = opt.bands || ee.Image(collection.first()).bandNames()
+  bands = ee.List(bands)
+  var forstats = collection.select(bands)
+  var mean = forstats.mean()
+  var stddev = forstats.reduce(ee.Reducer.stdDev())
+  var imin = mean.subtract(stddev.multiply(opt.sigma))
+  var imax = mean.add(stddev.multiply(opt.sigma))
+
+  var getOutlier = function(im, imin, imax) {
+    var ismin = im.lt(imin)
+    var ismax = im.gt(imax)
+    var outlier = ismin.or(ismax)
+    return outlier
+  }
+
+  var overcol = function(im) {
+    var outs = getOutlier(im.select(bands), imin, imax)
+    if (opt.updateMask) {
+      var ibands = im.select(bands)
+      ibands = ibands.updateMask(outs.not())
+    } else {
+      var ibands = image_module.addSuffix(outs, '_outlier')
+    }
+
+    return im.addBands(ibands, overwrite=true)
+  }
+
+    return collection.map(overcol)
+}
+
 exports.imageCollection = imageCollection
