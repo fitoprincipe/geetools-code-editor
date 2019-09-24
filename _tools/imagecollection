@@ -176,7 +176,7 @@ imageCollection.outliers = function(collection, options) {
       var ibands = image_module.addSuffix('_outlier')(outs)
     }
 
-    return im.addBands(ibands, overwrite=true)
+    return im.addBands({srcImg:ibands, overwrite:true})
   }
 
     return collection.map(overcol)
