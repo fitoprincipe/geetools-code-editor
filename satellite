@@ -9,6 +9,25 @@ Easy way to access common satellites (Landsat, Sentinel, MODIS) information
 var indexes = require('users/fitoprincipe/geetools:indexes')
 var cld = require('users/fitoprincipe/geetools:cloud_masks')
 
+var SHORTS = {
+  'COPERNICUS/S2': 'S2TOA',
+  'COPERNICUS/S2_SR': 'S2SR',
+  'LANDSAT/LM01/C01/T1': 'L1T1',
+  'LANDSAT/LM02/C01/T1': 'L2T1',
+  'LANDSAT/LM03/C01/T1': 'L3T1',
+  'LANDSAT/LM04/C01/T1': 'L4MSST1',
+  'LANDSAT/LT04/C01/T1_SR': 'L4SRT1',
+  'LANDSAT/LT04/C01/T1_TOA': 'L4TOAT1',
+  'LANDSAT/LM05/C01/T1': 'L5MSST1',
+  'LANDSAT/LT05/C01/T1_SR': 'L5SRT1',
+  'LANDSAT/LT05/C01/T1_TOA': 'L5TOAT1',
+  'LANDSAT/LM07/C01/T1': 'L7MSST1',
+  'LANDSAT/LE07/C01/T1_SR': 'L7SRT1',
+  'LANDSAT/LE07/C01/T1_TOA': 'L7TOAT1',
+  'LANDSAT/LC08/C01/T1_SR': 'L8SRT1',
+  'LANDSAT/LC08/C01/T1_TOA': 'L8TOAT1'
+}
+
 var Landsat = function(number, process, sensor, tier) {
   this.number = number;
   this.process = process;
@@ -151,6 +170,8 @@ var Landsat = function(number, process, sensor, tier) {
                       +PROCESS[this.process]
                       
   this.collection = ee.ImageCollection(this.id)
+  
+  this.shortName = SHORTS[this.id]
   
   // BANDS by NUMBER
   switch (this.number) {
@@ -418,6 +439,7 @@ var Sentinel = function(number, process) {
   }
   
   this.collection = ee.ImageCollection(this.id)
+  this.shortName = SHORTS[this.id]
 }
 exports.Sentinel = Sentinel
 
