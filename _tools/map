@@ -5,23 +5,25 @@ var image_module = require('users/fitoprincipe/geetools:_tools/image').image
 var map = {};
 
 // ADD COLLECTION TO MAP
-map.addImageCollection = function(col, visParams, namePattern, datePattern, active) {
+map.addImageCollection = function(col, options) {
   
-  namePattern = namePattern || '{id}'
-  datePattern = datePattern || 'yyyy-MM-dd'
-  visParams = visParams || {min:0, max:1}
-  active = active || false
+  var def = {
+    namePattern : '{id}',
+    properties: [],
+    datePattern : 'yyyy-MM-dd',
+    visParams : {min:0, max:1},
+    active : false
+  }
+  var opt = helpersJS.get_options(def, options)
   
-  // var label = label;
   var list = col.toList(col.size())
   var i = 0
   
-  // var active = active;
   while (i >= 0) {
     try {
       var img = ee.Image(list.get(i))
-      var name = image_module.makeName(img, namePattern, datePattern)
-      Map.addLayer(img, visParams, name.getInfo(), active)
+      var name = image_module.makeName(img, opt.namePattern, opt.properties, opt.datePattern)
+      Map.addLayer(img, opt.visParams, name.getInfo(), opt.active)
       i++
     } catch (error) {
       return null
