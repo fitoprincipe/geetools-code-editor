@@ -9,7 +9,6 @@ map.addImageCollection = function(col, options) {
   
   var def = {
     namePattern : '{id}',
-    properties: [],
     datePattern : 'yyyy-MM-dd',
     visParams : {min:0, max:1},
     active : false
@@ -22,7 +21,7 @@ map.addImageCollection = function(col, options) {
   while (i >= 0) {
     try {
       var img = ee.Image(list.get(i))
-      var name = image_module.makeName(img, opt.namePattern, opt.properties, opt.datePattern)
+      var name = image_module.makeName(img, opt.namePattern, opt.datePattern)
       Map.addLayer(img, opt.visParams, name.getInfo(), opt.active)
       i++
     } catch (error) {
