@@ -241,12 +241,12 @@ image.makeName = function(image, pattern, date_pattern) {
     
     var match = ee.String(pattern).match('{.*?}', 'g')
     var exclude = ee.List(['system_date', 'id', 'ID'])
-    var properties = match.iterate(function(it, l){
+    var properties = ee.List(match.iterate(function(it, l){
       it = ee.String(it)
       var newit = it.slice(1,-1)
       l = ee.List(l)
       return ee.Algorithms.If(exclude.contains(newit), l, l.add(newit))
-    }, ee.List([]))
+    }, ee.List([])))
         
     var img = ee.Image(image)
     var condition = ee.Number(properties.size()).gt(0)
