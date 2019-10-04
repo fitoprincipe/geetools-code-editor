@@ -239,7 +239,7 @@ image.makeName = function(image, pattern, date_pattern) {
     date_pattern = date_pattern || null
     //properties = properties || null
     
-    var match = pattern.match('{.*?}', 'g')
+    var match = ee.String(pattern).match('{.*?}', 'g')
     var exclude = ee.List(['system_date', 'id', 'ID'])
     var properties = match.iterate(function(it, l){
       it = ee.String(it)
