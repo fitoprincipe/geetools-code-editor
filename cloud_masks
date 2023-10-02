@@ -302,8 +302,8 @@ help['landsatSR'] = 'landsatSR(options)\n\n'+
 
 help['landsatTOA'] = 'landsatTOA(options)\n\n'+
                      'function to mask out clouds of Landsat TOA images\n'+
-                     'collections: LANDSAT/LT04/C01/T1_TOA, LANDSAT/LT05/C01/T1_TOA,\n'+
-                     'LANDSAT/LE07/C01/T1_TOA, LANDSAT/LC08/C01/T1_TOA\n'+
+                     'collections: LANDSAT/LT04/C02/T1_TOA, LANDSAT/LT05/C02/T1_TOA,\n'+
+                     'LANDSAT/LE07/C02/T1_TOA, LANDSAT/LC08/C02/T1_TOA\n'+
                      'options (list): cloud, shadow, snow'
 
 help['modisSR'] = 'modis(options)\n\n'+
